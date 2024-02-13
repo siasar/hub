@@ -1,0 +1,24 @@
+{
+  "name": "data-hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/siasar3/data-hub.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/siasar3/data-hub/issues"
+  },
+  "homepage": "https://gitlab.com/siasar3/data-hub#readme",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
