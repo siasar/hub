@@ -7,8 +7,6 @@ export default class Api {
   }
 
   async login() {
-    console.debug(`Logging in`);
-
     const response = await fetch(`${this.baseUrl}/users/login`, {
       method: "POST",
       headers: {
@@ -23,8 +21,6 @@ export default class Api {
   }
 
   async getPoints(page = 1) {
-    console.debug(`Fetching points (Page ${page})`);
-
     if (!this.token) await this.login();
 
     const params = new URLSearchParams({
@@ -40,10 +36,7 @@ export default class Api {
       },
     });
 
-    if (response.status !== 200) {
-      console.error(`Failed to fetch points (Page ${page})`);
-      return;
-    }
+    if (response.status !== 200) return;
 
     return (await response.json())
       .filter((point, index, self) => {
@@ -58,8 +51,6 @@ export default class Api {
   }
 
   async getCommunity(id) {
-    console.debug(`Fetching community ${id}`);
-
     if (!this.token) await this.login();
 
     const response = await fetch(`${this.baseUrl}/form/data/form.communitys/${id}`, {

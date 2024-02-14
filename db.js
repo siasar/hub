@@ -13,8 +13,6 @@ export const query = async (query) => {
 };
 
 export const createSchema = async () => {
-  console.debug("Creating database schema");
-
   await query(`
     DROP TABLE IF EXISTS points CASCADE;
     CREATE TABLE points (
@@ -82,8 +80,6 @@ export const createSchema = async () => {
 export const insertPoints = async (points) => {
   if (!points.length) return;
 
-  console.debug(`Adding ${points.length} points`);
-
   await query(`
     INSERT INTO points (id, status, version, image_url, country)
     VALUES ${points
@@ -103,8 +99,6 @@ export const insertPoints = async (points) => {
 
 export const insertCommunities = async (communities) => {
   if (!communities.length) return;
-
-  console.debug(`Adding ${communities.length} communities`);
 
   await query(`
     INSERT INTO communities (id, point_id, name, status, version, indicator, indicator_value, image_url, country)
@@ -130,8 +124,6 @@ export const insertCommunities = async (communities) => {
 export const insertSystems = async (systems) => {
   if (!systems.length) return;
 
-  console.debug(`Adding ${systems.length} systems`);
-
   await query(`
     INSERT INTO systems (id, point_id, name, status, version, indicator, indicator_value, image_url, country)
     VALUES ${systems
@@ -155,8 +147,6 @@ export const insertSystems = async (systems) => {
 
 export const insertProviders = async (providers) => {
   if (!providers.length) return;
-
-  console.debug(`Adding ${providers.length} providers`);
 
   await query(`
     INSERT INTO providers (id, point_id, name, status, version, indicator, indicator_value, image_url, country)

@@ -1,6 +1,4 @@
 export const refresh = async () => {
-  console.debug("Triggering Metabase refresh...");
-
   // Login to Metabase
   const response = await fetch("http://metabase:3000/api/session", {
     method: "POST",
