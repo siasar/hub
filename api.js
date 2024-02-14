@@ -1,74 +1,102 @@
-const baseUrl = "https://colombia.api.siasar.org/api/v1/";
+export default class Api {
+  constructor(country) {
+    this.country = country;
+    this.baseUrl = country.url + "/api/v1";
+    this.username = country.username;
+    this.password = country.password;
+  }
 
-export const login = async (username, password) => {
-  console.debug("Logging in...");
+  async login() {
+    console.debug(`Logging in`);
 
-  const response = await fetch(`${baseUrl}users/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, password }),
-  });
+    const response = await fetch(`${this.baseUrl}/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: this.username, password: this.password }),
+    });
 
-  const { token } = await response.json();
-  process.env["API_TOKEN"] = token;
+    this.token = (await response.json()).token;
 
-  console.debug("Logged in", token);
-  return token;
-};
+    return this.token;
+  }
 
-export const getPoints = async (page = 1) => {
-  console.debug(`Fetching points (Page ${page})...`);
+  async getPoints(page = 1) {
+    console.debug(`Fetching points (Page ${page})`);
 
-  const params = new URLSearchParams({
-    page: page,
-    status: "calculated",
-  });
+    if (!this.token) await this.login();
 
-  const response = await fetch(`${baseUrl}form/data/form.points?${params}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.API_TOKEN}`,
-    },
-  });
+    const params = new URLSearchParams({
+      page: page,
+      status: "calculated",
+    });
 
-  const data = await response.json();
+    const response = await fetch(`${this.baseUrl}/form/data/form.points?${params}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
 
-  // Remove duplicates
-  const points = data.filter((value, index, self) => {
-    return self.findIndex((v) => v.id === value.id) === index;
-  });
+    if (response.status !== 200) {
+      console.error(`Failed to fetch points (Page ${page})`);
+      return;
+    }
 
-  console.debug(`Fetched ${points.length} points`);
-  return points;
-};
+    return (await response.json())
+      .filter((point, index, self) => {
+        return self.findIndex((p) => p.id === point.id) === index;
+      })
+      .map((point) => ({
+        ...point,
+        country_code: this.country.code,
+        country_name: this.country.name,
+        image_url: point.image ? this.country.url + point.image : null,
+      }));
+  }
 
-export const getCommunity = async (id) => {
-  console.debug(`Fetching community ${id}...`);
+  async getCommunity(id) {
+    console.debug(`Fetching community ${id}`);
 
-  const response = await fetch(`${baseUrl}form/data/form.communitys/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.API_TOKEN}`,
-    },
-  });
+    if (!this.token) await this.login();
 
-  return await response.json();
-};
+    const response = await fetch(`${this.baseUrl}/form/data/form.communitys/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
 
-export const getInquiries = async (id) => {
-  console.debug(`Fetching inquiries for Point ${id}...`);
+    return await response.json();
+  }
 
-  const response = await fetch(`${baseUrl}form/data/form.points/${id}/inquiries`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.API_TOKEN}`,
-    },
-  });
+  async getInquiries(pointId) {
+    if (!this.token) await this.login();
 
-  return await response.json();
-};
+    const response = await fetch(`${this.baseUrl}/form/data/form.points/${pointId}/inquiries`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+
+    const inquiries = (await response.json()).map((inquiry) => ({
+      ...inquiry,
+      country_code: this.country.code,
+      country_name: this.country.name,
+      point_id: pointId,
+      image_url: inquiry.field_image?.[0]?.meta.url ? this.country.url + inquiry.field_image[0].meta.url : null,
+      version: inquiry.field_editors_update.pop()?.value,
+    }));
+
+    return {
+      communities: inquiries.filter((i) => i.type === "form.community"),
+      systems: inquiries.filter((i) => i.type === "form.wssystem"),
+      providers: inquiries.filter((i) => i.type === "form.wsprovider"),
+    };
+  }
+}
