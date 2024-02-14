@@ -1,6 +1,6 @@
 import pino from "pino";
 import Api from "./api.js";
-import { createSchema, insertCommunities, insertPoints, insertProviders, insertSystems } from "./db.js";
+import { createSchema, updateGeom, insertCommunities, insertPoints, insertProviders, insertSystems } from "./db.js";
 import { refresh } from "./metabase.js";
 
 const logger = pino({
@@ -70,6 +70,7 @@ const run = async () => {
 
       page++;
     }
+    await updateGeom();
   }
 
   logger.info("Triggering Metabase refresh");
