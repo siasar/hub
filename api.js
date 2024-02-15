@@ -99,7 +99,7 @@ export default class Api {
     const filteredInquiries = inquiries.filter((i) => i.type === type);
     const details = await Promise.all(filteredInquiries.map((inquiry) => fetchData(inquiry.id)));
     return filteredInquiries.map((inquiry, index) => {
-      const { indicator, indicator_value, country_code, country_name, image_url, version} = inquiry;
+      const { indicator, indicator_value, country_code, country_name, image_url, version } = inquiry;
       const { ...inquiryDetails } = details[index];
       return {
         indicator,
@@ -108,8 +108,8 @@ export default class Api {
         country_name,
         image_url,
         version,
-        ...inquiryDetails
-      }
+        ...inquiryDetails,
+      };
     });
   }
 

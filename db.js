@@ -180,7 +180,7 @@ export const insertProviders = async (providers) => {
             ${provider.indicator_value},
             ${provider.image_url ? `'${provider.image_url}'` : null},
             '${provider.country_name}'
-          )`
+          )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;
