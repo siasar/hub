@@ -149,7 +149,7 @@ export const insertPoints = async (points) => {
           '${point.adm2}',
           '${point.adm3}',
           '${point.adm4}'
-        )`
+        )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;
@@ -193,7 +193,7 @@ export const insertCommunities = async (communities) => {
           '${community.adm2}',
           '${community.adm3}',
           '${community.adm4}'
-        )`
+        )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;
@@ -237,7 +237,7 @@ export const insertSystems = async (systems) => {
           '${system.adm2}',
           '${system.adm3}',
           '${system.adm4}'
-        )`
+        )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;
@@ -281,7 +281,7 @@ export const insertProviders = async (providers) => {
           '${provider.adm2}',
           '${provider.adm3}',
           '${provider.adm4}'
-        )`
+        )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;
