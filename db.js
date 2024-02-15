@@ -99,7 +99,7 @@ export const insertPoints = async (points) => {
           '${point.version}',
           ${point.image_url ? `'${point.image_url}'` : null},
           '${point.country_name}'
-        )`
+        )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;
@@ -126,7 +126,7 @@ export const insertCommunities = async (communities) => {
           ${community.indicator_value},
           ${community.image_url ? `'${community.image_url}'` : null},
           '${community.country_name}'
-        )`
+        )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;
@@ -153,7 +153,7 @@ export const insertSystems = async (systems) => {
           ${system.indicator_value},
           ${system.image_url ? `'${system.image_url}'` : null},
           '${system.country_name}'
-        )`
+        )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;

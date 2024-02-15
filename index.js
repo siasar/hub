@@ -50,7 +50,7 @@ const run = async () => {
             providers: inquiries.providers.concat(pointInquiries.providers),
           };
         },
-        { communities: [], systems: [], providers: [] }
+        { communities: [], systems: [], providers: [] },
       );
 
       if (inquiries.communities.length) {
