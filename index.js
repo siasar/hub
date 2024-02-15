@@ -6,6 +6,10 @@ import { refresh } from "./metabase.js";
 const logger = pino({
   transport: {
     target: "pino-pretty",
+    options: {
+      colorize: true,
+      colorizeObjects: true,
+    },
   },
 });
 
@@ -22,24 +26,24 @@ const run = async () => {
 
     let page = 1;
     while (true) {
-      logger.info(`Fetching points (Page ${page})`);
+      logger.info(`\tFetching points (Page ${page})`);
       let points = await api.getPoints(page);
 
       if (!points) {
-        logger.warn(`Failed to fetch points, skipping page ${page}`);
+        logger.warn(`\t\tFailed to fetch points, skipping page ${page}`);
         page++;
         continue;
       }
 
       if (points.length === 0) {
-        logger.info(`No more data to process for ${country.name}`);
+        logger.info(`\tNo more data to process for ${country.name}`);
         break;
       }
 
-      logger.info(`Adding ${points.length} points`);
+      logger.info(`\t\tAdding ${points.length} points`);
       await insertPoints(points);
 
-      logger.info(`Fetching inquiries`);
+      logger.info(`\t\tFetching inquiries`);
 
       const requests = points.map((point) => api.getInquiries(point.id));
       const inquiries = (await Promise.all(requests)).reduce(
@@ -54,17 +58,17 @@ const run = async () => {
       );
 
       if (inquiries.communities.length) {
-        logger.info(`Adding ${inquiries.communities.length} communities`);
+        logger.info(`\t\tAdding ${inquiries.communities.length} communities`);
         await insertCommunities(inquiries.communities);
       }
 
       if (inquiries.systems.length) {
-        logger.info(`Adding ${inquiries.systems.length} systems`);
+        logger.info(`\t\tAdding ${inquiries.systems.length} systems`);
         await insertSystems(inquiries.systems);
       }
 
       if (inquiries.providers.length) {
-        logger.info(`Adding ${inquiries.providers.length} providers`);
+        logger.info(`\t\tAdding ${inquiries.providers.length} providers`);
         await insertProviders(inquiries.providers);
       }
 
