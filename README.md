@@ -4,15 +4,9 @@ A project to collect and display data from the [SIASAR](https://globalsiasar.org
 
 ### How to run it locally
 
-1. Create a .env file with the following content
-   ```
-   API_USER=
-   API_PASSWORD=
-   METABASE_USER=
-   METABASE_PASSWORD=
-   ```
+1. Create your `.env` file
 1. `docker compose build data-hub`
 1. `docker compose up`
-1. `docker compose run data-hub`
+1. `docker compose run --rm data-hub`
 
 Metabase should be running at [http://localhost:3000](http://localhost:3000)

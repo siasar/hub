@@ -1,0 +1,19 @@
+version: "3"
+
+tasks:
+  lint:
+    cmds:
+      - docker compose run --rm data-hub npm run lint
+  fix:
+    cmds:
+      - docker compose run --rm data-hub npm run lint:fix
+  run:
+    cmds:
+      - docker compose run --rm data-hub
+  server:
+    cmds:
+      - docker compose down
+      - docker compose up
+  build:
+    cmds:
+      - docker compose build data-hub
