@@ -20,6 +20,27 @@ export default class Api {
     return this.token;
   }
 
+  parseAdm(adm) {
+    function getNames(obj) {
+      let names = [];
+      while (obj) {
+        names.push(obj.name);
+        obj = obj.parent;
+      }
+      return names;
+    }
+
+    const names = getNames(adm).reverse();
+
+    return {
+      adm0: this.country.name,
+      adm1: names[0],
+      adm2: names[1],
+      adm3: names[2],
+      adm4: names[3],
+    };
+  }
+
   async getPoints(page = 1) {
     if (!this.token) await this.login();
 
@@ -44,9 +65,9 @@ export default class Api {
       })
       .map((point) => ({
         ...point,
-        country_code: this.country.code,
-        country_name: this.country.name,
+        country: this.country.code,
         image_url: point.image ? this.country.url + point.image : null,
+        ...this.parseAdm(point.administrative_division?.[0].meta),
       }));
   }
 
@@ -126,11 +147,12 @@ export default class Api {
 
     const inquiries = (await response.json()).map((inquiry) => ({
       ...inquiry,
-      country_code: this.country.code,
+      country: this.country.code,
       country_name: this.country.name,
       point_id: pointId,
       image_url: inquiry.field_image?.[0]?.meta.url ? this.country.url + inquiry.field_image[0].meta.url : null,
       version: inquiry.field_editors_update.pop()?.value,
+      ...this.parseAdm(inquiry.field_region.meta),
     }));
 
     const communities = await this.getData("form.community", inquiries, this.getCommunity.bind(this));
