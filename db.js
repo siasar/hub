@@ -64,6 +64,7 @@ export const createSchema = async () => {
     CREATE INDEX communities_adm2_idx ON communities (adm2);
     CREATE INDEX communities_adm3_idx ON communities (adm3);
     CREATE INDEX communities_adm4_idx ON communities (adm4);
+    CREATE INDEX communities_geom_idx ON communities USING GIST (geom);
   `);
 
   await query(`
@@ -95,6 +96,7 @@ export const createSchema = async () => {
     CREATE INDEX systems_adm2_idx ON systems (adm2);
     CREATE INDEX systems_adm3_idx ON systems (adm3);
     CREATE INDEX systems_adm4_idx ON systems (adm4);
+    CREATE INDEX systems_geom_idx ON systems USING GIST (geom);
   `);
 
   await query(`
@@ -126,6 +128,7 @@ export const createSchema = async () => {
     CREATE INDEX providers_adm2_idx ON providers (adm2);
     CREATE INDEX providers_adm3_idx ON providers (adm3);
     CREATE INDEX providers_adm4_idx ON providers (adm4);
+    CREATE INDEX providers_geom_idx ON providers USING GIST (geom);
   `);
 };
 
