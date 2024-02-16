@@ -31,6 +31,9 @@ export const createSchema = async () => {
       id varchar(26) PRIMARY KEY,
       point_id varchar(26) REFERENCES points(id) ON DELETE CASCADE,
       name text,
+      latitude float,
+      longitude float,
+      geom geometry(Point,4326),
       status text,
       indicator varchar(1),
       indicator_value float,
@@ -48,6 +51,9 @@ export const createSchema = async () => {
       id varchar(26) PRIMARY KEY,
       point_id varchar(26) REFERENCES points(id) ON DELETE CASCADE,
       name text,
+      latitude float,
+      longitude float,
+      geom geometry(Point,4326),
       status text,
       indicator varchar(1),
       indicator_value float,
@@ -65,6 +71,9 @@ export const createSchema = async () => {
       id varchar(26) PRIMARY KEY,
       point_id varchar(26) REFERENCES points(id) ON DELETE CASCADE,
       name text,
+      latitude float,
+      longitude float,
+      geom geometry(Point,4326),
       status text,
       indicator varchar(1),
       indicator_value float,
@@ -101,13 +110,16 @@ export const insertCommunities = async (communities) => {
   if (!communities.length) return;
 
   await query(`
-    INSERT INTO communities (id, point_id, name, status, version, indicator, indicator_value, image_url, country)
+    INSERT INTO communities (id, point_id, name, latitude, longitude, geom, status, version, indicator, indicator_value, image_url, country)
     VALUES ${communities
       .map(
         (community) => `(
           '${community.id}',
-          '${community.point_id}',
-          '${community.field_title}',
+          '${community.point}',
+          '${community.field_community_name}',
+          ${community.field_location_lat},
+          ${community.field_location_lon},
+          ST_POINT(${community.field_location_lon}, ${community.field_location_lat}, 4326),
           '${community.field_status}',
           '${community.version}',
           '${community.indicator}',
@@ -125,13 +137,16 @@ export const insertSystems = async (systems) => {
   if (!systems.length) return;
 
   await query(`
-    INSERT INTO systems (id, point_id, name, status, version, indicator, indicator_value, image_url, country)
+    INSERT INTO systems (id, point_id, name, latitude, longitude, geom, status, version, indicator, indicator_value, image_url, country)
     VALUES ${systems
       .map(
         (system) => `(
           '${system.id}',
-          '${system.point_id}',
-          '${system.field_title}',
+          '${system.point}',
+          '${system.field_system_name}',
+          ${system.field_location_lat},
+          ${system.field_location_lon},
+          ST_POINT(${system.field_location_lon}, ${system.field_location_lat}, 4326),
           '${system.field_status}',
           '${system.version}',
           '${system.indicator}',
@@ -149,20 +164,23 @@ export const insertProviders = async (providers) => {
   if (!providers.length) return;
 
   await query(`
-    INSERT INTO providers (id, point_id, name, status, version, indicator, indicator_value, image_url, country)
+    INSERT INTO providers (id, point_id, name, latitude, longitude, geom, status, version, indicator, indicator_value, image_url, country)
     VALUES ${providers
       .map(
         (provider) => `(
-          '${provider.id}',
-          '${provider.point_id}',
-          '${provider.field_title}',
-          '${provider.field_status}',
-          '${provider.version}',
-          '${provider.indicator}',
-          ${provider.indicator_value},
-          ${provider.image_url ? `'${provider.image_url}'` : null},
-          '${provider.country_name}'
-        )`,
+            '${provider.id}',
+            '${provider.point}',
+            '${provider.field_provider_name}',
+            ${provider.field_location_lat},
+            ${provider.field_location_lon},
+            ST_POINT(${provider.field_location_lon}, ${provider.field_location_lat}, 4326),
+            '${provider.field_status}',
+            '${provider.version}',
+            '${provider.indicator}',
+            ${provider.indicator_value},
+            ${provider.image_url ? `'${provider.image_url}'` : null},
+            '${provider.country_name}'
+          )`,
       )
       .join(",")}
     ON CONFLICT DO NOTHING;

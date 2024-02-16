@@ -64,6 +64,55 @@ export default class Api {
     return await response.json();
   }
 
+  async getSystem(id) {
+    if (!this.token) await this.login();
+
+    const response = await fetch(`${this.baseUrl}/form/data/form.wssystems/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+
+    return await response.json();
+  }
+
+  async getProvider(id) {
+    if (!this.token) await this.login();
+
+    const response = await fetch(`${this.baseUrl}/form/data/form.wsproviders/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch provider ${id}`);
+    }
+
+    return await response.json();
+  }
+
+  async getData(type, inquiries, fetchData) {
+    const filteredInquiries = inquiries.filter((i) => i.type === type);
+    const details = await Promise.all(filteredInquiries.map((inquiry) => fetchData(inquiry.id)));
+    return filteredInquiries.map((inquiry, index) => {
+      const { indicator, indicator_value, country_code, country_name, image_url, version } = inquiry;
+      const { ...inquiryDetails } = details[index];
+      return {
+        indicator,
+        indicator_value,
+        country_code,
+        country_name,
+        image_url,
+        version,
+        ...inquiryDetails,
+      };
+    });
+  }
+
   async getInquiries(pointId) {
     if (!this.token) await this.login();
 
@@ -84,10 +133,14 @@ export default class Api {
       version: inquiry.field_editors_update.pop()?.value,
     }));
 
+    const communities = await this.getData("form.community", inquiries, this.getCommunity.bind(this));
+    const systems = await this.getData("form.wssystem", inquiries, this.getSystem.bind(this));
+    const service_providers = await this.getData("form.wsprovider", inquiries, this.getProvider.bind(this));
+
     return {
-      communities: inquiries.filter((i) => i.type === "form.community"),
-      systems: inquiries.filter((i) => i.type === "form.wssystem"),
-      providers: inquiries.filter((i) => i.type === "form.wsprovider"),
+      communities: communities,
+      systems: systems,
+      providers: service_providers,
     };
   }
 }
