@@ -196,4 +196,54 @@ export default class Input {
       ),
     }));
   }
+
+  async getServiceProviders(pointIds) {
+    const query = `
+      SELECT
+        sp.id,
+        sp.field_provider_name AS name,
+        sp.field_status AS status,
+        CAST(sp.field_changed_value AS CHAR) AS version,
+        sp.field_country_value AS country,
+        psp.record AS point_id,
+        sp.field_location_lat AS latitude,
+        sp.field_location_lon AS longitude,
+        (
+          SELECT JSON_ARRAYAGG(JSON_OBJECT('name', i.name, 'value', i.value))
+          FROM indicator i
+          WHERE i.record = sp.id
+        ) AS indicators,
+        (
+          SELECT JSON_ARRAYAGG(HEX(f.field_photos_value))
+          FROM form_wsprovider__field_photos f
+          WHERE f.record = sp.id
+        ) AS images,
+        country.name AS adm0,
+        adm1.name AS adm1,
+        adm2.name AS adm2,
+        adm3.name AS adm3,
+        adm4.name AS adm4
+      FROM form_wsprovider sp
+      JOIN form_point__field_wsps psp ON psp.field_wsps_value = sp.id
+      JOIN country ON country.code = sp.field_country_value
+      JOIN administrative_division adm4 ON adm4.id = sp.field_region_value
+      JOIN administrative_division adm3 ON adm3.id = adm4.parent_id
+      JOIN administrative_division adm2 ON adm2.id = adm3.parent_id
+      JOIN administrative_division adm1 ON adm1.id = adm2.parent_id
+      WHERE HEX(psp.record) IN (${this.idList(pointIds)})
+        AND sp.field_status = 'validated';
+    `;
+
+    const [rows] = await this.query(query);
+
+    return rows.map((row) => ({
+      ...row,
+      ulid: this.idDecode(row.id),
+      pointUlid: this.idDecode(row.point_id),
+      indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
+      images: JSON.parse(row.images || "[]").map(
+        (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
+      ),
+    }));
+  }
 }

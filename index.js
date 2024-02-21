@@ -53,6 +53,14 @@ const run = async () => {
       await insertSystems(systems);
     }
 
+    logger.info(`\t\tFetching service providers`);
+    const providers = await input.getServiceProviders(points.map((point) => point.id));
+
+    if (providers.length) {
+      logger.info(`\t\tAdding ${providers.length} service providers`);
+      await insertProviders(providers);
+    }
+
     input.close();
   }
 
