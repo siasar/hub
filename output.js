@@ -34,8 +34,8 @@ export const createSchema = async () => {
       longitude float,
       geom geometry(Point,4326),
       status text,
-      indicator varchar(1),
-      indicator_value float,
+      wsp varchar(1),
+      wsp_value float,
       version timestamp,
       image_url text,
       country varchar(2),
@@ -45,8 +45,8 @@ export const createSchema = async () => {
       adm3 text,
       adm4 text
     );
-    CREATE INDEX communities_indicator_idx ON communities (indicator);
-    CREATE INDEX communities_indicator_value_idx ON communities (indicator_value);
+    CREATE INDEX communities_wsp_idx ON communities (wsp);
+    CREATE INDEX communities_wsp_value_idx ON communities (wsp_value);
     CREATE INDEX communities_country_idx ON communities (country);
     CREATE INDEX communities_adm0_idx ON communities (adm0);
     CREATE INDEX communities_adm1_idx ON communities (adm1);
@@ -158,8 +158,8 @@ export const insertCommunities = async (communities) => {
       geom,
       status,
       version,
-      indicator,
-      indicator_value,
+      wsp,
+      wsp_value,
       image_url,
       country,
       adm0,
