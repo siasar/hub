@@ -19,20 +19,9 @@ export const createSchema = async () => {
       id varchar(26) PRIMARY KEY,
       status text,
       version timestamp,
-      image_url text,
-      country varchar(2),
-      adm0 text,
-      adm1 text,
-      adm2 text,
-      adm3 text,
-      adm4 text
+      country varchar(2)
     );
     CREATE INDEX points_country_idx ON points (country);
-    CREATE INDEX points_adm0_idx ON points (adm0);
-    CREATE INDEX points_adm1_idx ON points (adm1);
-    CREATE INDEX points_adm2_idx ON points (adm2);
-    CREATE INDEX points_adm3_idx ON points (adm3);
-    CREATE INDEX points_adm4_idx ON points (adm4);
   `);
 
   await query(`
@@ -140,27 +129,15 @@ export const insertPoints = async (points) => {
       id,
       status,
       version,
-      image_url,
-      country,
-      adm0,
-      adm1,
-      adm2,
-      adm3,
-      adm4
+      country
     )
     VALUES ${points
       .map(
         (point) => `(
-          '${point.id}',
-          '${point.status_code}',
+          '${point.ulid}',
+          '${point.status}',
           '${point.version}',
-          ${point.image_url ? `'${point.image_url}'` : null},
-          '${point.country}',
-          '${point.adm0}',
-          '${point.adm1}',
-          '${point.adm2}',
-          '${point.adm3}',
-          '${point.adm4}'
+          '${point.country}'
         )`,
       )
       .join(",")}
@@ -194,17 +171,17 @@ export const insertCommunities = async (communities) => {
     VALUES ${communities
       .map(
         (community) => `(
-          '${community.id}',
-          '${community.point}',
-          '${community.field_community_name}',
-          ${community.field_location_lat},
-          ${community.field_location_lon},
-          ST_POINT(${community.field_location_lon}, ${community.field_location_lat}, 4326),
-          '${community.field_status}',
+          '${community.ulid}',
+          '${community.pointUlid}',
+          '${community.name}',
+          ${community.latitude},
+          ${community.longitude},
+          ST_POINT(${community.longitude}, ${community.latitude}, 4326),
+          '${community.status}',
           '${community.version}',
-          '${community.indicator}',
-          ${community.indicator_value},
-          ${community.image_url ? `'${community.image_url}'` : null},
+          '${community.indicators[0].label}',
+          ${community.indicators[0].value},
+          ${community.images.length ? `'${community.images[0]}'` : null},
           '${community.country}',
           '${community.adm0}',
           '${community.adm1}',
