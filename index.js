@@ -45,34 +45,13 @@ const run = async () => {
       await insertCommunities(communities);
     }
 
-    //   logger.info(`\t\tFetching inquiries`);
+    logger.info(`\t\tFetching systems`);
+    const systems = await input.getSystems(points.map((point) => point.id));
 
-    //   const requests = points.map((point) => api.getInquiries(point.id));
-    //   const inquiries = (await Promise.all(requests)).reduce(
-    //     (inquiries, pointInquiries) => {
-    //       return {
-    //         communities: inquiries.communities.concat(pointInquiries.communities),
-    //         systems: inquiries.systems.concat(pointInquiries.systems),
-    //         providers: inquiries.providers.concat(pointInquiries.providers),
-    //       };
-    //     },
-    //     { communities: [], systems: [], providers: [] },
-    //   );
-
-    //   if (inquiries.communities.length) {
-    //     logger.info(`\t\tAdding ${inquiries.communities.length} communities`);
-    //     await insertCommunities(inquiries.communities);
-    //   }
-
-    //   if (inquiries.systems.length) {
-    //     logger.info(`\t\tAdding ${inquiries.systems.length} systems`);
-    //     await insertSystems(inquiries.systems);
-    //   }
-
-    //   if (inquiries.providers.length) {
-    //     logger.info(`\t\tAdding ${inquiries.providers.length} providers`);
-    //     await insertProviders(inquiries.providers);
-    //   }
+    if (systems.length) {
+      logger.info(`\t\tAdding ${systems.length} systems`);
+      await insertSystems(systems);
+    }
 
     input.close();
   }

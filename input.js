@@ -99,7 +99,7 @@ export default class Input {
 
   async getCommunities(pointIds) {
     const query = `
-      SELECT 
+      SELECT
         c.id,
         c.field_community_name AS name,
         c.field_status AS status,
@@ -132,6 +132,56 @@ export default class Input {
       JOIN administrative_division adm1 ON adm1.id = adm2.parent_id
       WHERE HEX(pc.record) IN (${this.idList(pointIds)})
         AND c.field_status = 'validated';
+    `;
+
+    const [rows] = await this.query(query);
+
+    return rows.map((row) => ({
+      ...row,
+      ulid: this.idDecode(row.id),
+      pointUlid: this.idDecode(row.point_id),
+      indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
+      images: JSON.parse(row.images || "[]").map(
+        (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
+      ),
+    }));
+  }
+
+  async getSystems(pointIds) {
+    const query = `
+      SELECT
+        s.id,
+        s.field_system_name AS name,
+        s.field_status AS status,
+        CAST(s.field_changed_value AS CHAR) AS version,
+        s.field_country_value AS country,
+        ps.record AS point_id,
+        s.field_location_lat AS latitude,
+        s.field_location_lon AS longitude,
+        (
+          SELECT JSON_ARRAYAGG(JSON_OBJECT('name', i.name, 'value', i.value))
+          FROM indicator i
+          WHERE i.record = s.id
+        ) AS indicators,
+        (
+          SELECT JSON_ARRAYAGG(HEX(f.field_wss_photos_value))
+          FROM form_wssystem__field_wss_photos f
+          WHERE f.record = s.id
+        ) AS images,
+        country.name AS adm0,
+        adm1.name AS adm1,
+        adm2.name AS adm2,
+        adm3.name AS adm3,
+        adm4.name AS adm4
+      FROM form_wssystem s
+      JOIN form_point__field_wsystems ps ON ps.field_wsystems_value = s.id
+      JOIN country ON country.code = s.field_country_value
+      JOIN administrative_division adm4 ON adm4.id = s.field_region_value
+      JOIN administrative_division adm3 ON adm3.id = adm4.parent_id
+      JOIN administrative_division adm2 ON adm2.id = adm3.parent_id
+      JOIN administrative_division adm1 ON adm1.id = adm2.parent_id
+      WHERE HEX(ps.record) IN (${this.idList(pointIds)})
+        AND s.field_status = 'validated';
     `;
 
     const [rows] = await this.query(query);

@@ -66,8 +66,8 @@ export const createSchema = async () => {
       longitude float,
       geom geometry(Point,4326),
       status text,
-      indicator varchar(1),
-      indicator_value float,
+      wsi varchar(1),
+      wsi_value float,
       version timestamp,
       image_url text,
       country varchar(2),
@@ -77,8 +77,8 @@ export const createSchema = async () => {
       adm3 text,
       adm4 text
     );
-    CREATE INDEX systems_indicator_idx ON systems (indicator);
-    CREATE INDEX systems_indicator_value_idx ON systems (indicator_value);
+    CREATE INDEX systems_wsi_idx ON systems (wsi);
+    CREATE INDEX systems_wsi_value_idx ON systems (wsi_value);
     CREATE INDEX systems_country_idx ON systems (country);
     CREATE INDEX systems_adm0_idx ON systems (adm0);
     CREATE INDEX systems_adm1_idx ON systems (adm1);
@@ -98,8 +98,8 @@ export const createSchema = async () => {
       longitude float,
       geom geometry(Point,4326),
       status text,
-      indicator varchar(1),
-      indicator_value float,
+      sep varchar(1),
+      sep_value float,
       version timestamp,
       image_url text,
       country varchar(2),
@@ -109,8 +109,8 @@ export const createSchema = async () => {
       adm3 text,
       adm4 text
     );
-    CREATE INDEX providers_indicator_idx ON providers (indicator);
-    CREATE INDEX providers_indicator_value_idx ON providers (indicator_value);
+    CREATE INDEX providers_sep_idx ON providers (sep);
+    CREATE INDEX providers_sep_value_idx ON providers (sep_value);
     CREATE INDEX providers_country_idx ON providers (country);
     CREATE INDEX providers_adm0_idx ON providers (adm0);
     CREATE INDEX providers_adm1_idx ON providers (adm1);
@@ -208,8 +208,8 @@ export const insertSystems = async (systems) => {
       geom,
       status,
       version,
-      indicator,
-      indicator_value,
+      wsi,
+      wsi_value,
       image_url,
       country,
       adm0,
@@ -221,17 +221,17 @@ export const insertSystems = async (systems) => {
     VALUES ${systems
       .map(
         (system) => `(
-          '${system.id}',
-          '${system.point}',
-          '${system.field_system_name}',
-          ${system.field_location_lat},
-          ${system.field_location_lon},
-          ST_POINT(${system.field_location_lon}, ${system.field_location_lat}, 4326),
-          '${system.field_status}',
+          '${system.ulid}',
+          '${system.pointUlid}',
+          '${system.name}',
+          ${system.latitude},
+          ${system.longitude},
+          ST_POINT(${system.longitude}, ${system.latitude}, 4326),
+          '${system.status}',
           '${system.version}',
-          '${system.indicator}',
-          ${system.indicator_value},
-          ${system.image_url ? `'${system.image_url}'` : null},
+          '${system.indicators.find((i) => i.name === 'WSI').label}',
+          ${system.indicators.find((i) => i.name === 'WSI').value},
+          ${system.images.length ? `'${system.images[0]}'` : null},
           '${system.country}',
           '${system.adm0}',
           '${system.adm1}',
@@ -258,8 +258,8 @@ export const insertProviders = async (providers) => {
       geom,
       status,
       version,
-      indicator,
-      indicator_value,
+      sep,
+      sep_value,
       image_url,
       country,
       adm0,
@@ -276,9 +276,9 @@ export const insertProviders = async (providers) => {
           '${provider.field_title}',
           '${provider.field_status}',
           '${provider.version}',
-          '${provider.indicator}',
-          ${provider.indicator_value},
-          ${provider.image_url ? `'${provider.image_url}'` : null},
+          '${provider.indicators.find((i) => i.name === 'SEP').label}',
+          ${provider.indicators.find((i) => i.name === 'SEP').value},
+          ${provider.images.length ? `'${provider.images[0]}'` : null},
           '${provider.country}',
           '${provider.adm0}',
           '${provider.adm1}',
