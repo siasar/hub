@@ -1,0 +1,35 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "community",
+  "signedByOrg": "tailosstg",
+  "signedByOrgName": "tailos",
+  "plugin": "tailosstg-map-panel",
+  "version": "1.2.2",
+  "time": 1702331882568,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "module.js": "947f213c7a9dfe89b9e2fcaacb5063505e0ea2eb1a728c5d6fcd9e3efe127802",
+    "img/screenshot.png": "3fb7aa40964923e5d1e24c767d6a9b6cfb09878f0245a2b804c01fcd93eba1d9",
+    "img/logo.svg": "2ffb2aa11db306afa60c88079e7850137c201f255173aaff7eeb04d6a06a8bb8",
+    "LICENSE": "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851",
+    "module.js.map": "f0975ea1c54febfb45fff78da2dc20a9cf36b8b6cb3adc29c19356d9a363b41e",
+    "CHANGELOG.md": "ba613d6f914b27dce9ace4d8c0cb074273c9eb6c536d8e7ac24c5ce6ae941fd0",
+    "plugin.json": "bdb2a55a574b110e5dae4efe3c556775040fbc43b47dee3ea57034dd9a774917",
+    "README.md": "1b2139bb610a14a7420a2740f49d0f23e67bb56d4a964fdd078685d7ba6e57d8"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.10
+Comment: https://openpgpjs.org
+
+wrgEARMKAAYFAmV3heoAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm55owAgkBJxQHrRmnMLlWtOkdYS7DN+x77RglAcb+mWa3hjI6rrNUX2Fh
+ZrqQ6IMBgSzkreQgxPGIRWJWEQN9o+PC/FJdWLoCCPhl/z0bWe2CMh+rm47G
+NyctOZiOKyA5pYtiLZuN/c9rInlW4HMwxcld/3oa/ooRIurULNgdYi5Owtt9
+3ltqk9yM
+=kZpQ
+-----END PGP SIGNATURE-----

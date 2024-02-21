@@ -1,0 +1,36 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "community",
+  "signedByOrg": "mckn",
+  "signedByOrgName": "mckn",
+  "plugin": "mckn-funnel-panel",
+  "version": "1.0.0",
+  "time": 1695370434979,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "LICENSE": "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851",
+    "CHANGELOG.md": "ba613d6f914b27dce9ace4d8c0cb074273c9eb6c536d8e7ac24c5ce6ae941fd0",
+    "module.js.LICENSE.txt": "a38486143894f3983170d896f8ba530930da8ac23d8e377bb4cea077d292099f",
+    "module.js.map": "1590d134e4be321b885f84f00ede48d1a68a29df79385ada9d32c995fab03543",
+    "plugin.json": "94854b3f15162a51d30ad8e776ad00cb346999f2050f053caced09465e7d7ef8",
+    "README.md": "b7e79dedf628baafec30491ddc01ecfaa67b9bc0925469e24218e55caf06f589",
+    "img/panel.png": "869b1ec3a9a5c220c6cd39020c60afbe9896e8c69c3448b4ef008dacd11622a7",
+    "img/logo.svg": "dee1255cec6afcb95e9d3dc27d922edf2b881a41a0134047e14edf58f6a49352",
+    "module.js": "3c0dea2c303c2fb3be997e78b07e9ec878506441848117cc6dfcd4da51a2ba42"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.10
+Comment: https://openpgpjs.org
+
+wrcEARMKAAYFAmUNTMMAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm57BxAgilxNs9cwG5Xm00cmohLkVcG+giIp/lG+ssLGWFHy0IQejTAms8
+ElGKxzjiipLQx7+L3IsK+UQ6sQ/PS6/equFDWQIHSKgf6esmiPcyI2R2/IfX
+ccUDMO+jVkG/FDsvg8KTHigplx20Q+Iz8l7k6GAzPEkkRgcteafxJYdehY6Q
+V9DiHgc=
+=DzQm
+-----END PGP SIGNATURE-----
