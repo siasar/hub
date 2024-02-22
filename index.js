@@ -1,7 +1,8 @@
 import pino from "pino";
-import Api from "./api.js";
-import { createSchema, insertCommunities, insertPoints, insertProviders, insertSystems } from "./db.js";
+import { createSchema, insertCommunities, insertPoints, insertProviders, insertSystems } from "./output.js";
 import { refresh } from "./metabase.js";
+import Input from "./input.js";
+import config from "./config.json" with { type: "json" };
 
 const logger = pino({
   transport: {
@@ -13,67 +14,54 @@ const logger = pino({
   },
 });
 
-const countries = JSON.parse(process.env.COUNTRIES);
-
 const run = async () => {
   logger.info("Creating schema");
   await createSchema();
 
-  for (const country of countries) {
+  for (const country of config.countries) {
     logger.info(`Processing ${country.name}`);
 
-    const api = new Api(country);
+    const input = new Input(country);
 
-    let page = 1;
-    while (true) {
-      logger.info(`\tFetching points (Page ${page})`);
-      let points = await api.getPoints(page);
+    logger.info(`\tConnecting server`);
+    await input.connect();
 
-      if (!points) {
-        logger.warn(`\t\tFailed to fetch points, skipping page ${page}`);
-        page++;
-        continue;
-      }
+    logger.info(`\tFetching points`);
+    const points = await input.getPoints();
 
-      if (points.length === 0) {
-        logger.info(`\tNo more data to process for ${country.name}`);
-        break;
-      }
-
-      logger.info(`\t\tAdding ${points.length} points`);
-      await insertPoints(points);
-
-      logger.info(`\t\tFetching inquiries`);
-
-      const requests = points.map((point) => api.getInquiries(point.id));
-      const inquiries = (await Promise.all(requests)).reduce(
-        (inquiries, pointInquiries) => {
-          return {
-            communities: inquiries.communities.concat(pointInquiries.communities),
-            systems: inquiries.systems.concat(pointInquiries.systems),
-            providers: inquiries.providers.concat(pointInquiries.providers),
-          };
-        },
-        { communities: [], systems: [], providers: [] },
-      );
-
-      if (inquiries.communities.length) {
-        logger.info(`\t\tAdding ${inquiries.communities.length} communities`);
-        await insertCommunities(inquiries.communities);
-      }
-
-      if (inquiries.systems.length) {
-        logger.info(`\t\tAdding ${inquiries.systems.length} systems`);
-        await insertSystems(inquiries.systems);
-      }
-
-      if (inquiries.providers.length) {
-        logger.info(`\t\tAdding ${inquiries.providers.length} providers`);
-        await insertProviders(inquiries.providers);
-      }
-
-      page++;
+    if (points.length === 0) {
+      logger.info(`\tNo data to process for ${country.name}`);
+      break;
     }
+
+    logger.info(`\t\tAdding ${points.length} points`);
+    await insertPoints(points);
+
+    logger.info(`\t\tFetching communities`);
+    const communities = await input.getCommunities(points.map((point) => point.id));
+
+    if (communities.length) {
+      logger.info(`\t\tAdding ${communities.length} communities`);
+      await insertCommunities(communities);
+    }
+
+    logger.info(`\t\tFetching systems`);
+    const systems = await input.getSystems(points.map((point) => point.id));
+
+    if (systems.length) {
+      logger.info(`\t\tAdding ${systems.length} systems`);
+      await insertSystems(systems);
+    }
+
+    logger.info(`\t\tFetching service providers`);
+    const providers = await input.getServiceProviders(points.map((point) => point.id));
+
+    if (providers.length) {
+      logger.info(`\t\tAdding ${providers.length} service providers`);
+      await insertProviders(providers);
+    }
+
+    input.close();
   }
 
   logger.info("Triggering Metabase refresh");
