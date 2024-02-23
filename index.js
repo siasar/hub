@@ -14,60 +14,66 @@ const logger = pino({
   },
 });
 
-const run = async () => {
-  logger.info("Creating schema");
-  await createSchema();
-
-  for (const country of config.countries) {
+const processCountry = (country) => {
+  return new Promise(async (resolve, reject) => {
     logger.info(`Processing ${country.name}`);
 
     const input = new Input(country);
 
-    logger.info(`\tConnecting server`);
+    logger.info(`${country.name}: Connecting server`);
     await input.connect();
 
-    logger.info(`\tFetching points`);
+    logger.info(`${country.name}: Fetching points`);
     const points = await input.getPoints();
 
     if (points.length === 0) {
-      logger.info(`\tNo data to process for ${country.name}`);
-      break;
+      logger.info(`${country.name}: No data to process`);
+      return resolve();
     }
 
-    logger.info(`\t\tAdding ${points.length} points`);
+    logger.info(`${country.name}: Adding ${points.length} points`);
     await insertPoints(points);
 
-    logger.info(`\t\tFetching communities`);
+    logger.info(`${country.name}: Fetching communities`);
     const communities = await input.getCommunities(points.map((point) => point.id));
 
     if (communities.length) {
-      logger.info(`\t\tAdding ${communities.length} communities`);
+      logger.info(`${country.name}: Adding ${communities.length} communities`);
       await insertCommunities(communities);
     }
 
-    logger.info(`\t\tFetching systems`);
+    logger.info(`${country.name}: Fetching systems`);
     const systems = await input.getSystems(points.map((point) => point.id));
 
     if (systems.length) {
-      logger.info(`\t\tAdding ${systems.length} systems`);
+      logger.info(`${country.name}: Adding ${systems.length} systems`);
       await insertSystems(systems);
     }
 
-    logger.info(`\t\tFetching service providers`);
+    logger.info(`${country.name}: Fetching service providers`);
     const providers = await input.getServiceProviders(points.map((point) => point.id));
 
     if (providers.length) {
-      logger.info(`\t\tAdding ${providers.length} service providers`);
+      logger.info(`${country.name}: Adding ${providers.length} service providers`);
       await insertProviders(providers);
     }
 
-    input.close();
-  }
+    await input.close();
 
-  logger.info("Triggering Metabase refresh");
-  await refresh();
+    resolve();
+  });
+};
 
-  logger.info("Done!");
+const run = async () => {
+  logger.info("Creating schema");
+  await createSchema();
+
+  Promise.all(config.countries.map(processCountry)).then(async () => {
+    logger.info("Triggering Metabase refresh");
+    await refresh();
+
+    logger.info("Done!");
+  });
 };
 
 run();
