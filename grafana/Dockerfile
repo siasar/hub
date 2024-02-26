@@ -70,15 +70,14 @@ ENV GF_USERS_ALLOW_SIGN_UP=false
 ENV GF_PANELS_DISABLE_SANITIZE_HTML=true
 
 ## Disable Explore
-ENV GF_EXPLORE_ENABLED=true
+# ENV GF_EXPLORE_ENABLED=false
 
-# Updates Check
+## Updates Check
 ENV GF_ANALYTICS_CHECK_FOR_UPDATES=false
 
 ## Paths
 ENV GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 ENV GF_PATHS_PLUGINS="/var/lib/grafana/plugins"
-ENV GF_PATHS_DASHBOARDS="/etc/grafana/dashboards"
 
 ## Install plugins
 ENV GF_INSTALL_PLUGINS=volkovlabs-echarts-panel,marcusolsson-json-datasource,orchestracities-map-panel
@@ -86,8 +85,5 @@ ENV GF_INSTALL_PLUGINS=volkovlabs-echarts-panel,marcusolsson-json-datasource,orc
 ## Copy Provisioning
 COPY --chown=grafana:root provisioning $GF_PATHS_PROVISIONING
 
-## Copy Dashboards
-COPY --chown=grafana:root provisioning/dashboards/*.json $GF_PATHS_DASHBOARDS/
-
 ## Set Home Dashboard
-ENV GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=$GF_PATHS_DASHBOARDS/main.json
+ENV GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=$GF_PATHS_PROVISIONING/dashboards/main.json
