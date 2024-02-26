@@ -1,0 +1,20 @@
+apiVersion: 1
+
+datasources:
+  - name: hub
+    type: postgres
+    uid: 0fdb8ba7-3686-48b7-8a92-373004563730
+    url: postgres:5432
+    isDefault: true
+    user: data_hub
+    secureJsonData:
+      password: 'data_hub'
+    jsonData:
+      database: data_hub
+      sslmode: 'disable'
+      maxOpenConns: 100
+      maxIdleConns: 100
+      maxIdleConnsAuto: tru
+      connMaxLifetime: 14400
+      postgresVersion: 1500
+      timescaledb: false

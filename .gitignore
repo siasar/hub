@@ -3,3 +3,4 @@ node_modules
 metabase
 .vscode/settings.json
 config.json
+.DS_Store

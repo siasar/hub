@@ -65,7 +65,7 @@ const processCountry = (country) => {
 };
 
 const run = async () => {
-  logger.info("Creating schema");
+  logger.info("Creating Database Schema");
   await createSchema();
 
   Promise.all(config.countries.map(processCountry)).then(async () => {
