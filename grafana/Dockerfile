@@ -21,20 +21,20 @@ RUN fc-cache -fv
 # Update Title
 RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SIASAR Hub</title>|g' /usr/share/grafana/public/views/index.html
 
-## Update Help menu
-RUN sed -i "s|\[\[.NavTree\]\],|nav,|g; \
-    s|window.grafanaBootData = {| \
-    let nav = [[.NavTree]]; \
-    const alerting = nav.find((element) => element.id === 'alerting'); \
-    if (alerting) { alerting['url'] = '/alerting/list'; } \
-    const dashboards = nav.find((element) => element.id === 'dashboards/browse'); \
-    if (dashboards) { dashboards['children'] = [];} \
-    const connections = nav.find((element) => element.id === 'connections'); \
-    if (connections) { connections['url'] = '/datasources'; connections['children'].shift(); } \
-    const help = nav.find((element) => element.id === 'help'); \
-    if (help) { help['subTitle'] = 'Grafana OSS'; help['children'] = [];} \
-    window.grafanaBootData = {|g" \
-  /usr/share/grafana/public/views/index.html
+# ## Update Help menu
+# RUN sed -i "s|\[\[.NavTree\]\],|nav,|g; \
+#     s|window.grafanaBootData = {| \
+#     let nav = [[.NavTree]]; \
+#     const alerting = nav.find((element) => element.id === 'alerting'); \
+#     if (alerting) { alerting['url'] = '/alerting/list'; } \
+#     const dashboards = nav.find((element) => element.id === 'dashboards/browse'); \
+#     if (dashboards) { dashboards['children'] = [];} \
+#     const connections = nav.find((element) => element.id === 'connections'); \
+#     if (connections) { connections['url'] = '/datasources'; connections['children'].shift(); } \
+#     const help = nav.find((element) => element.id === 'help'); \
+#     if (help) { help['subTitle'] = 'Grafana OSS'; help['children'] = [];} \
+#     window.grafanaBootData = {|g" \
+#   /usr/share/grafana/public/views/index.html
 
 ## Update Title
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|AppTitle="Grafana"|AppTitle="SIASAR Hub"|g' {} \;
