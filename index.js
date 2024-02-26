@@ -68,10 +68,7 @@ const run = async () => {
   logger.info("Creating Database Schema");
   await createSchema();
 
-  Promise.all(config.countries.map(processCountry)).then(async () => {
-    logger.info("Triggering Metabase refresh");
-    await refresh();
-
+  Promise.all(config.countries.map(processCountry)).then(() => {
     logger.info("Done!");
   });
 };
