@@ -1,6 +1,5 @@
 import pino from "pino";
-import { createSchema, insertCommunities, insertPoints, insertProviders, insertSystems } from "./output.js";
-import { refresh } from "./metabase.js";
+import Output from "./output.js";
 import Input from "./input.js";
 import config from "./config.json" with { type: "json" };
 
@@ -14,63 +13,83 @@ const logger = pino({
   },
 });
 
+const output = new Output({
+  host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT || 5432,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
+});
+
 const processCountry = (country) => {
-  return new Promise(async (resolve, reject) => {
-    logger.info(`Processing ${country.name}`);
+  const input = new Input(country);
 
-    const input = new Input(country);
+  logger.info(`${country.name}: Connecting server`);
 
-    logger.info(`${country.name}: Connecting server`);
-    await input.connect();
+  return input
+    .connect()
+    .then(() => {
+      logger.info(`${country.name}: Fetching points`);
+      return input.getPoints();
+    })
+    .then((points) => {
+      logger.info(`${country.name}: Adding ${points.length} points`);
+      return output.insertPoints(points).then(() => {
+        return points;
+      });
+    })
+    .then((points) => {
+      logger.info(`${country.name}: Fetching points data`);
+      const pointsIds = points.map((point) => point.id);
 
-    logger.info(`${country.name}: Fetching points`);
-    const points = await input.getPoints();
+      return Promise.all([
+        input.getCommunities(pointsIds),
+        input.getSystems(pointsIds),
+        input.getServiceProviders(pointsIds),
+      ]);
+    })
+    .then(([communities, systems, providers]) => {
+      const inserts = [];
 
-    if (points.length === 0) {
-      logger.info(`${country.name}: No data to process`);
-      return resolve();
-    }
+      if (communities.length) {
+        logger.info(`${country.name}: Adding ${communities.length} communities`);
+        inserts.push(output.insertCommunities(communities));
+      }
 
-    logger.info(`${country.name}: Adding ${points.length} points`);
-    await insertPoints(points);
+      if (systems.length) {
+        logger.info(`${country.name}: Adding ${systems.length} systems`);
+        inserts.push(output.insertSystems(systems));
+      }
 
-    logger.info(`${country.name}: Fetching communities`);
-    const communities = await input.getCommunities(points.map((point) => point.id));
+      if (providers.length) {
+        logger.info(`${country.name}: Adding ${providers.length} service providers`);
+        inserts.push(output.insertProviders(providers));
+      }
 
-    if (communities.length) {
-      logger.info(`${country.name}: Adding ${communities.length} communities`);
-      await insertCommunities(communities);
-    }
-
-    logger.info(`${country.name}: Fetching systems`);
-    const systems = await input.getSystems(points.map((point) => point.id));
-
-    if (systems.length) {
-      logger.info(`${country.name}: Adding ${systems.length} systems`);
-      await insertSystems(systems);
-    }
-
-    logger.info(`${country.name}: Fetching service providers`);
-    const providers = await input.getServiceProviders(points.map((point) => point.id));
-
-    if (providers.length) {
-      logger.info(`${country.name}: Adding ${providers.length} service providers`);
-      await insertProviders(providers);
-    }
-
-    await input.close();
-
-    resolve();
-  });
+      return Promise.all(inserts);
+    })
+    .then(() => {
+      logger.info(`${country.name}: Closing input connection`);
+      return input.end();
+    })
+    .catch((err) => {
+      logger.error(err);
+      input.end();
+    });
 };
 
-const run = async () => {
-  logger.info("Creating Database Schema");
-  await createSchema();
+logger.info("Creating Database Schema");
 
-  Promise.all(config.countries.map(processCountry)).then(() => {
-    logger.info("Done!");
+output
+  .createSchema()
+  .then(() => {
+    return Promise.all(config.countries.map(processCountry));
+  })
+  .then(() => {
+    logger.info("All Done! Closing output connection");
+    return output.end();
+  })
+  .catch((err) => {
+    logger.error(err);
+    output.end();
   });
-};
-
-run();

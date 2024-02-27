@@ -1,4 +1,4 @@
-import { createPool } from "mysql2/promise";
+import { createConnection } from "mysql2/promise";
 import { Client } from "ssh2";
 
 export default class Input {
@@ -7,14 +7,17 @@ export default class Input {
     this.sshClient = new Client();
   }
 
-  async connect() {
-    this.pool = await new Promise((resolve, reject) => {
+  connect() {
+    return new Promise((resolve, reject) => {
       this.sshClient
         .on("ready", () => {
           const port = Math.floor(Math.random() * 10000 + 10000);
           this.sshClient.forwardOut("localhost", port, "localhost", 3306, (err, stream) => {
             if (err) reject(err);
-            resolve(createPool({ ...this.config.database, host: "localhost", port, stream }));
+            createConnection({ ...this.config.database, host: "localhost", port, stream }).then((connection) => {
+              this.connection = connection;
+              resolve();
+            });
           });
         })
         .connect({
@@ -24,13 +27,12 @@ export default class Input {
     });
   }
 
-  async query(query) {
-    return await this.pool.query(query);
+  query(query) {
+    return this.connection.query(query);
   }
 
-  async close() {
-    await this.pool.end();
-    this.sshClient.end();
+  end() {
+    return this.connection.end().then(() => this.sshClient.end());
   }
 
   idDecode(buffer) {
@@ -80,8 +82,8 @@ export default class Input {
     return ids.map((id) => `'${id.toString("hex")}'`).join(",");
   }
 
-  async getPoints() {
-    const [rows] = await this.query(`
+  getPoints() {
+    const query = `
       SELECT
         p.id,
         p.field_status AS status,
@@ -89,15 +91,17 @@ export default class Input {
         p.field_country_value AS country
       FROM form_point p
       WHERE p.field_status = 'calculated'
-    `);
+    `;
 
-    return rows.map((row) => ({
-      ...row,
-      ulid: this.idDecode(row.id),
-    }));
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        ...row,
+        ulid: this.idDecode(row.id),
+      }));
+    });
   }
 
-  async getCommunities(pointIds) {
+  getCommunities(pointIds) {
     const query = `
       SELECT
         c.id,
@@ -134,20 +138,20 @@ export default class Input {
         AND c.field_status = 'validated';
     `;
 
-    const [rows] = await this.query(query);
-
-    return rows.map((row) => ({
-      ...row,
-      ulid: this.idDecode(row.id),
-      pointUlid: this.idDecode(row.point_id),
-      indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
-      images: JSON.parse(row.images || "[]").map(
-        (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
-      ),
-    }));
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        ...row,
+        ulid: this.idDecode(row.id),
+        pointUlid: this.idDecode(row.point_id),
+        indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
+        images: JSON.parse(row.images || "[]").map(
+          (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
+        ),
+      }));
+    });
   }
 
-  async getSystems(pointIds) {
+  getSystems(pointIds) {
     const query = `
       SELECT
         s.id,
@@ -184,20 +188,20 @@ export default class Input {
         AND s.field_status = 'validated';
     `;
 
-    const [rows] = await this.query(query);
-
-    return rows.map((row) => ({
-      ...row,
-      ulid: this.idDecode(row.id),
-      pointUlid: this.idDecode(row.point_id),
-      indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
-      images: JSON.parse(row.images || "[]").map(
-        (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
-      ),
-    }));
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        ...row,
+        ulid: this.idDecode(row.id),
+        pointUlid: this.idDecode(row.point_id),
+        indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
+        images: JSON.parse(row.images || "[]").map(
+          (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
+        ),
+      }));
+    });
   }
 
-  async getServiceProviders(pointIds) {
+  getServiceProviders(pointIds) {
     const query = `
       SELECT
         sp.id,
@@ -234,16 +238,16 @@ export default class Input {
         AND sp.field_status = 'validated';
     `;
 
-    const [rows] = await this.query(query);
-
-    return rows.map((row) => ({
-      ...row,
-      ulid: this.idDecode(row.id),
-      pointUlid: this.idDecode(row.point_id),
-      indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
-      images: JSON.parse(row.images || "[]").map(
-        (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
-      ),
-    }));
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        ...row,
+        ulid: this.idDecode(row.id),
+        pointUlid: this.idDecode(row.point_id),
+        indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
+        images: JSON.parse(row.images || "[]").map(
+          (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
+        ),
+      }));
+    });
   }
 }
