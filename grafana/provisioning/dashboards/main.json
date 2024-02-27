@@ -1221,7 +1221,9 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": true
+  },
   "timezone": "",
   "title": "Main",
   "uid": "db945fe3-d580-4fd9-be35-88b12a16e99b",
