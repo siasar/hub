@@ -23,122 +23,6 @@
   "panels": [
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unitScale": true
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "id": 7,
-      "options": {
-        "basemap": {
-          "config": {},
-          "type": "default"
-        },
-        "controls": {
-          "mouseWheelZoom": true,
-          "showAttribution": true,
-          "showDebug": false,
-          "showLayercontrol": true,
-          "showScale": false,
-          "showZoom": true
-        },
-        "layers": [
-          {
-            "config": {
-              "cluster": false,
-              "clusterDistance": 20,
-              "clusterMinDistance": 0,
-              "clusterValue": "size",
-              "color": {
-                "fixed": "#5a8fb4"
-              },
-              "enableGradient": false,
-              "enableShadow": false,
-              "fillOpacity": 0.9,
-              "iconSize": 9,
-              "pinShape": "marker",
-              "shape": "circle",
-              "showLegend": true,
-              "showPin": false,
-              "size": {
-                "fixed": 2,
-                "max": 15,
-                "min": 2
-              }
-            },
-            "displayProperties": [
-              "name"
-            ],
-            "location": {
-              "geojson": "geometry",
-              "mode": "geojson"
-            },
-            "name": "Countries",
-            "query": "A",
-            "type": "markers"
-          }
-        ],
-        "view": {
-          "id": "zero",
-          "lat": 0,
-          "lon": 0,
-          "zoom": 1.5
-        }
-      },
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
-          },
-          "fields": [
-            {
-              "jsonPath": "$.features[*].geometry"
-            },
-            {
-              "jsonPath": "$.features[*].properties.name",
-              "language": "jsonpath",
-              "name": ""
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": ""
-        }
-      ],
-      "type": "orchestracities-map-panel"
-    },
-    {
-      "datasource": {
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
@@ -225,8 +109,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 12,
-        "x": 12,
+        "w": 13,
+        "x": 0,
         "y": 0
       },
       "id": 3,
@@ -256,7 +140,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as communities\nFROM communities\nWHERE upper(adm0) in ($country);",
+          "rawSql": "SELECT count(*) as communities\nFROM communities\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -285,7 +169,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as systems\nFROM systems\nWHERE upper(adm0) in ($country);;",
+          "rawSql": "SELECT count(*) as systems\nFROM systems\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "B",
           "sql": {
             "columns": [
@@ -314,7 +198,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as providers\nFROM providers\nWHERE upper(adm0) in ($country);;",
+          "rawSql": "SELECT count(*) as providers\nFROM providers\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "C",
           "sql": {
             "columns": [
@@ -339,35 +223,13 @@
     },
     {
       "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+        "type": "marcusolsson-json-datasource",
+        "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 86,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -376,212 +238,104 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           },
           "unitScale": true
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "communities"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#89af25",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Communities"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "systems"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#2693b5",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Systems"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "providers"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#44a891",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Service Providers"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "country"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Country"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 9
+        "w": 11,
+        "x": 13,
+        "y": 0
       },
-      "id": 5,
+      "id": 7,
       "options": {
-        "barRadius": 0,
-        "barWidth": 0.81,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "basemap": {
+          "config": {},
+          "type": "default"
         },
-        "orientation": "vertical",
-        "showValue": "never",
-        "stacking": "percent",
-        "text": {
-          "valueSize": 8
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": false,
+          "showLayercontrol": true,
+          "showScale": false,
+          "showZoom": true
         },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "asc"
-        },
-        "xField": "country",
-        "xTickLabelMaxLength": 10,
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
+        "layers": [
+          {
+            "config": {
+              "cluster": false,
+              "clusterDistance": 20,
+              "clusterMinDistance": 0,
+              "clusterValue": "size",
+              "color": {
+                "fixed": "#5a8fb4"
+              },
+              "enableGradient": false,
+              "enableShadow": false,
+              "fillOpacity": 0.9,
+              "iconSize": 9,
+              "pinShape": "marker",
+              "shape": "circle",
+              "showLegend": true,
+              "showPin": false,
+              "size": {
+                "fixed": 2,
+                "max": 15,
+                "min": 2
+              }
+            },
+            "displayProperties": [
+              "name"
+            ],
+            "location": {
+              "geojson": "geometry",
+              "mode": "geojson"
+            },
+            "name": "Countries",
+            "query": "A",
+            "type": "markers"
+          }
+        ],
+        "view": {
+          "id": "zero",
+          "lat": 0,
+          "lon": 0,
+          "zoom": 1.5
+        }
       },
       "targets": [
         {
+          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+            "type": "marcusolsson-json-datasource",
+            "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
           },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as communities from communities where upper(adm0) in ($country) GROUP BY country;",
+          "fields": [
+            {
+              "jsonPath": "$.features[*].geometry"
+            },
+            {
+              "jsonPath": "$.features[*].properties.name",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
           "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": false,
-          "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as systems from systems where upper(adm0) in ($country) GROUP BY country;",
-          "refId": "B",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": false,
-          "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as providers from providers where upper(adm0) in ($country) GROUP BY country;",
-          "refId": "C",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
+          "urlPath": ""
         }
       ],
-      "title": "SIASAR entities grouped by country",
-      "transformations": [
-        {
-          "id": "merge",
-          "options": {}
-        }
-      ],
-      "type": "barchart"
+      "type": "orchestracities-map-panel"
     },
     {
       "datasource": {
@@ -733,8 +487,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 12,
-        "x": 12,
+        "w": 13,
+        "x": 0,
         "y": 9
       },
       "id": 4,
@@ -773,7 +527,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"A\" from systems where wsi = 'A' and upper(adm0) in ($country) UNION\nSELECT 'COM' as entity, count(*) as \"A\" from communities where wsp = 'A' and upper(adm0) in ($country) UNION\nSELECT 'SEP' as entity, count(*) as \"A\" from providers where sep = 'A' and upper(adm0) in ($country);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"A\" from systems where wsi = 'A' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"A\" from communities where wsp = 'A' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"A\" from providers where sep = 'A' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -802,7 +556,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"B\" from systems where wsi = 'B' and upper(adm0) in ($country) UNION\nSELECT 'COM' as entity, count(*) as \"B\" from communities where wsp = 'B' and upper(adm0) in ($country) UNION\nSELECT 'SEP' as entity, count(*) as \"B\" from providers where sep = 'B' and upper(adm0) in ($country);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"B\" from systems where wsi = 'B' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"B\" from communities where wsp = 'B' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"B\" from providers where sep = 'B' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "B",
           "sql": {
             "columns": [
@@ -831,7 +585,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"C\" from systems where wsi = 'C' and upper(adm0) in ($country) UNION\nSELECT 'COM' as entity, count(*) as \"C\" from communities where wsp = 'C' and upper(adm0) in ($country) UNION\nSELECT 'SEP' as entity, count(*) as \"C\" from providers where sep = 'C' and upper(adm0) in ($country);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"C\" from systems where wsi = 'C' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"C\" from communities where wsp = 'C' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"C\" from providers where sep = 'C' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "C",
           "sql": {
             "columns": [
@@ -860,7 +614,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"D\" from systems where wsi = 'D' and upper(adm0) in ($country) UNION\nSELECT 'COM' as entity, count(*) as \"D\" from communities where wsp = 'D' and upper(adm0) in ($country) UNION\nSELECT 'SEP' as entity, count(*) as \"D\" from providers where sep = 'D' and upper(adm0) in ($country);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"D\" from systems where wsi = 'D' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"D\" from communities where wsp = 'D' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"D\" from providers where sep = 'D' and upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "D",
           "sql": {
             "columns": [
@@ -1008,9 +762,9 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 18
+        "w": 11,
+        "x": 13,
+        "y": 9
       },
       "id": 6,
       "options": {
@@ -1048,7 +802,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as communities\nFROM communities\nWHERE upper(adm0) in ($country)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as communities\nFROM communities\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1077,7 +831,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as systems\nFROM systems\nWHERE upper(adm0) in ($country)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as systems\nFROM systems\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -1106,7 +860,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as providers\nFROM providers \nWHERE upper(adm0) in ($country)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as providers\nFROM providers \nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
           "refId": "C",
           "sql": {
             "columns": [
@@ -1135,9 +889,255 @@
         }
       ],
       "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 86,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "communities"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#89af25",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Communities"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "systems"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#2693b5",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Systems"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "providers"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#44a891",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Service Providers"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "country"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Country"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 11,
+        "x": 0,
+        "y": 18
+      },
+      "id": 5,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.81,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "never",
+        "stacking": "percent",
+        "text": {
+          "valueSize": 8
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "asc"
+        },
+        "xField": "country",
+        "xTickLabelMaxLength": 10,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT upper(country) as country, count(*) as communities\nfrom communities\nwhere upper(adm0) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nGROUP BY country;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT upper(country) as country, count(*) as systems\nfrom systems\nwhere upper(adm0) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nGROUP BY country;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT upper(country) as country, count(*) as providers\nfrom providers\nwhere upper(adm0) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nGROUP BY country;",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "SIASAR entities grouped by country",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "barchart"
     }
   ],
-  "refresh": "",
+  "refresh": false,
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -1145,7 +1145,7 @@
       {
         "allValue": "",
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
@@ -1169,7 +1169,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
@@ -1201,37 +1201,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT adm2 FROM communities where adm1 = $adm1 group by adm2 order by 1 asc;",
+        "definition": "SELECT adm2 FROM communities where adm1 in ($adm1) group by adm2 order by 1 asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Adm 2",
         "multi": false,
         "name": "adm2",
         "options": [],
-        "query": "SELECT adm2 FROM communities where adm1 = $adm1 group by adm2 order by 1 asc;",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "A",
-          "value": "A"
-        },
-        "datasource": {
-          "type": "grafana-postgresql-datasource",
-          "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-        },
-        "definition": "SELECT 'A'\nUNION\nSELECT 'B'\nUNION\nSELECT 'C'\nUNION\nSELECT 'D'\norder by 1;",
-        "hide": 0,
-        "includeAll": true,
-        "multi": false,
-        "name": "score",
-        "options": [],
-        "query": "SELECT 'A'\nUNION\nSELECT 'B'\nUNION\nSELECT 'C'\nUNION\nSELECT 'D'\norder by 1;",
+        "query": "SELECT adm2 FROM communities where adm1 in ($adm1) group by adm2 order by 1 asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1241,8 +1218,8 @@
     ]
   },
   "time": {
-    "from": "now-6h",
-    "to": "now"
+    "from": "2024-02-23T14:48:30.126Z",
+    "to": "2024-03-02T14:48:30.158Z"
   },
   "timepicker": {},
   "timezone": "",
