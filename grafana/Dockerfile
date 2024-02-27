@@ -80,7 +80,7 @@ ENV GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 ENV GF_PATHS_PLUGINS="/var/lib/grafana/plugins"
 
 ## Install plugins
-ENV GF_INSTALL_PLUGINS=volkovlabs-echarts-panel,marcusolsson-json-datasource,orchestracities-map-panel
+ENV GF_INSTALL_PLUGINS=volkovlabs-echarts-panel,marcusolsson-json-datasource,orchestracities-map-panel,marcusolsson-dynamictext-panel,dalvany-image-panel
 
 ## Copy Provisioning
 COPY --chown=grafana:root provisioning $GF_PATHS_PROVISIONING

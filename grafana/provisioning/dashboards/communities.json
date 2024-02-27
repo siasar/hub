@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -537,6 +537,13 @@
             },
             "inspect": false
           },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+            }
+          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -674,6 +681,13 @@
             },
             "inspect": false
           },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+            }
+          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
