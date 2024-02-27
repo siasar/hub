@@ -20,10 +20,7 @@ export default class Input {
             });
           });
         })
-        .connect({
-          ...this.config.ssh,
-          privateKey: process.env.SSH_PRIVATE_KEY,
-        });
+        .connect(this.config.ssh);
     });
   }
 
