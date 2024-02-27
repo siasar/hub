@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -115,7 +115,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "PANAMA",
           "value": "PANAMA"
         },
@@ -139,7 +139,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "PANAMÁ OESTE",
           "value": "PANAMÁ OESTE"
         },
@@ -163,7 +163,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "LA CHORRERA",
           "value": "LA CHORRERA"
         },
@@ -239,10 +239,12 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": true
+  },
   "timezone": "",
   "title": "Communities List",
   "uid": "de458d8c-6338-4673-bcc6-eddb161e0765",
-  "version": 4,
+  "version": 1,
   "weekStart": ""
 }

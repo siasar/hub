@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -849,7 +849,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -877,7 +877,9 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": true
+  },
   "timezone": "",
   "title": "Service Providers",
   "uid": "d470a8e2-a83d-4590-8dc0-a4a82956e551",

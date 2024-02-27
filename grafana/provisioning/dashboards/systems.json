@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -848,7 +848,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -876,10 +876,12 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": true
+  },
   "timezone": "",
   "title": "Systems",
   "uid": "de0c2c76-364f-4326-a454-ec1af85569a2",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

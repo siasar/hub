@@ -466,10 +466,12 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "hidden": true
+  },
   "timezone": "",
   "title": "Community Dashboard",
   "uid": "ce679b69-9cb2-4710-a67c-153078b071cc",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }
