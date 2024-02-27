@@ -23,6 +23,122 @@
   "panels": [
     {
       "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "basemap": {
+          "config": {},
+          "type": "default"
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": false,
+          "showLayercontrol": true,
+          "showScale": false,
+          "showZoom": true
+        },
+        "layers": [
+          {
+            "config": {
+              "cluster": false,
+              "clusterDistance": 20,
+              "clusterMinDistance": 0,
+              "clusterValue": "size",
+              "color": {
+                "fixed": "#5a8fb4"
+              },
+              "enableGradient": false,
+              "enableShadow": false,
+              "fillOpacity": 0.9,
+              "iconSize": 9,
+              "pinShape": "marker",
+              "shape": "circle",
+              "showLegend": true,
+              "showPin": false,
+              "size": {
+                "fixed": 2,
+                "max": 15,
+                "min": 2
+              }
+            },
+            "displayProperties": [
+              "name"
+            ],
+            "location": {
+              "geojson": "geometry",
+              "mode": "geojson"
+            },
+            "name": "Countries",
+            "query": "A",
+            "type": "markers"
+          }
+        ],
+        "view": {
+          "id": "zero",
+          "lat": 0,
+          "lon": 0,
+          "zoom": 1.5
+        }
+      },
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.features[*].geometry"
+            },
+            {
+              "jsonPath": "$.features[*].properties.name",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "type": "orchestracities-map-panel"
+    },
+    {
+      "datasource": {
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
@@ -109,8 +225,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
-        "x": 0,
+        "w": 12,
+        "x": 12,
         "y": 0
       },
       "id": 3,
@@ -220,122 +336,6 @@
         }
       ],
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unitScale": true
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 11,
-        "x": 13,
-        "y": 0
-      },
-      "id": 7,
-      "options": {
-        "basemap": {
-          "config": {},
-          "type": "default"
-        },
-        "controls": {
-          "mouseWheelZoom": true,
-          "showAttribution": true,
-          "showDebug": false,
-          "showLayercontrol": true,
-          "showScale": false,
-          "showZoom": true
-        },
-        "layers": [
-          {
-            "config": {
-              "cluster": false,
-              "clusterDistance": 20,
-              "clusterMinDistance": 0,
-              "clusterValue": "size",
-              "color": {
-                "fixed": "#5a8fb4"
-              },
-              "enableGradient": false,
-              "enableShadow": false,
-              "fillOpacity": 0.9,
-              "iconSize": 9,
-              "pinShape": "marker",
-              "shape": "circle",
-              "showLegend": true,
-              "showPin": false,
-              "size": {
-                "fixed": 2,
-                "max": 15,
-                "min": 2
-              }
-            },
-            "displayProperties": [
-              "name"
-            ],
-            "location": {
-              "geojson": "geometry",
-              "mode": "geojson"
-            },
-            "name": "Countries",
-            "query": "A",
-            "type": "markers"
-          }
-        ],
-        "view": {
-          "id": "zero",
-          "lat": 0,
-          "lon": 0,
-          "zoom": 1.5
-        }
-      },
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
-          },
-          "fields": [
-            {
-              "jsonPath": "$.features[*].geometry"
-            },
-            {
-              "jsonPath": "$.features[*].properties.name",
-              "language": "jsonpath",
-              "name": ""
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": ""
-        }
-      ],
-      "type": "orchestracities-map-panel"
     },
     {
       "datasource": {
@@ -487,7 +487,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
+        "w": 12,
         "x": 0,
         "y": 9
       },
@@ -649,252 +649,6 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "Last 6 Months",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 86,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unitScale": true
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "communities"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#89af25",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Communities"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "systems"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#2693b5",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Systems"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "providers"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#44a891",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Service Providers"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "country"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Country"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 11,
-        "x": 13,
-        "y": 9
-      },
-      "id": 6,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.81,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "vertical",
-        "showValue": "never",
-        "stacking": "none",
-        "text": {
-          "valueSize": 8
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "asc"
-        },
-        "xField": "label",
-        "xTickLabelMaxLength": 10,
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as communities\nFROM communities\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": false,
-          "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as systems\nFROM systems\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
-          "refId": "B",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": false,
-          "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as providers\nFROM providers \nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
-          "refId": "C",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "Gathered Data (Last 6 Months)",
-      "transformations": [
-        {
-          "id": "merge",
-          "options": {}
-        }
-      ],
-      "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1008,9 +762,9 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 11,
-        "x": 0,
-        "y": 18
+        "w": 12,
+        "x": 12,
+        "y": 9
       },
       "id": 5,
       "options": {
@@ -1135,6 +889,252 @@
         }
       ],
       "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
+      "description": "Last 6 Months",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 86,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "communities"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#89af25",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Communities"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "systems"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#2693b5",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Systems"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "providers"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#44a891",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Service Providers"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "country"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Country"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.81,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "never",
+        "stacking": "none",
+        "text": {
+          "valueSize": 8
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "asc"
+        },
+        "xField": "label",
+        "xTickLabelMaxLength": 10,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as communities\nFROM communities\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as systems\nFROM systems\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as providers\nFROM providers \nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Gathered Data (Last 6 Months)",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "barchart"
     }
   ],
   "refresh": false,
@@ -1146,8 +1146,8 @@
         "allValue": "",
         "current": {
           "selected": true,
-          "text": "All",
-          "value": "$__all"
+          "text": "PANAMA",
+          "value": "PANAMA"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
@@ -1169,7 +1169,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
