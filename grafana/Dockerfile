@@ -18,24 +18,6 @@ RUN apk add --no-cache fontconfig
 COPY fonts /usr/share/fonts/
 RUN fc-cache -fv
 
-# Update Title
-RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SIASAR Hub</title>|g' /usr/share/grafana/public/views/index.html
-
-# ## Update Help menu
-# RUN sed -i "s|\[\[.NavTree\]\],|nav,|g; \
-#     s|window.grafanaBootData = {| \
-#     let nav = [[.NavTree]]; \
-#     const alerting = nav.find((element) => element.id === 'alerting'); \
-#     if (alerting) { alerting['url'] = '/alerting/list'; } \
-#     const dashboards = nav.find((element) => element.id === 'dashboards/browse'); \
-#     if (dashboards) { dashboards['children'] = [];} \
-#     const connections = nav.find((element) => element.id === 'connections'); \
-#     if (connections) { connections['url'] = '/datasources'; connections['children'].shift(); } \
-#     const help = nav.find((element) => element.id === 'help'); \
-#     if (help) { help['subTitle'] = 'Grafana OSS'; help['children'] = [];} \
-#     window.grafanaBootData = {|g" \
-#   /usr/share/grafana/public/views/index.html
-
 ## Update Title
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|AppTitle="Grafana"|AppTitle="SIASAR Hub"|g' {} \;
 
@@ -57,22 +39,44 @@ RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|..createEle
 ## Remove Open Source icon
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|.push({target:"_blank",id:"version",text:`${..edition}${.}`,url:..licenseUrl,icon:"external-link-alt"})||g' {} \;
 
+## Add custom styles
+COPY custom.css /usr/share/grafana/public/
+
+## Update Title
+RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SIASAR Hub</title>|g' /usr/share/grafana/public/views/index.html
+
+## Add CSS link tag
+RUN sed -i 's|</head>|<link rel="stylesheet" type="text/css" href="public/custom.css" /></head>|g' /usr/share/grafana/public/views/index.html
+
+## Add Google Fonts link tag
+RUN sed -i 's|</head>|<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet"></head>|g' /usr/share/grafana/public/views/index.html
+
 ## Set Grafana options
 ENV GF_ENABLE_GZIP=true
 ENV GF_USERS_DEFAULT_THEME=light
+ENV GF_DEFAULT_INSTANCE_NAME=siasar
 
 ## Enable Anonymous Authentication
 ENV GF_AUTH_ANONYMOUS_ENABLED=true
 ENV GF_AUTH_BASIC_ENABLED=false
 ENV GF_USERS_ALLOW_SIGN_UP=false
 
-## Disable Sanitize
+## Disable Help Section
+ENV GF_HELP_ENABLED=false
+
+## Disable Public Dashboards
+ENV GF_PUBLIC_DASHBOARDS_ENABLED=false
+
+# Disable Alerting and News
+ENV GF_ALERTING_ENABLED=false
+ENV GF_UNIFIED_ALERTING_ENABLED=false
+ENV GF_NEWS_ENABLED=false
+
+## Enable Panels
 ENV GF_PANELS_DISABLE_SANITIZE_HTML=true
+ENV GF_PANELS_ENABLE_ALPHA=true
 
-## Disable Explore
-# ENV GF_EXPLORE_ENABLED=false
-
-## Updates Check
+## Disable Updates Check
 ENV GF_ANALYTICS_CHECK_FOR_UPDATES=false
 
 ## Paths
