@@ -45,11 +45,11 @@ COPY custom.css /usr/share/grafana/public/
 ## Update Title
 RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SIASAR Hub</title>|g' /usr/share/grafana/public/views/index.html
 
-## Add CSS link tag
-RUN sed -i 's|</head>|<link rel="stylesheet" type="text/css" href="public/custom.css" /></head>|g' /usr/share/grafana/public/views/index.html
-
 ## Add Google Fonts link tag
 RUN sed -i 's|</head>|<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet"></head>|g' /usr/share/grafana/public/views/index.html
+
+## Add CSS link tag
+RUN sed -i 's|</head>|<link rel="stylesheet" type="text/css" href="public/custom.css" /></head>|g' /usr/share/grafana/public/views/index.html
 
 ## Set Grafana options
 ENV GF_ENABLE_GZIP=true
