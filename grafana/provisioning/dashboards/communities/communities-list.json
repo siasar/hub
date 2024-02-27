@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -55,7 +55,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 20,
         "w": 24,
         "x": 0,
         "y": 0
@@ -104,7 +104,6 @@
           }
         }
       ],
-      "title": "Panel Title",
       "type": "table"
     }
   ],
@@ -245,6 +244,6 @@
   "timezone": "",
   "title": "Communities List",
   "uid": "de458d8c-6338-4673-bcc6-eddb161e0765",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
