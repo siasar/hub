@@ -17,6 +17,7 @@ services:
       - POSTGRES_DB=data_hub
       - POSTGRES_USER=data_hub
       - POSTGRES_PASSWORD=data_hub
+      - POSTGRES_PORT=5432
     depends_on:
       - postgres
     profiles:
@@ -42,5 +43,10 @@ services:
       - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=siasar123
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=data_hub
+      - POSTGRES_USER=data_hub
+      - POSTGRES_PASSWORD=data_hub
+      - POSTGRES_PORT=5432
     depends_on:
       - postgres

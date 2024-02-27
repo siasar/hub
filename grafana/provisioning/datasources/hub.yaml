@@ -4,13 +4,13 @@ datasources:
   - name: hub
     type: postgres
     uid: 0fdb8ba7-3686-48b7-8a92-373004563730
-    url: postgres:5432
+    url: $POSTGRES_HOST:$POSTGRES_PORT
     isDefault: true
-    user: data_hub
+    user: $POSTGRES_USER
     secureJsonData:
-      password: 'data_hub'
+      password: $POSTGRES_PASSWORD
     jsonData:
-      database: data_hub
+      database: $POSTGRES_DB
       sslmode: 'disable'
       maxOpenConns: 100
       maxIdleConns: 100
