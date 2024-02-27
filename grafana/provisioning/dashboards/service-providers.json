@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -48,7 +48,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp"
+              "options": "sep"
             },
             "properties": [
               {
@@ -109,7 +109,7 @@
               "clusterMinDistance": 0,
               "clusterValue": "size",
               "color": {
-                "field": "wsp",
+                "field": "sep",
                 "fixed": "dark-green"
               },
               "enableGradient": false,
@@ -153,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, wsp\nFROM communities\nWHERE upper(adm0) in ($country);",
+          "rawSql": "SELECT latitude, longitude, sep\nFROM providers \nWHERE upper(adm0) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -205,6 +205,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -247,7 +248,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp"
+              "options": "sep"
             },
             "properties": [
               {
@@ -286,7 +287,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Communities"
+                "value": "Service Providers"
               }
             ]
           }
@@ -302,7 +303,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
-        "colorByField": "wsp",
+        "colorByField": "sep",
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -318,7 +319,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xField": "wsp",
+        "xField": "sep",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -331,7 +332,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(wsp), wsp\nFROM communities\nWHERE upper(adm0) in ($country)\nGROUP BY wsp\nORDER BY wsp ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(sep), sep\nFROM providers \nWHERE upper(adm0) in ($country)\nGROUP BY sep\nORDER BY sep ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -379,7 +380,7 @@
           "table": "communities"
         }
       ],
-      "title": "Communities by score",
+      "title": "Service Providers by score",
       "type": "barchart"
     },
     {
@@ -434,7 +435,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Communities"
+                "value": "Service Providers"
               }
             ]
           }
@@ -477,9 +478,10 @@
             "type": "grafana-postgresql-datasource",
             "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "format": "table",
-          "rawSql": "SELECT COUNT(adm0), adm0 FROM communities GROUP BY adm0 LIMIT 50 ",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(adm0), adm0 FROM providers GROUP BY adm0 LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -517,7 +519,7 @@
           "table": "communities"
         }
       ],
-      "title": "Communities by country",
+      "title": "Service Providers by country",
       "type": "barchart"
     },
     {
@@ -633,7 +635,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, adm0\nFROM communities\nWHERE upper(adm0) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, adm0\nFROM providers \nWHERE upper(adm0) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -718,12 +720,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp_value"
+              "options": "sep_value"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "WSP"
+                "value": "SEP"
               }
             ]
           },
@@ -742,7 +744,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp"
+              "options": "sep"
             },
             "properties": [
               {
@@ -815,7 +817,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, wsp, wsp_value, adm0\nFROM communities\nWHERE upper(adm0) in ($country)\nORDER BY wsp_value DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, sep, sep_value, adm0\nFROM providers \nWHERE upper(adm0) in ($country)\nORDER BY sep_value DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -847,9 +849,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "PANAMA",
-          "value": "PANAMA"
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
@@ -877,8 +879,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Communities",
-  "uid": "e1f8aac3-9f16-48e7-8c16-42ae182d3243",
+  "title": "Service Providers",
+  "uid": "d470a8e2-a83d-4590-8dc0-a4a82956e551",
   "version": 1,
   "weekStart": ""
 }
