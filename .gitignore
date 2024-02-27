@@ -1,6 +1,4 @@
 node_modules
 .env
-metabase
 .vscode/settings.json
-config.json
 .DS_Store
