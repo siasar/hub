@@ -17,3 +17,6 @@ tasks:
   build:
     cmds:
       - docker compose build data-hub
+  grafana:
+    cmds:
+      - docker compose build grafana
