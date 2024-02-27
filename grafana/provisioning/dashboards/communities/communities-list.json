@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -71,7 +71,8 @@
           ],
           "show": true
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "10.3.3",
       "targets": [
@@ -114,9 +115,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "PANAMA",
-          "value": "PANAMA"
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
@@ -139,21 +140,21 @@
       {
         "current": {
           "selected": false,
-          "text": "PANAMÁ OESTE",
-          "value": "PANAMÁ OESTE"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT adm1 FROM communities where upper(adm0) = $country group by adm1 order by 1 asc;",
+        "definition": "SELECT adm1 FROM communities where upper(adm0) in ($country) group by adm1 order by 1 asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Adm 1",
         "multi": false,
         "name": "adm1",
         "options": [],
-        "query": "SELECT adm1 FROM communities where upper(adm0) = $country group by adm1 order by 1 asc;",
+        "query": "SELECT adm1 FROM communities where upper(adm0) in ($country) group by adm1 order by 1 asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -163,8 +164,8 @@
       {
         "current": {
           "selected": false,
-          "text": "LA CHORRERA",
-          "value": "LA CHORRERA"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
@@ -244,6 +245,6 @@
   "timezone": "",
   "title": "Communities List",
   "uid": "de458d8c-6338-4673-bcc6-eddb161e0765",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
