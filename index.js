@@ -1,7 +1,7 @@
 import pino from "pino";
 import Output from "./output.js";
 import Input from "./input.js";
-import config from "./config.json" with { type: "json" };
+import config from "./config.js";
 
 const logger = pino({
   transport: {
