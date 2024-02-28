@@ -342,32 +342,10 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 86,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "mode": "shades"
           },
           "mappings": [],
           "thresholds": {
@@ -385,107 +363,77 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "communities"
+              "options": "population"
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#89af25",
-                  "mode": "fixed"
-                }
-              },
-              {
                 "id": "displayName",
-                "value": "Communities"
+                "value": "Population"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "systems"
+              "options": "households"
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#2693b5",
-                  "mode": "fixed"
-                }
-              },
-              {
                 "id": "displayName",
-                "value": "Systems"
+                "value": "Households"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "providers"
+              "options": "households_without_water"
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#44a891",
-                  "mode": "fixed"
-                }
-              },
-              {
                 "id": "displayName",
-                "value": "Service Providers"
+                "value": "Households without water"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "country"
+              "options": "served_households"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Country"
+                "value": "Served households"
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 6,
+        "w": 24,
         "x": 0,
         "y": 9
       },
-      "id": 5,
+      "id": 8,
       "options": {
-        "barRadius": 0,
-        "barWidth": 0.81,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
+        "colorMode": "background_solid",
+        "graphMode": "area",
+        "justifyMode": "center",
         "orientation": "vertical",
-        "showValue": "never",
-        "stacking": "percent",
-        "text": {
-          "valueSize": 8
+        "reduceOptions": {
+          "calcs": [
+            "allValues"
+          ],
+          "fields": "/.*/",
+          "values": false
         },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "asc"
-        },
-        "xField": "country",
-        "xTickLabelMaxLength": 10,
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
       },
+      "pluginVersion": "10.3.3",
       "targets": [
         {
           "datasource": {
@@ -495,7 +443,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as communities from communities where upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
+          "rawSql": "SELECT sum(population) as population, sum(households) as households, sum(households) - sum(households_without_water) as served_households, sum(households_without_water) as households_without_water\nFROM communities\nWHERE upper(adm0) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -514,74 +462,9 @@
             ],
             "limit": 50
           }
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": false,
-          "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as systems from systems where upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
-          "refId": "B",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": false,
-          "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as providers from providers where upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
-          "refId": "C",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
         }
       ],
-      "title": "SIASAR entities grouped by country",
-      "transformations": [
-        {
-          "id": "merge",
-          "options": {}
-        }
-      ],
-      "type": "barchart"
+      "type": "stat"
     },
     {
       "datasource": {
@@ -734,8 +617,8 @@
       "gridPos": {
         "h": 9,
         "w": 12,
-        "x": 12,
-        "y": 9
+        "x": 0,
+        "y": 15
       },
       "id": 4,
       "options": {
@@ -895,6 +778,252 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 86,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "communities"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#89af25",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Communities"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "systems"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#2693b5",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Systems"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "providers"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#44a891",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Service Providers"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "country"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Country"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "id": 5,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.81,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "never",
+        "stacking": "percent",
+        "text": {
+          "valueSize": 8
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "asc"
+        },
+        "xField": "country",
+        "xTickLabelMaxLength": 10,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT upper(country) as country, count(*) as communities from communities where upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT upper(country) as country, count(*) as systems from systems where upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT upper(country) as country, count(*) as providers from providers where upper(adm0) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "SIASAR entities grouped by country",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
       "description": "Last 6 Months",
       "fieldConfig": {
         "defaults": {
@@ -1010,7 +1139,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 24
       },
       "id": 6,
       "options": {
@@ -1146,8 +1275,8 @@
         "allValue": "",
         "current": {
           "selected": true,
-          "text": "REPUBLIC OF COLOMBIA",
-          "value": "REPUBLIC OF COLOMBIA"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
