@@ -5,6 +5,9 @@ export default class Input {
   constructor(config) {
     this.config = config;
     this.sshClient = new Client();
+    this.countries = config.countries.reduce((countries, country) => {
+      return { ...countries, [country.code]: country };
+    }, {});
   }
 
   connect() {
@@ -79,13 +82,26 @@ export default class Input {
     return ids.map((id) => `'${id.toString("hex")}'`).join(",");
   }
 
+  getCountries() {
+    const query = `
+      SELECT
+        c.code,
+        c.name AS fullname,
+        cg.polygon AS geom
+      FROM country c
+      LEFT JOIN country_geometry cg ON c.code = cg.id
+    `;
+
+    return this.query(query).then(([rows]) => rows);
+  }
+
   getPoints() {
     const query = `
       SELECT
         p.id,
         p.field_status AS status,
         CAST(p.field_changed_value AS CHAR) AS version,
-        p.field_country_value AS country
+        UPPER(p.field_country_value) AS country_code
       FROM form_point p
       WHERE p.field_status = 'calculated'
     `;
@@ -94,6 +110,7 @@ export default class Input {
       return rows.map((row) => ({
         ...row,
         ulid: this.idDecode(row.id),
+        country: this.countries[row.country_code].name,
       }));
     });
   }
@@ -105,7 +122,7 @@ export default class Input {
         c.field_community_name AS name,
         c.field_status AS status,
         CAST(c.field_changed_value AS CHAR) AS version,
-        c.field_country_value AS country,
+        UPPER(c.field_country_value) AS country_code,
         pc.record AS point_id,
         c.field_location_lat AS latitude,
         c.field_location_lon AS longitude,
@@ -122,7 +139,6 @@ export default class Input {
         field_total_population as population,
         field_total_households as households,
         field_households_without_water_supply_system as households_without_water,
-        country.name AS adm0,
         adm1.name AS adm1,
         adm2.name AS adm2,
         adm3.name AS adm3,
@@ -147,6 +163,7 @@ export default class Input {
         images: JSON.parse(row.images || "[]").map(
           (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
         ),
+        country: this.countries[row.country_code],
       }));
     });
   }
@@ -158,7 +175,7 @@ export default class Input {
         s.field_system_name AS name,
         s.field_status AS status,
         CAST(s.field_changed_value AS CHAR) AS version,
-        s.field_country_value AS country,
+        UPPER(s.field_country_value) AS country_code,
         ps.record AS point_id,
         s.field_location_lat AS latitude,
         s.field_location_lon AS longitude,
@@ -172,7 +189,6 @@ export default class Input {
           FROM form_wssystem__field_wss_photos f
           WHERE f.record = s.id
         ) AS images,
-        country.name AS adm0,
         adm1.name AS adm1,
         adm2.name AS adm2,
         adm3.name AS adm3,
@@ -197,6 +213,7 @@ export default class Input {
         images: JSON.parse(row.images || "[]").map(
           (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
         ),
+        country: this.countries[row.country_code].name,
       }));
     });
   }
@@ -208,7 +225,7 @@ export default class Input {
         sp.field_provider_name AS name,
         sp.field_status AS status,
         CAST(sp.field_changed_value AS CHAR) AS version,
-        sp.field_country_value AS country,
+        UPPER(sp.field_country_value) AS country_code,
         psp.record AS point_id,
         sp.field_location_lat AS latitude,
         sp.field_location_lon AS longitude,
@@ -222,7 +239,6 @@ export default class Input {
           FROM form_wsprovider__field_photos f
           WHERE f.record = sp.id
         ) AS images,
-        country.name AS adm0,
         adm1.name AS adm1,
         adm2.name AS adm2,
         adm3.name AS adm3,
@@ -247,6 +263,7 @@ export default class Input {
         images: JSON.parse(row.images || "[]").map(
           (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
         ),
+        country: this.countries[row.country_code],
       }));
     });
   }

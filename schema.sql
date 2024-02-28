@@ -4,10 +4,10 @@ CREATE TABLE points (
   id varchar(26) PRIMARY KEY,
   status text,
   version timestamp,
-  country varchar(2)
+  country_code varchar(2)
 );
 
-CREATE INDEX points_country_idx ON points (country);
+CREATE INDEX points_country_code_idx ON points (country_code);
 
 DROP TABLE IF EXISTS communities CASCADE;
 
@@ -26,8 +26,8 @@ CREATE TABLE communities (
   households integer,
   households_without_water integer,
   image_url text,
-  country varchar(2),
-  adm0 text,
+  country_code varchar(2),
+  country text,
   adm1 text,
   adm2 text,
   adm3 text,
@@ -38,9 +38,9 @@ CREATE INDEX communities_wsp_idx ON communities (wsp);
 
 CREATE INDEX communities_wsp_value_idx ON communities (wsp_value);
 
-CREATE INDEX communities_country_idx ON communities (country);
+CREATE INDEX communities_country_code_idx ON communities (country_code);
 
-CREATE INDEX communities_adm0_idx ON communities (adm0);
+CREATE INDEX communities_country_idx ON communities (country);
 
 CREATE INDEX communities_adm1_idx ON communities (adm1);
 
@@ -66,8 +66,8 @@ CREATE TABLE systems (
   wsi_value float,
   version timestamp,
   image_url text,
-  country varchar(2),
-  adm0 text,
+  country_code varchar(2),
+  country text,
   adm1 text,
   adm2 text,
   adm3 text,
@@ -78,9 +78,9 @@ CREATE INDEX systems_wsi_idx ON systems (wsi);
 
 CREATE INDEX systems_wsi_value_idx ON systems (wsi_value);
 
-CREATE INDEX systems_country_idx ON systems (country);
+CREATE INDEX systems_country_code_idx ON systems (country_code);
 
-CREATE INDEX systems_adm0_idx ON systems (adm0);
+CREATE INDEX systems_country_idx ON systems (country);
 
 CREATE INDEX systems_adm1_idx ON systems (adm1);
 
@@ -106,8 +106,8 @@ CREATE TABLE providers (
   sep_value float,
   version timestamp,
   image_url text,
-  country varchar(2),
-  adm0 text,
+  country_code varchar(2),
+  country text,
   adm1 text,
   adm2 text,
   adm3 text,
@@ -118,9 +118,9 @@ CREATE INDEX providers_sep_idx ON providers (sep);
 
 CREATE INDEX providers_sep_value_idx ON providers (sep_value);
 
-CREATE INDEX providers_country_idx ON providers (country);
+CREATE INDEX providers_country_code_idx ON providers (country_code);
 
-CREATE INDEX providers_adm0_idx ON providers (adm0);
+CREATE INDEX providers_country_idx ON providers (country);
 
 CREATE INDEX providers_adm1_idx ON providers (adm1);
 
@@ -131,3 +131,14 @@ CREATE INDEX providers_adm3_idx ON providers (adm3);
 CREATE INDEX providers_adm4_idx ON providers (adm4);
 
 CREATE INDEX providers_geom_idx ON providers USING GIST (geom);
+
+DROP TABLE IF EXISTS countries CASCADE;
+
+CREATE TABLE countries (
+  code varchar(2) PRIMARY KEY,
+  name text,
+  fullname text,
+  geom geometry(MultiPolygon, 4326)
+);
+
+CREATE INDEX countries_geom_idx ON countries USING GIST (geom);

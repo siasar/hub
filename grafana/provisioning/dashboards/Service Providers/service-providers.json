@@ -153,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, sep\nFROM providers \nWHERE upper(adm0) in ($country);",
+          "rawSql": "SELECT latitude, longitude, sep\nFROM providers \nWHERE upper(country_code) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -332,7 +332,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(sep), sep\nFROM providers \nWHERE upper(adm0) in ($country)\nGROUP BY sep\nORDER BY sep ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(sep), sep\nFROM providers \nWHERE upper(country_code) in ($country)\nGROUP BY sep\nORDER BY sep ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -451,7 +451,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
-        "colorByField": "adm0",
+        "colorByField": "country_code",
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -467,7 +467,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xField": "adm0",
+        "xField": "country_code",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -481,7 +481,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(adm0), adm0 FROM providers GROUP BY adm0 LIMIT 50 ",
+          "rawSql": "SELECT COUNT(country_code), country_code FROM providers group by country_code LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -489,7 +489,7 @@
                 "name": "COUNT",
                 "parameters": [
                   {
-                    "name": "adm0",
+                    "name": "country_code",
                     "type": "functionParameter"
                   }
                 ],
@@ -498,7 +498,7 @@
               {
                 "parameters": [
                   {
-                    "name": "adm0",
+                    "name": "country_code",
                     "type": "functionParameter"
                   }
                 ],
@@ -508,7 +508,7 @@
             "groupBy": [
               {
                 "property": {
-                  "name": "adm0",
+                  "name": "country_code",
                   "type": "string"
                 },
                 "type": "groupBy"
@@ -595,7 +595,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "adm0"
+              "options": "country_code"
             },
             "properties": [
               {
@@ -635,7 +635,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, adm0\nFROM providers \nWHERE upper(adm0) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country_code\nFROM providers \nWHERE upper(country_code) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -732,7 +732,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "adm0"
+              "options": "country_code"
             },
             "properties": [
               {
@@ -817,7 +817,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, sep, sep_value, adm0\nFROM providers \nWHERE upper(adm0) in ($country)\nORDER BY sep_value DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, sep, sep_value, country_code\nFROM providers \nWHERE upper(country_code) in ($country)\nORDER BY sep_value DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -857,14 +857,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT upper(adm0) from communities group by adm0 order by adm0 asc;",
+        "definition": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Country",
         "multi": false,
         "name": "country",
         "options": [],
-        "query": "SELECT upper(adm0) from communities group by adm0 order by adm0 asc;",
+        "query": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

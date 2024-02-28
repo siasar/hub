@@ -18,6 +18,30 @@ export default class Output {
     return this.query(fs.readFileSync("schema.sql", "utf8"));
   }
 
+  insertCountries(rows) {
+    if (!rows.length) return;
+
+    return this.query(`
+      INSERT INTO countries (
+        code,
+        name,
+        fullname,
+        geom
+      )
+      VALUES ${rows
+        .map(
+          (row) => `(
+            '${row.code}',
+            '${row.name}',
+            '${row.fullname}',
+            ST_GeomFromGeoJSON('${JSON.stringify(row.geom)}')
+          )`,
+        )
+        .join(",")}
+      ON CONFLICT DO NOTHING;
+    `);
+  }
+
   insertPoints(rows) {
     if (!rows.length) return;
 
@@ -26,7 +50,7 @@ export default class Output {
         id,
         status,
         version,
-        country
+        country_code
       )
       VALUES ${rows
         .map(
@@ -34,7 +58,7 @@ export default class Output {
             '${row.ulid}',
             '${row.status}',
             '${row.version}',
-            '${row.country}'
+            '${row.country_code}'
           )`,
         )
         .join(",")}
@@ -61,8 +85,8 @@ export default class Output {
         population,
         households,
         households_without_water,
+        country_code,
         country,
-        adm0,
         adm1,
         adm2,
         adm3,
@@ -85,8 +109,8 @@ export default class Output {
             ${row.population},
             ${row.households},
             ${row.households_without_water},
+            '${row.country_code}',
             '${row.country}',
-            '${row.adm0}',
             '${row.adm1}',
             '${row.adm2}',
             '${row.adm3}',
@@ -114,8 +138,8 @@ export default class Output {
         wsi,
         wsi_value,
         image_url,
+        country_code,
         country,
-        adm0,
         adm1,
         adm2,
         adm3,
@@ -135,8 +159,8 @@ export default class Output {
             '${row.indicators.find((i) => i.name === "WSI").label}',
             ${row.indicators.find((i) => i.name === "WSI").value},
             ${row.images.length ? `'${row.images[0]}'` : null},
+            '${row.country_code}',
             '${row.country}',
-            '${row.adm0}',
             '${row.adm1}',
             '${row.adm2}',
             '${row.adm3}',
@@ -164,8 +188,8 @@ export default class Output {
         sep,
         sep_value,
         image_url,
+        country_code,
         country,
-        adm0,
         adm1,
         adm2,
         adm3,
@@ -185,8 +209,8 @@ export default class Output {
             '${row.indicators.find((i) => i.name === "SEP").label}',
             ${row.indicators.find((i) => i.name === "SEP").value},
             ${row.images.length ? `'${row.images[0]}'` : null},
+            '${row.country_code}',
             '${row.country}',
-            '${row.adm0}',
             '${row.adm1}',
             '${row.adm2}',
             '${row.adm3}',

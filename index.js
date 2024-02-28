@@ -2,6 +2,7 @@ import pino from "pino";
 import Output from "./output.js";
 import Input from "./input.js";
 import config from "./config.js";
+import fs from "fs";
 
 const logger = pino({
   transport: {
@@ -21,8 +22,15 @@ const output = new Output({
   database: process.env.POSTGRES_DB,
 });
 
+const countries = JSON.parse(fs.readFileSync("countries.json", "utf8")).features.map((feature) => ({
+  code: feature.properties.iso_a2,
+  name: feature.properties.name,
+  fullname: feature.properties.formal,
+  geom: feature.geometry,
+}));
+
 const processCountry = (country) => {
-  const input = new Input(country);
+  const input = new Input({ ...country, countries });
 
   logger.info(`${country.name}: Connecting server`);
 
@@ -33,7 +41,7 @@ const processCountry = (country) => {
       return input.getPoints();
     })
     .then((points) => {
-      logger.info(`${country.name}: Adding ${points.length} points`);
+      logger.info(`${country.name}: Importing ${points.length} points`);
       return output.insertPoints(points).then(() => {
         return points;
       });
@@ -52,17 +60,17 @@ const processCountry = (country) => {
       const inserts = [];
 
       if (communities.length) {
-        logger.info(`${country.name}: Adding ${communities.length} communities`);
+        logger.info(`${country.name}: Importing ${communities.length} communities`);
         inserts.push(output.insertCommunities(communities));
       }
 
       if (systems.length) {
-        logger.info(`${country.name}: Adding ${systems.length} systems`);
+        logger.info(`${country.name}: Importing ${systems.length} systems`);
         inserts.push(output.insertSystems(systems));
       }
 
       if (providers.length) {
-        logger.info(`${country.name}: Adding ${providers.length} service providers`);
+        logger.info(`${country.name}: Importing ${providers.length} service providers`);
         inserts.push(output.insertProviders(providers));
       }
 
@@ -82,6 +90,10 @@ logger.info("Creating Database Schema");
 
 output
   .createSchema()
+  .then(() => {
+    logger.info(`Importing ${countries.length} countries`);
+    return output.insertCountries(countries);
+  })
   .then(() => {
     return Promise.all(config.countries.map(processCountry));
   })

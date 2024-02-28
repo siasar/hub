@@ -55,7 +55,7 @@
       "id": 3,
       "options": {
         "afterRender": "",
-        "content": "<div class=\"card\">\n  <div class=\"card-content\">\n    <h2 class=\"card-title\"><b>{{name}}</b></h2>\n    <p class=\"card-text\"><b>ID #:</b> {{id}}</p>\n    <p class=\"card-text\"><b>Location:</b> {{adm0}}, {{adm1}}, {{adm2}}, {{adm3}}, {{adm4}}</p>\n  </div>\n</div>",
+        "content": "<div class=\"card\">\n  <div class=\"card-content\">\n    <h2 class=\"card-title\"><b>{{name}}</b></h2>\n    <p class=\"card-text\"><b>ID #:</b> {{id}}</p>\n    <p class=\"card-text\"><b>Location:</b> {{country_code}}, {{adm1}}, {{adm2}}, {{adm3}}, {{adm4}}</p>\n  </div>\n</div>",
         "defaultContent": "The query didn't return any results.",
         "editor": {
           "format": "auto",
@@ -82,7 +82,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select id, name, to_char(version, 'YYYY-MM-DD') as date, adm0, adm1, adm2, adm3, adm4\nfrom communities \nWHERE id = '${id}'",
+          "rawSql": "select id, name, to_char(version, 'YYYY-MM-DD') as date, country_code, adm1, adm2, adm3, adm4\nfrom communities \nWHERE id = '${id}'",
           "refId": "A",
           "sql": {
             "columns": [
