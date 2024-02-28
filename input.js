@@ -119,6 +119,9 @@ export default class Input {
           FROM form_community__field_community_photos f
           WHERE f.record = c.id
         ) AS images,
+        field_total_population as population,
+        field_total_households as households,
+        field_households_without_water_supply_system as households_without_water,
         country.name AS adm0,
         adm1.name AS adm1,
         adm2.name AS adm2,
