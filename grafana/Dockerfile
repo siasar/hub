@@ -37,8 +37,9 @@ RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|..createEle
 ## Remove Open Source icon
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|.push({target:"_blank",id:"version",text:`${..edition}${.}`,url:..licenseUrl,icon:"external-link-alt"})||g' {} \;
 
-## Add custom styles
+## Add custom files
 COPY custom.css /usr/share/grafana/public/
+COPY custom.js /usr/share/grafana/public/
 
 ## Update Title
 RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SIASAR Hub</title>|g' /usr/share/grafana/public/views/index.html
@@ -48,6 +49,9 @@ RUN sed -i 's|</head>|<link href="https://fonts.googleapis.com/css2?family=Nunit
 
 # ## Add CSS link tag
 RUN sed -i 's|</head>|<link rel="stylesheet" type="text/css" href="public/custom.css" /></head>|g' /usr/share/grafana/public/views/index.html
+
+# ## Add JS Script
+RUN sed -i 's|</body>|<script src="public/custom.js" type="text/javascript"></script></body>|g' /usr/share/grafana/public/views/index.html
 
 ## Set Grafana options
 ENV GF_ENABLE_GZIP=true
