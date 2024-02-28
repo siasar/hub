@@ -145,7 +145,6 @@ export default class Input {
         adm4.name AS adm4
       FROM form_community c
       JOIN form_point__field_communities pc ON pc.field_communities_value = c.id
-      JOIN country ON country.code = c.field_country_value
       JOIN administrative_division adm4 ON adm4.id = c.field_region_value
       JOIN administrative_division adm3 ON adm3.id = adm4.parent_id
       JOIN administrative_division adm2 ON adm2.id = adm3.parent_id
@@ -163,7 +162,7 @@ export default class Input {
         images: JSON.parse(row.images || "[]").map(
           (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
         ),
-        country: this.countries[row.country_code],
+        country: this.countries[row.country_code].name,
       }));
     });
   }
@@ -195,7 +194,6 @@ export default class Input {
         adm4.name AS adm4
       FROM form_wssystem s
       JOIN form_point__field_wsystems ps ON ps.field_wsystems_value = s.id
-      JOIN country ON country.code = s.field_country_value
       JOIN administrative_division adm4 ON adm4.id = s.field_region_value
       JOIN administrative_division adm3 ON adm3.id = adm4.parent_id
       JOIN administrative_division adm2 ON adm2.id = adm3.parent_id
@@ -245,7 +243,6 @@ export default class Input {
         adm4.name AS adm4
       FROM form_wsprovider sp
       JOIN form_point__field_wsps psp ON psp.field_wsps_value = sp.id
-      JOIN country ON country.code = sp.field_country_value
       JOIN administrative_division adm4 ON adm4.id = sp.field_region_value
       JOIN administrative_division adm3 ON adm3.id = adm4.parent_id
       JOIN administrative_division adm2 ON adm2.id = adm3.parent_id
@@ -263,7 +260,7 @@ export default class Input {
         images: JSON.parse(row.images || "[]").map(
           (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
         ),
-        country: this.countries[row.country_code],
+        country: this.countries[row.country_code].name,
       }));
     });
   }
