@@ -47,9 +47,10 @@ const processCountry = (country) => {
         input.getSystems(pointsIds),
         input.getServiceProviders(pointsIds),
         input.getSchools(),
+        input.getHealthCenters(),
       ]);
     })
-    .then(([communities, systems, providers, schools]) => {
+    .then(([communities, systems, providers, schools, health_centers]) => {
       const inserts = [];
 
       if (communities.length) {
@@ -72,21 +73,26 @@ const processCountry = (country) => {
         inserts.push(output.insertSchools(schools));
       }
 
+      if (health_centers.length) {
+        logger.info(`${country.name}: Adding ${health_centers.length} health centers`);
+        inserts.push(output.insertHealthCenters(health_centers));
+      }
+
       return Promise.all(inserts);
     })
     .then(() => {
       logger.info(`${country.name}: Fetching relationships`);
       return Promise.all([input.getRelationships(), input.getCommunitiesSchools()]);
     })
-    .then(([relationships, communitiesSchools]) => {
+    .then(([relationships, communities_schools]) => {
       const inserts = [];
       if (relationships.length) {
         logger.info(`${country.name}: Adding ${relationships.length} relationships`);
         inserts.push(output.insertRelationships(relationships));
       }
-      if (communitiesSchools.length) {
-        logger.info(`${country.name}: Adding ${communitiesSchools.length} communitiesSchools relation`);
-        inserts.push(output.insertCommunitiesSchools(communitiesSchools));
+      if (communities_schools.length) {
+        logger.info(`${country.name}: Adding ${communities_schools.length} communitiesSchools relation`);
+        inserts.push(output.insertCommunitiesSchools(communities_schools));
       }
       return Promise.all(inserts);
     })

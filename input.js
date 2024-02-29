@@ -304,6 +304,57 @@ export default class Input {
     });
   }
 
+  getHealthCenters() {
+    const query = `
+      SELECT
+        hc.id,
+        hc.field_name AS name,
+        hc.field_code as code,
+        hc.field_status AS status,
+        CAST(hc.field_changed_value AS CHAR) AS version,
+        hc.field_country_value AS country,
+        hc.field_location_lat AS latitude,
+        hc.field_location_lon AS longitude,
+        (
+          SELECT JSON_ARRAYAGG(JSON_OBJECT('name', i.name, 'value', i.value))
+          FROM indicator i
+          WHERE i.record = hc.id
+        ) AS indicators,
+        field_female_employees as staff_women,
+        field_male_employees as staff_men,
+        field_have_toilets as toilets,
+        (
+          SELECT JSON_ARRAYAGG(HEX(f.field_photos_value))
+          FROM form_health_care__field_photos f
+          WHERE f.record = hc.id
+        ) AS images,
+        country.name AS adm0,
+        adm1.name AS adm1,
+        adm2.name AS adm2,
+        adm3.name AS adm3,
+        adm4.name AS adm4
+      FROM form_health_care hc
+      JOIN country ON country.code = hc.field_country_value
+      JOIN administrative_division adm4 ON adm4.id = hc.field_region_value
+      JOIN administrative_division adm3 ON adm3.id = adm4.parent_id
+      JOIN administrative_division adm2 ON adm2.id = adm3.parent_id
+      JOIN administrative_division adm1 ON adm1.id = adm2.parent_id
+      WHERE hc.field_status = 'validated';
+    `;
+
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        ...row,
+        ulid: this.idDecode(row.id),
+        indicators: JSON.parse(row.indicators).map((i) => ({ ...i, label: this.indicatorLabel(i.value) })),
+        images: JSON.parse(row.images || "[]").map(
+          (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
+        ),
+        have_toilets: row.toilets == 1 ? true : false,
+      }));
+    });
+  }
+
   getRelationships() {
     const query = `
       SELECT

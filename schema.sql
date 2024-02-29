@@ -207,3 +207,46 @@ CREATE TABLE communities_schools_tmp (
   community_id varchar(26),
   school_id varchar(26)
 );
+
+DROP TABLE IF EXISTS health_centers CASCADE;
+
+CREATE TABLE health_centers (
+  id varchar(26) PRIMARY KEY,
+  name text,
+  code text,
+  latitude float,
+  longitude float,
+  geom geometry(Point, 4326),
+  status text,
+  hcc varchar(1),
+  hcc_value float,
+  staff_women integer,
+  staff_men integer,
+  have_toilets boolean,
+  version timestamp,
+  image_url text,
+  country varchar(2),
+  adm0 text,
+  adm1 text,
+  adm2 text,
+  adm3 text,
+  adm4 text
+);
+
+CREATE INDEX schools_hcc_idx ON health_centers (hcc);
+
+CREATE INDEX schools_hcc_value_idx ON health_centers (hcc_value);
+
+CREATE INDEX health_centers_country_idx ON health_centers (country);
+
+CREATE INDEX health_centers_adm0_idx ON health_centers (adm0);
+
+CREATE INDEX health_centers_adm1_idx ON health_centers (adm1);
+
+CREATE INDEX health_centers_adm2_idx ON health_centers (adm2);
+
+CREATE INDEX health_centers_adm3_idx ON health_centers (adm3);
+
+CREATE INDEX health_centers_adm4_idx ON health_centers (adm4);
+
+CREATE INDEX health_centers_geom_idx ON health_centers USING GIST (geom);
