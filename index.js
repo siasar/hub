@@ -75,6 +75,14 @@ const processCountry = (country) => {
       return Promise.all(inserts);
     })
     .then(() => {
+      logger.info(`${country.name}: Fetching relationships`);
+      return input.getRelationships();
+    })
+    .then((relationships) => {
+      logger.info(`${country.name}: Adding ${relationships.length} relationships`);
+      return output.insertRelationships(relationships);
+    })
+    .then(() => {
       logger.info(`${country.name}: Closing input connection`);
       return input.end();
     })
@@ -92,6 +100,7 @@ output
     return Promise.all(config.countries.map(processCountry));
   })
   .then(() => {
+    output.dropTmpRelationships();
     logger.info("All Done! Closing output connection");
     return output.end();
   })

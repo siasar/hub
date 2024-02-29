@@ -131,7 +131,28 @@ CREATE INDEX providers_adm3_idx ON providers (adm3);
 CREATE INDEX providers_adm4_idx ON providers (adm4);
 
 CREATE INDEX providers_geom_idx ON providers USING GIST (geom);
+
+DROP TABLE IF EXISTS communities_systems_providers CASCADE;
+
+CREATE TABLE communities_systems_providers (
+  community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
+  system_id varchar(26) REFERENCES systems(id) ON DELETE CASCADE,
+  provider_id varchar(26) REFERENCES providers(id) ON DELETE CASCADE,
+  served_households integer
+);
+
+DROP TABLE IF EXISTS communities_systems_providers_tmp CASCADE;
+CREATE TABLE communities_systems_providers_tmp (
+  community_id varchar(26),
+  system_id varchar(26) ,
+  provider_id varchar(26) ,
+  served_households integer
+);
+
+CREATE INDEX communities_systems_providers_households_idx ON providers (sep);
+
 DROP TABLE IF EXISTS schools CASCADE;
+
 CREATE TABLE schools (
   id varchar(26) PRIMARY KEY,
   name text,

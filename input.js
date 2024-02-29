@@ -303,4 +303,33 @@ export default class Input {
       }));
     });
   }
+
+  getRelationships() {
+    const query = `
+      SELECT
+        c.id AS community_id,
+        s.id AS system_id,
+        p.id AS provider_id,
+        sc.field_households AS served_households
+      FROM
+        form_wssystem__field_served_communities ssc
+      JOIN form_wssystem_communities sc ON sc.id = ssc.field_served_communities_value
+      JOIN form_wssystem s ON s.id = ssc.record
+      JOIN form_wsprovider p ON p.id = sc.field_provider_value
+      JOIN administrative_division adm ON adm.id = sc.field_community_value
+      JOIN form_community c ON c.field_region_value = adm.id
+      WHERE s.field_status = 'validated'
+        AND c.field_status = 'validated'
+        AND p.field_status = 'validated';
+    `;
+
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        ...row,
+        community_id: this.idDecode(row.community_id),
+        system_id: this.idDecode(row.system_id),
+        provider_id: this.idDecode(row.provider_id),
+      }));
+    });
+  }
 }

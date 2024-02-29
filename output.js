@@ -50,8 +50,8 @@ export default class Output {
         id,
         point_id,
         name,
-        latitude, 
-        longitude, 
+        latitude,
+        longitude,
         geom,
         status,
         version,
@@ -106,8 +106,8 @@ export default class Output {
         id,
         point_id,
         name,
-        latitude, 
-        longitude, 
+        latitude,
+        longitude,
         geom,
         status,
         version,
@@ -156,8 +156,8 @@ export default class Output {
         id,
         point_id,
         name,
-        latitude, 
-        longitude, 
+        latitude,
+        longitude,
         geom,
         status,
         version,
@@ -256,5 +256,43 @@ export default class Output {
         .join(",")}
       ON CONFLICT DO NOTHING;
     `);
+  }
+
+  insertRelationships(rows) {
+    if (!rows.length) return;
+
+    return this.query(`
+      INSERT INTO communities_systems_providers_tmp (
+        community_id,
+        system_id,
+        provider_id,
+        served_households
+      )
+      VALUES ${rows
+        .map(
+          (row) => `(
+            '${row.community_id}',
+            '${row.system_id}',
+            '${row.provider_id}',
+            '${row.served_households}'
+          )`,
+        )
+        .join(",")}
+      ON CONFLICT DO NOTHING;
+
+      INSERT INTO communities_systems_providers
+      (
+        SELECT t.*
+        FROM communities_systems_providers_tmp t
+        JOIN communities c ON c.id = t.community_id
+        JOIN systems s ON s.id = t.system_id
+        JOIN providers p ON p.id = t.provider_id
+      );
+    `);
+  }
+
+  dropTmpRelationships() {
+    return this.query(`
+      DROP TABLE IF EXISTS communities_systems_providers_tmp CASCADE;`);
   }
 }
