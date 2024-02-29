@@ -131,3 +131,46 @@ CREATE INDEX providers_adm3_idx ON providers (adm3);
 CREATE INDEX providers_adm4_idx ON providers (adm4);
 
 CREATE INDEX providers_geom_idx ON providers USING GIST (geom);
+DROP TABLE IF EXISTS schools CASCADE;
+CREATE TABLE schools (
+  id varchar(26) PRIMARY KEY,
+  name text,
+  code text,
+  latitude float,
+  longitude float,
+  geom geometry(Point, 4326),
+  status text,
+  shc varchar(1),
+  shc_value float,
+  staff_women integer,
+  staff_men integer,
+  students_female integer,
+  students_male integer,
+  have_toilets boolean,
+  version timestamp,
+  image_url text,
+  country varchar(2),
+  adm0 text,
+  adm1 text,
+  adm2 text,
+  adm3 text,
+  adm4 text
+);
+
+CREATE INDEX schools_shc_idx ON schools (shc);
+
+CREATE INDEX schools_shc_value_idx ON schools (shc_value);
+
+CREATE INDEX schools_country_idx ON schools (country);
+
+CREATE INDEX schools_adm0_idx ON schools (adm0);
+
+CREATE INDEX schools_adm1_idx ON schools (adm1);
+
+CREATE INDEX schools_adm2_idx ON schools (adm2);
+
+CREATE INDEX schools_adm3_idx ON schools (adm3);
+
+CREATE INDEX schools_adm4_idx ON schools (adm4);
+
+CREATE INDEX schools_geom_idx ON schools USING GIST (geom);

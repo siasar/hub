@@ -197,4 +197,64 @@ export default class Output {
       ON CONFLICT DO NOTHING;
     `);
   }
+
+  insertSchools(rows) {
+    if (!rows.length) return;
+
+    return this.query(`
+      INSERT INTO schools (
+        id,
+        name,
+        code,
+        latitude,
+        longitude,
+        geom,
+        status,
+        version,
+        shc,
+        shc_value,
+        staff_women,
+        staff_men,
+        students_female,
+        students_male,
+        have_toilets,
+        image_url,
+        country,
+        adm0,
+        adm1,
+        adm2,
+        adm3,
+        adm4
+      )
+      VALUES ${rows
+        .map(
+          (row) => `(
+            '${row.ulid}',
+            '${row.name}',
+            '${row.code}',
+            '${row.latitude}',
+            '${row.longitude}',
+            ST_POINT(${row.longitude}, ${row.latitude}, 4326),
+            '${row.status}',
+            '${row.version}',
+            '${row.indicators.find((i) => i.name === "SHC").label}',
+            ${row.indicators.find((i) => i.name === "SHC").value},
+            ${row.staff_women},
+            ${row.staff_men},
+            ${row.students_female},
+            ${row.students_male},
+            ${row.have_toilets},
+            ${row.images.length ? `'${row.images[0]}'` : null},
+            '${row.country}',
+            '${row.adm0}',
+            '${row.adm1}',
+            '${row.adm2}',
+            '${row.adm3}',
+            '${row.adm4}'
+          )`,
+        )
+        .join(",")}
+      ON CONFLICT DO NOTHING;
+    `);
+  }
 }

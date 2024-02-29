@@ -46,9 +46,10 @@ const processCountry = (country) => {
         input.getCommunities(pointsIds),
         input.getSystems(pointsIds),
         input.getServiceProviders(pointsIds),
+        input.getSchools(),
       ]);
     })
-    .then(([communities, systems, providers]) => {
+    .then(([communities, systems, providers, schools]) => {
       const inserts = [];
 
       if (communities.length) {
@@ -64,6 +65,11 @@ const processCountry = (country) => {
       if (providers.length) {
         logger.info(`${country.name}: Adding ${providers.length} service providers`);
         inserts.push(output.insertProviders(providers));
+      }
+
+      if (schools.length) {
+        logger.info(`${country.name}: Adding ${schools.length} schools`);
+        inserts.push(output.insertSchools(schools));
       }
 
       return Promise.all(inserts);
