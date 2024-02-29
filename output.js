@@ -283,7 +283,8 @@ export default class Output {
       INSERT INTO communities_systems_providers
       (
         SELECT t.*
-        FROM communities_systems_providers_tmp t
+        FROM
+          communities_systems_providers_tmp t
         JOIN communities c ON c.id = t.community_id
         JOIN systems s ON s.id = t.system_id
         JOIN providers p ON p.id = t.provider_id
@@ -291,8 +292,38 @@ export default class Output {
     `);
   }
 
-  dropTmpRelationships() {
+  insertCommunitiesSchools(rows) {
+    if (!rows.length) return;
+
     return this.query(`
-      DROP TABLE IF EXISTS communities_systems_providers_tmp CASCADE;`);
+      INSERT INTO communities_schools_tmp (
+        community_id,
+        school_id
+      )
+      VALUES ${rows
+        .map(
+          (row) => `(
+            '${row.community_id}',
+            '${row.school_id}'
+          )`,
+        )
+        .join(",")}
+      ON CONFLICT DO NOTHING;
+
+      INSERT INTO communities_schools
+      (
+        SELECT t.*
+        FROM
+          communities_schools_tmp t
+        JOIN communities c ON c.id = t.community_id
+        JOIN schools s ON s.id = t.school_id
+      );
+    `);
+  }
+
+  dropTmpTables() {
+    return this.query(`
+      DROP TABLE IF EXISTS communities_systems_providers_tmp CASCADE;
+      DROP TABLE IF EXISTS communities_schools_tmp CASCADE;`);
   }
 }

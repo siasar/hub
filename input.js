@@ -332,4 +332,26 @@ export default class Input {
       }));
     });
   }
+
+  getCommunitiesSchools() {
+    const query = `
+      SELECT
+        c.id as community_id,
+        s.id as school_id
+      FROM
+        form_school__field_rural_communities_served scs
+      JOIN form_school s ON s.id = scs.record
+      JOIN administrative_division adm ON adm.id = scs.field_rural_communities_served_value
+      JOIN form_community c ON c.field_region_value = adm.id
+      WHERE c.field_status = 'validated'
+        AND s.field_status = 'validated';
+    `;
+
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        community_id: this.idDecode(row.community_id),
+        school_id: this.idDecode(row.school_id),
+      }));
+    });
+  }
 }

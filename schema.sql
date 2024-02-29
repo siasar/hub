@@ -195,3 +195,15 @@ CREATE INDEX schools_adm3_idx ON schools (adm3);
 CREATE INDEX schools_adm4_idx ON schools (adm4);
 
 CREATE INDEX schools_geom_idx ON schools USING GIST (geom);
+
+DROP TABLE IF EXISTS communities_schools CASCADE;
+CREATE TABLE communities_schools (
+  community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
+  school_id varchar(26) REFERENCES schools(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS communities_schools_tmp CASCADE;
+CREATE TABLE communities_schools_tmp (
+  community_id varchar(26),
+  school_id varchar(26)
+);

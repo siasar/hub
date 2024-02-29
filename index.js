@@ -76,11 +76,19 @@ const processCountry = (country) => {
     })
     .then(() => {
       logger.info(`${country.name}: Fetching relationships`);
-      return input.getRelationships();
+      return Promise.all([input.getRelationships(), input.getCommunitiesSchools()]);
     })
-    .then((relationships) => {
-      logger.info(`${country.name}: Adding ${relationships.length} relationships`);
-      return output.insertRelationships(relationships);
+    .then(([relationships, communitiesSchools]) => {
+      const inserts = [];
+      if (relationships.length) {
+        logger.info(`${country.name}: Adding ${relationships.length} relationships`);
+        inserts.push(output.insertRelationships(relationships));
+      }
+      if (communitiesSchools.length) {
+        logger.info(`${country.name}: Adding ${communitiesSchools.length} communitiesSchools relation`);
+        inserts.push(output.insertCommunitiesSchools(communitiesSchools));
+      }
+      return Promise.all(inserts);
     })
     .then(() => {
       logger.info(`${country.name}: Closing input connection`);
@@ -100,7 +108,10 @@ output
     return Promise.all(config.countries.map(processCountry));
   })
   .then(() => {
-    output.dropTmpRelationships();
+    logger.info("Dropping temporary tables");
+    return output.dropTmpTables();
+  })
+  .then(() => {
     logger.info("All Done! Closing output connection");
     return output.end();
   })
