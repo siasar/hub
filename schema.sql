@@ -250,3 +250,15 @@ CREATE INDEX health_centers_adm3_idx ON health_centers (adm3);
 CREATE INDEX health_centers_adm4_idx ON health_centers (adm4);
 
 CREATE INDEX health_centers_geom_idx ON health_centers USING GIST (geom);
+
+DROP TABLE IF EXISTS communities_health_centers CASCADE;
+CREATE TABLE communities_health_centers (
+  community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
+  health_center_id varchar(26) REFERENCES health_centers(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS communities_health_centers_tmp CASCADE;
+CREATE TABLE communities_health_centers_tmp (
+  community_id varchar(26),
+  health_center_id varchar(26)
+);

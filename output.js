@@ -377,9 +377,40 @@ export default class Output {
     `);
   }
 
+  insertCommunitiesHealthCenters(rows) {
+    if (!rows.length) return;
+
+    return this.query(`
+      INSERT INTO communities_health_centers_tmp (
+        community_id,
+        health_center_id
+      )
+      VALUES ${rows
+        .map(
+          (row) => `(
+            '${row.community_id}',
+            '${row.health_center_id}'
+          )`,
+        )
+        .join(",")}
+      ON CONFLICT DO NOTHING;
+
+      INSERT INTO communities_health_centers
+      (
+        SELECT t.*
+        FROM
+          communities_health_centers_tmp t
+        JOIN communities c ON c.id = t.community_id
+        JOIN health_centers hc ON hc.id = t.health_center_id
+      );
+    `);
+  }
+
   dropTmpTables() {
     return this.query(`
       DROP TABLE IF EXISTS communities_systems_providers_tmp CASCADE;
-      DROP TABLE IF EXISTS communities_schools_tmp CASCADE;`);
+      DROP TABLE IF EXISTS communities_schools_tmp CASCADE;
+      DROP TABLE IF EXISTS communities_health_centers_tmp CASCADE;
+    `);
   }
 }

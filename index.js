@@ -82,18 +82,30 @@ const processCountry = (country) => {
     })
     .then(() => {
       logger.info(`${country.name}: Fetching relationships`);
-      return Promise.all([input.getRelationships(), input.getCommunitiesSchools()]);
+      return Promise.all([
+        input.getRelationships(),
+        input.getCommunitiesSchools(),
+        input.getCommunitiesHealthCenters(),
+      ]);
     })
-    .then(([relationships, communities_schools]) => {
+    .then(([relationships, communities_schools, communities_health_centers]) => {
       const inserts = [];
+
       if (relationships.length) {
         logger.info(`${country.name}: Adding ${relationships.length} relationships`);
         inserts.push(output.insertRelationships(relationships));
       }
+
       if (communities_schools.length) {
         logger.info(`${country.name}: Adding ${communities_schools.length} communitiesSchools relation`);
         inserts.push(output.insertCommunitiesSchools(communities_schools));
       }
+
+      if (communities_health_centers.length) {
+        logger.info(`${country.name}: Adding ${communities_schools.length} communitiesHealthCenters relation`);
+        inserts.push(output.insertCommunitiesHealthCenters(communities_health_centers));
+      }
+
       return Promise.all(inserts);
     })
     .then(() => {

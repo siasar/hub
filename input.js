@@ -405,4 +405,26 @@ export default class Input {
       }));
     });
   }
+
+  getCommunitiesHealthCenters() {
+    const query = `
+      SELECT
+        c.id as community_id,
+        hc.id as health_center_id
+      FROM
+        form_health_care__field_communities_served hcc
+      JOIN form_health_care hc ON hc.id = hcc.record
+      JOIN administrative_division adm ON adm.id = hcc.field_communities_served_value
+      JOIN form_community c ON c.field_region_value = adm.id
+      WHERE c.field_status = 'validated'
+        AND hc.field_status = 'validated';
+    `;
+
+    return this.query(query).then(([rows]) => {
+      return rows.map((row) => ({
+        community_id: this.idDecode(row.community_id),
+        health_center_id: this.idDecode(row.health_center_id),
+      }));
+    });
+  }
 }
