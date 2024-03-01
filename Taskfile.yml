@@ -10,6 +10,9 @@ tasks:
   run:
     cmds:
       - docker compose run --rm data-hub
+  export:
+    cmds:
+      - docker compose run --rm data-hub npm run export
   server:
     cmds:
       - docker compose down

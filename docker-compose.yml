@@ -18,6 +18,7 @@ services:
       - POSTGRES_USER=data_hub
       - POSTGRES_PASSWORD=data_hub
       - POSTGRES_PORT=5432
+      - GRAFANA_PASSWORD=siasar123
     depends_on:
       - postgres
     profiles:

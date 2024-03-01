@@ -60,7 +60,7 @@ ENV GF_DEFAULT_INSTANCE_NAME=siasar
 
 ## Enable Anonymous Authentication
 ENV GF_AUTH_ANONYMOUS_ENABLED=true
-ENV GF_AUTH_BASIC_ENABLED=false
+ENV GF_AUTH_BASIC_ENABLED=true
 ENV GF_USERS_ALLOW_SIGN_UP=false
 
 ## Disable Help Section
