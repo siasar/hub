@@ -602,6 +602,23 @@
                 "value": "Country"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "",
+                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -780,6 +797,24 @@
                       }
                     },
                     "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
