@@ -1,4 +1,4 @@
-const baseUrl = "http://grafana:3000/api";
+const baseUrl = `${process.env.GRAFANA_URL}/api`;
 
 export const apiRequest = (url, options) => {
   const auth = options?.token ? "Bearer" + options.token : "Basic " + btoa(`admin:${process.env.GRAFANA_PASSWORD}`);
