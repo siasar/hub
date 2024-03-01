@@ -272,15 +272,15 @@ export default class Output {
           served_households
       FROM
           (VALUES ${rows
-              .map(
-                (row) => `(
+            .map(
+              (row) => `(
                   '${row.community_id}',
                   '${row.system_id}',
                   '${row.provider_id}',
                   ${row.served_households}
                 )`,
-              )
-              .join(",")}
+            )
+            .join(",")}
           ) AS data(community_id, system_id, provider_id, served_households);
 
       INSERT INTO communities_systems_providers
