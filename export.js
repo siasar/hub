@@ -1,7 +1,7 @@
 import fs from "fs";
 import { getDashboards, getDashboard, login, logout } from "./grafana.js";
 
-const basePath = process.env.GRAFANA_DASHBOARDS_PATH;
+const basePath = `${process.cwd()}/grafana/dashboards`;
 
 console.info("Login");
 login()
