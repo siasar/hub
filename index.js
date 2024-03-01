@@ -54,9 +54,11 @@ const processCountry = (country) => {
         input.getCommunities(pointsIds),
         input.getSystems(pointsIds),
         input.getServiceProviders(pointsIds),
+        input.getSchools(),
+        input.getHealthCenters(),
       ]);
     })
-    .then(([communities, systems, providers]) => {
+    .then(([communities, systems, providers, schools, healthCenters]) => {
       const inserts = [];
 
       if (communities.length) {
@@ -72,6 +74,44 @@ const processCountry = (country) => {
       if (providers.length) {
         logger.info(`${country.name}: Importing ${providers.length} service providers`);
         inserts.push(output.insertProviders(providers));
+      }
+
+      if (schools.length) {
+        logger.info(`${country.name}: Adding ${schools.length} schools`);
+        inserts.push(output.insertSchools(schools));
+      }
+
+      if (healthCenters.length) {
+        logger.info(`${country.name}: Adding ${healthCenters.length} health centers`);
+        inserts.push(output.insertHealthCenters(healthCenters));
+      }
+
+      return Promise.all(inserts);
+    })
+    .then(() => {
+      logger.info(`${country.name}: Fetching relationships`);
+      return Promise.all([
+        input.getCommunitiesSystems(),
+        input.getCommunitiesSchools(),
+        input.getCommunitiesHealthCenters(),
+      ]);
+    })
+    .then(([communitiesSystems, communitiesSchools, communitiesHealthCenters]) => {
+      const inserts = [];
+
+      if (communitiesSystems.length) {
+        logger.info(`${country.name}: Adding ${communitiesSystems.length} communitiesSystemsProviders`);
+        inserts.push(output.insertCommunitiesSystems(communitiesSystems));
+      }
+
+      if (communitiesSchools.length) {
+        logger.info(`${country.name}: Adding ${communitiesSchools.length} communitiesSchools relation`);
+        inserts.push(output.insertCommunitiesSchools(communitiesSchools));
+      }
+
+      if (communitiesHealthCenters.length) {
+        logger.info(`${country.name}: Adding ${communitiesHealthCenters.length} communitiesHealthCenters relation`);
+        inserts.push(output.insertCommunitiesHealthCenters(communitiesHealthCenters));
       }
 
       return Promise.all(inserts);

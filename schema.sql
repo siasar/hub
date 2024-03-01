@@ -142,3 +142,118 @@ CREATE TABLE countries (
 );
 
 CREATE INDEX countries_geom_idx ON countries USING GIST (geom);
+DROP TABLE IF EXISTS communities_systems_providers CASCADE;
+
+CREATE TABLE communities_systems_providers (
+  community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
+  system_id varchar(26) REFERENCES systems(id) ON DELETE CASCADE,
+  provider_id varchar(26) REFERENCES providers(id) ON DELETE CASCADE,
+  served_households integer,
+  CONSTRAINT unique_community_system_provider UNIQUE (community_id, system_id, provider_id)
+);
+
+CREATE INDEX communities_systems_providers_households_idx ON providers (sep);
+
+DROP TABLE IF EXISTS schools CASCADE;
+
+CREATE TABLE schools (
+  id varchar(26) PRIMARY KEY,
+  name text,
+  code text,
+  latitude float,
+  longitude float,
+  geom geometry(Point, 4326),
+  status text,
+  shc varchar(1),
+  shc_value float,
+  staff_women integer,
+  staff_men integer,
+  students_female integer,
+  students_male integer,
+  have_toilets boolean,
+  version timestamp,
+  image_url text,
+  country varchar(2),
+  adm0 text,
+  adm1 text,
+  adm2 text,
+  adm3 text,
+  adm4 text
+);
+
+CREATE INDEX schools_shc_idx ON schools (shc);
+
+CREATE INDEX schools_shc_value_idx ON schools (shc_value);
+
+CREATE INDEX schools_country_idx ON schools (country);
+
+CREATE INDEX schools_adm0_idx ON schools (adm0);
+
+CREATE INDEX schools_adm1_idx ON schools (adm1);
+
+CREATE INDEX schools_adm2_idx ON schools (adm2);
+
+CREATE INDEX schools_adm3_idx ON schools (adm3);
+
+CREATE INDEX schools_adm4_idx ON schools (adm4);
+
+CREATE INDEX schools_geom_idx ON schools USING GIST (geom);
+
+DROP TABLE IF EXISTS communities_schools CASCADE;
+
+CREATE TABLE communities_schools (
+  community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
+  school_id varchar(26) REFERENCES schools(id) ON DELETE CASCADE,
+  CONSTRAINT unique_community_school UNIQUE (community_id, school_id)
+);
+
+DROP TABLE IF EXISTS health_centers CASCADE;
+
+CREATE TABLE health_centers (
+  id varchar(26) PRIMARY KEY,
+  name text,
+  code text,
+  latitude float,
+  longitude float,
+  geom geometry(Point, 4326),
+  status text,
+  hcc varchar(1),
+  hcc_value float,
+  staff_women integer,
+  staff_men integer,
+  have_toilets boolean,
+  version timestamp,
+  image_url text,
+  country varchar(2),
+  adm0 text,
+  adm1 text,
+  adm2 text,
+  adm3 text,
+  adm4 text
+);
+
+CREATE INDEX schools_hcc_idx ON health_centers (hcc);
+
+CREATE INDEX schools_hcc_value_idx ON health_centers (hcc_value);
+
+CREATE INDEX health_centers_country_idx ON health_centers (country);
+
+CREATE INDEX health_centers_adm0_idx ON health_centers (adm0);
+
+CREATE INDEX health_centers_adm1_idx ON health_centers (adm1);
+
+CREATE INDEX health_centers_adm2_idx ON health_centers (adm2);
+
+CREATE INDEX health_centers_adm3_idx ON health_centers (adm3);
+
+CREATE INDEX health_centers_adm4_idx ON health_centers (adm4);
+
+CREATE INDEX health_centers_geom_idx ON health_centers USING GIST (geom);
+
+DROP TABLE IF EXISTS communities_health_centers CASCADE;
+
+CREATE TABLE communities_health_centers (
+  community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
+  health_center_id varchar(26) REFERENCES health_centers(id) ON DELETE CASCADE,
+  CONSTRAINT unique_community_health_center UNIQUE (community_id, health_center_id)
+);
