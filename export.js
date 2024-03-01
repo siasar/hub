@@ -10,13 +10,6 @@ login()
     return getDashboards(data.token).then((dashboards) => ({ ...data, dashboards }));
   })
   .then((data) => {
-    console.info("Cleaning folder");
-    if (fs.existsSync(basePath)) {
-      fs.rmSync(basePath, { recursive: true, force: true });
-    }
-    return data;
-  })
-  .then((data) => {
     console.info("Creating folders");
     fs.mkdirSync(`${basePath}`, { recursive: true });
     data.dashboards
