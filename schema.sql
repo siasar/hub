@@ -141,14 +141,6 @@ CREATE TABLE communities_systems_providers (
   served_households integer
 );
 
-DROP TABLE IF EXISTS communities_systems_providers_tmp CASCADE;
-CREATE TABLE communities_systems_providers_tmp (
-  community_id varchar(26),
-  system_id varchar(26) ,
-  provider_id varchar(26) ,
-  served_households integer
-);
-
 CREATE INDEX communities_systems_providers_households_idx ON providers (sep);
 
 DROP TABLE IF EXISTS schools CASCADE;
@@ -197,15 +189,10 @@ CREATE INDEX schools_adm4_idx ON schools (adm4);
 CREATE INDEX schools_geom_idx ON schools USING GIST (geom);
 
 DROP TABLE IF EXISTS communities_schools CASCADE;
+
 CREATE TABLE communities_schools (
   community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
   school_id varchar(26) REFERENCES schools(id) ON DELETE CASCADE
-);
-
-DROP TABLE IF EXISTS communities_schools_tmp CASCADE;
-CREATE TABLE communities_schools_tmp (
-  community_id varchar(26),
-  school_id varchar(26)
 );
 
 DROP TABLE IF EXISTS health_centers CASCADE;
@@ -252,13 +239,8 @@ CREATE INDEX health_centers_adm4_idx ON health_centers (adm4);
 CREATE INDEX health_centers_geom_idx ON health_centers USING GIST (geom);
 
 DROP TABLE IF EXISTS communities_health_centers CASCADE;
+
 CREATE TABLE communities_health_centers (
   community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
   health_center_id varchar(26) REFERENCES health_centers(id) ON DELETE CASCADE
-);
-
-DROP TABLE IF EXISTS communities_health_centers_tmp CASCADE;
-CREATE TABLE communities_health_centers_tmp (
-  community_id varchar(26),
-  health_center_id varchar(26)
 );

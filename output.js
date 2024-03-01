@@ -261,8 +261,17 @@ export default class Output {
   insertRelationships(rows) {
     if (!rows.length) return;
 
+    const tableName = `tmp_${Math.round(Math.random() * 100000)}`;
+
     return this.query(`
-      INSERT INTO communities_systems_providers_tmp (
+      CREATE TEMP TABLE ${tableName} (
+        community_id varchar(26),
+        system_id varchar(26) ,
+        provider_id varchar(26) ,
+        served_households integer
+      );
+
+      INSERT INTO ${tableName} (
         community_id,
         system_id,
         provider_id,
@@ -277,14 +286,12 @@ export default class Output {
             '${row.served_households}'
           )`,
         )
-        .join(",")}
-      ON CONFLICT DO NOTHING;
+        .join(",")};
 
       INSERT INTO communities_systems_providers
       (
         SELECT t.*
-        FROM
-          communities_systems_providers_tmp t
+        FROM ${tableName} t
         JOIN communities c ON c.id = t.community_id
         JOIN systems s ON s.id = t.system_id
         JOIN providers p ON p.id = t.provider_id

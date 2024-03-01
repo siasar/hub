@@ -84,8 +84,8 @@ const processCountry = (country) => {
       logger.info(`${country.name}: Fetching relationships`);
       return Promise.all([
         input.getRelationships(),
-        input.getCommunitiesSchools(),
-        input.getCommunitiesHealthCenters(),
+        // input.getCommunitiesSchools(),
+        // input.getCommunitiesHealthCenters(),
       ]);
     })
     .then(([relationships, communities_schools, communities_health_centers]) => {
@@ -96,15 +96,15 @@ const processCountry = (country) => {
         inserts.push(output.insertRelationships(relationships));
       }
 
-      if (communities_schools.length) {
-        logger.info(`${country.name}: Adding ${communities_schools.length} communitiesSchools relation`);
-        inserts.push(output.insertCommunitiesSchools(communities_schools));
-      }
+      // if (communities_schools.length) {
+      //   logger.info(`${country.name}: Adding ${communities_schools.length} communitiesSchools relation`);
+      //   inserts.push(output.insertCommunitiesSchools(communities_schools));
+      // }
 
-      if (communities_health_centers.length) {
-        logger.info(`${country.name}: Adding ${communities_schools.length} communitiesHealthCenters relation`);
-        inserts.push(output.insertCommunitiesHealthCenters(communities_health_centers));
-      }
+      // if (communities_health_centers.length) {
+      //   logger.info(`${country.name}: Adding ${communities_schools.length} communitiesHealthCenters relation`);
+      //   inserts.push(output.insertCommunitiesHealthCenters(communities_health_centers));
+      // }
 
       return Promise.all(inserts);
     })
@@ -124,10 +124,6 @@ output
   .createSchema()
   .then(() => {
     return Promise.all(config.countries.map(processCountry));
-  })
-  .then(() => {
-    logger.info("Dropping temporary tables");
-    return output.dropTmpTables();
   })
   .then(() => {
     logger.info("All Done! Closing output connection");
