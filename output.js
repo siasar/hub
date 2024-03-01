@@ -258,35 +258,30 @@ export default class Output {
     `);
   }
 
-  insertRelationships(rows) {
+  insertCommunitiesSystems(rows) {
     if (!rows.length) return;
 
     const tableName = `tmp_${Math.round(Math.random() * 100000)}`;
 
     return this.query(`
-      CREATE TEMP TABLE ${tableName} (
-        community_id varchar(26),
-        system_id varchar(26) ,
-        provider_id varchar(26) ,
-        served_households integer
-      );
-
-      INSERT INTO ${tableName} (
-        community_id,
-        system_id,
-        provider_id,
-        served_households
-      )
-      VALUES ${rows
-        .map(
-          (row) => `(
-            '${row.community_id}',
-            '${row.system_id}',
-            '${row.provider_id}',
-            '${row.served_households}'
-          )`,
-        )
-        .join(",")};
+      CREATE TEMP TABLE ${tableName} AS
+      SELECT
+          community_id,
+          system_id,
+          provider_id,
+          served_households
+      FROM
+          (VALUES ${rows
+              .map(
+                (row) => `(
+                  '${row.community_id}',
+                  '${row.system_id}',
+                  '${row.provider_id}',
+                  ${row.served_households}
+                )`,
+              )
+              .join(",")}
+          ) AS data(community_id, system_id, provider_id, served_households);
 
       INSERT INTO communities_systems_providers
       (
@@ -302,26 +297,28 @@ export default class Output {
   insertCommunitiesSchools(rows) {
     if (!rows.length) return;
 
+    const tableName = `tmp_${Math.round(Math.random() * 100000)}`;
+
     return this.query(`
-      INSERT INTO communities_schools_tmp (
-        community_id,
-        school_id
-      )
-      VALUES ${rows
-        .map(
-          (row) => `(
-            '${row.community_id}',
-            '${row.school_id}'
-          )`,
-        )
-        .join(",")}
-      ON CONFLICT DO NOTHING;
+      CREATE TEMP TABLE ${tableName} AS
+      SELECT
+          community_id,
+          school_id
+      FROM
+        (VALUES ${rows
+          .map(
+            (row) => `(
+                '${row.community_id}',
+                '${row.school_id}'
+            )`,
+          )
+          .join(",")}
+        ) AS data(community_id, school_id);
 
       INSERT INTO communities_schools
       (
         SELECT t.*
-        FROM
-          communities_schools_tmp t
+        FROM ${tableName} t
         JOIN communities c ON c.id = t.community_id
         JOIN schools s ON s.id = t.school_id
       );
@@ -387,26 +384,28 @@ export default class Output {
   insertCommunitiesHealthCenters(rows) {
     if (!rows.length) return;
 
+    const tableName = `tmp_${Math.round(Math.random() * 100000)}`;
+
     return this.query(`
-      INSERT INTO communities_health_centers_tmp (
-        community_id,
-        health_center_id
-      )
-      VALUES ${rows
-        .map(
-          (row) => `(
-            '${row.community_id}',
-            '${row.health_center_id}'
-          )`,
-        )
-        .join(",")}
-      ON CONFLICT DO NOTHING;
+      CREATE TEMP TABLE ${tableName} AS
+      SELECT
+          community_id,
+          health_center_id
+      FROM
+        (VALUES ${rows
+          .map(
+            (row) => `(
+                '${row.community_id}',
+                '${row.health_center_id}'
+              )`,
+          )
+          .join(",")}
+        ) AS data(community_id, health_center_id);
 
       INSERT INTO communities_health_centers
       (
         SELECT t.*
-        FROM
-          communities_health_centers_tmp t
+        FROM ${tableName} t
         JOIN communities c ON c.id = t.community_id
         JOIN health_centers hc ON hc.id = t.health_center_id
       );

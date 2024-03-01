@@ -50,7 +50,7 @@ const processCountry = (country) => {
         input.getHealthCenters(),
       ]);
     })
-    .then(([communities, systems, providers, schools, health_centers]) => {
+    .then(([communities, systems, providers, schools, healthCenters]) => {
       const inserts = [];
 
       if (communities.length) {
@@ -73,9 +73,9 @@ const processCountry = (country) => {
         inserts.push(output.insertSchools(schools));
       }
 
-      if (health_centers.length) {
-        logger.info(`${country.name}: Adding ${health_centers.length} health centers`);
-        inserts.push(output.insertHealthCenters(health_centers));
+      if (healthCenters.length) {
+        logger.info(`${country.name}: Adding ${healthCenters.length} health centers`);
+        inserts.push(output.insertHealthCenters(healthCenters));
       }
 
       return Promise.all(inserts);
@@ -83,28 +83,28 @@ const processCountry = (country) => {
     .then(() => {
       logger.info(`${country.name}: Fetching relationships`);
       return Promise.all([
-        input.getRelationships(),
-        // input.getCommunitiesSchools(),
-        // input.getCommunitiesHealthCenters(),
+        input.getCommunitiesSystems(),
+        input.getCommunitiesSchools(),
+        input.getCommunitiesHealthCenters(),
       ]);
     })
-    .then(([relationships, communities_schools, communities_health_centers]) => {
+    .then(([communitiesSystems, communitiesSchools, communitiesHealthCenters]) => {
       const inserts = [];
 
-      if (relationships.length) {
-        logger.info(`${country.name}: Adding ${relationships.length} relationships`);
-        inserts.push(output.insertRelationships(relationships));
+      if (communitiesSystems.length) {
+        logger.info(`${country.name}: Adding ${communitiesSystems.length} communitiesSystemsProviders`);
+        inserts.push(output.insertCommunitiesSystems(communitiesSystems));
       }
 
-      // if (communities_schools.length) {
-      //   logger.info(`${country.name}: Adding ${communities_schools.length} communitiesSchools relation`);
-      //   inserts.push(output.insertCommunitiesSchools(communities_schools));
-      // }
+      if (communitiesSchools.length) {
+        logger.info(`${country.name}: Adding ${communitiesSchools.length} communitiesSchools relation`);
+        inserts.push(output.insertCommunitiesSchools(communitiesSchools));
+      }
 
-      // if (communities_health_centers.length) {
-      //   logger.info(`${country.name}: Adding ${communities_schools.length} communitiesHealthCenters relation`);
-      //   inserts.push(output.insertCommunitiesHealthCenters(communities_health_centers));
-      // }
+      if (communitiesHealthCenters.length) {
+        logger.info(`${country.name}: Adding ${communitiesHealthCenters.length} communitiesHealthCenters relation`);
+        inserts.push(output.insertCommunitiesHealthCenters(communitiesHealthCenters));
+      }
 
       return Promise.all(inserts);
     })

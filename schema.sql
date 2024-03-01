@@ -138,7 +138,8 @@ CREATE TABLE communities_systems_providers (
   community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
   system_id varchar(26) REFERENCES systems(id) ON DELETE CASCADE,
   provider_id varchar(26) REFERENCES providers(id) ON DELETE CASCADE,
-  served_households integer
+  served_households integer,
+  CONSTRAINT unique_community_system_provider UNIQUE (community_id, system_id, provider_id)
 );
 
 CREATE INDEX communities_systems_providers_households_idx ON providers (sep);
@@ -192,7 +193,8 @@ DROP TABLE IF EXISTS communities_schools CASCADE;
 
 CREATE TABLE communities_schools (
   community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
-  school_id varchar(26) REFERENCES schools(id) ON DELETE CASCADE
+  school_id varchar(26) REFERENCES schools(id) ON DELETE CASCADE,
+  CONSTRAINT unique_community_school UNIQUE (community_id, school_id)
 );
 
 DROP TABLE IF EXISTS health_centers CASCADE;
@@ -242,5 +244,6 @@ DROP TABLE IF EXISTS communities_health_centers CASCADE;
 
 CREATE TABLE communities_health_centers (
   community_id varchar(26) REFERENCES communities(id) ON DELETE CASCADE,
-  health_center_id varchar(26) REFERENCES health_centers(id) ON DELETE CASCADE
+  health_center_id varchar(26) REFERENCES health_centers(id) ON DELETE CASCADE,
+  CONSTRAINT unique_community_health_center UNIQUE (community_id, health_center_id)
 );

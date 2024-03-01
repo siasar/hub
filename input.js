@@ -355,7 +355,7 @@ export default class Input {
     });
   }
 
-  getRelationships() {
+  getCommunitiesSystems() {
     const query = `
       SELECT
         c.id AS community_id,
