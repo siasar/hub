@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 9,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -48,7 +48,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep"
+              "options": "wsi"
             },
             "properties": [
               {
@@ -109,7 +109,7 @@
               "clusterMinDistance": 0,
               "clusterValue": "size",
               "color": {
-                "field": "sep",
+                "field": "wsi",
                 "fixed": "dark-green"
               },
               "enableGradient": false,
@@ -153,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, sep\nFROM providers \nWHERE upper(country_code) in ($country);",
+          "rawSql": "SELECT latitude, longitude, wsi\nFROM systems \nWHERE upper(country_code) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -205,7 +205,6 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,7 +247,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep"
+              "options": "wsi"
             },
             "properties": [
               {
@@ -287,7 +286,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Service Providers"
+                "value": "Systems"
               }
             ]
           }
@@ -303,7 +302,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
-        "colorByField": "sep",
+        "colorByField": "wsi",
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -319,7 +318,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xField": "sep",
+        "xField": "wsi",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -332,7 +331,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(sep), sep\nFROM providers \nWHERE upper(country_code) in ($country)\nGROUP BY sep\nORDER BY sep ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(wsi), wsi\nFROM systems \nWHERE upper(country_code) in ($country)\nGROUP BY wsi\nORDER BY wsi ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -380,7 +379,7 @@
           "table": "communities"
         }
       ],
-      "title": "Service Providers by score",
+      "title": "Systems by score",
       "type": "barchart"
     },
     {
@@ -435,7 +434,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Service Providers"
+                "value": "Systems"
               }
             ]
           }
@@ -481,7 +480,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(country_code), country_code FROM providers group by country_code LIMIT 50 ",
+          "rawSql": "SELECT COUNT(country_code), country_code FROM systems group by country_code LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -519,7 +518,7 @@
           "table": "communities"
         }
       ],
-      "title": "Service Providers by country",
+      "title": "Systems by country",
       "type": "barchart"
     },
     {
@@ -635,7 +634,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country_code\nFROM providers \nWHERE upper(country_code) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country_code\nFROM systems \nWHERE upper(country_code) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -720,12 +719,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep_value"
+              "options": "wsi_value"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "SEP"
+                "value": "WSI"
               }
             ]
           },
@@ -744,7 +743,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep"
+              "options": "wsi"
             },
             "properties": [
               {
@@ -817,7 +816,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, sep, sep_value, country_code\nFROM providers \nWHERE upper(country_code) in ($country)\nORDER BY sep_value DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, wsi, wsi_value, country_code\nFROM systems \nWHERE upper(country_code) in ($country)\nORDER BY wsi_value DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -881,8 +880,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Service Providers",
-  "uid": "d470a8e2-a83d-4590-8dc0-a4a82956e551",
+  "title": "Systems",
+  "uid": "de0c2c76-364f-4326-a454-ec1af85569a2",
   "version": 1,
   "weekStart": ""
 }

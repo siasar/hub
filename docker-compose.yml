@@ -19,6 +19,7 @@ services:
       - POSTGRES_PASSWORD=data_hub
       - POSTGRES_PORT=5432
       - GRAFANA_PASSWORD=siasar123
+      - GRAFANA_DASHBOARDS_PATH=/usr/src/app/grafana/dashboards
     depends_on:
       - postgres
     profiles:

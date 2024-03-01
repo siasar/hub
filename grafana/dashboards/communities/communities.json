@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -48,7 +48,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsi"
+              "options": "wsp"
             },
             "properties": [
               {
@@ -109,7 +109,7 @@
               "clusterMinDistance": 0,
               "clusterValue": "size",
               "color": {
-                "field": "wsi",
+                "field": "wsp",
                 "fixed": "dark-green"
               },
               "enableGradient": false,
@@ -153,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, wsi\nFROM systems \nWHERE upper(country_code) in ($country);",
+          "rawSql": "SELECT latitude, longitude, wsp\nFROM communities\nWHERE upper(country_code) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -247,7 +247,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsi"
+              "options": "wsp"
             },
             "properties": [
               {
@@ -286,7 +286,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Systems"
+                "value": "Communities"
               }
             ]
           }
@@ -302,7 +302,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
-        "colorByField": "wsi",
+        "colorByField": "wsp",
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -318,7 +318,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xField": "wsi",
+        "xField": "wsp",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -331,7 +331,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(wsi), wsi\nFROM systems \nWHERE upper(country_code) in ($country)\nGROUP BY wsi\nORDER BY wsi ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(wsp), wsp\nFROM communities\nWHERE upper(country_code) in ($country)\nGROUP BY wsp\nORDER BY wsp ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -379,7 +379,7 @@
           "table": "communities"
         }
       ],
-      "title": "Systems by score",
+      "title": "Communities by score",
       "type": "barchart"
     },
     {
@@ -434,7 +434,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Systems"
+                "value": "Communities"
               }
             ]
           }
@@ -477,10 +477,9 @@
             "type": "grafana-postgresql-datasource",
             "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT COUNT(country_code), country_code FROM systems group by country_code LIMIT 50 ",
+          "rawSql": "SELECT COUNT(country_code), country_code FROM communities group by country_code LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -518,7 +517,7 @@
           "table": "communities"
         }
       ],
-      "title": "Systems by country",
+      "title": "Communities by country",
       "type": "barchart"
     },
     {
@@ -538,6 +537,7 @@
             },
             "inspect": false
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -602,6 +602,24 @@
                 "value": "Country"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -634,7 +652,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country_code\nFROM systems \nWHERE upper(country_code) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country_code\nFROM communities\nWHERE upper(country_code) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -675,6 +693,7 @@
             },
             "inspect": false
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -719,12 +738,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsi_value"
+              "options": "wsp_value"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "WSI"
+                "value": "WSP"
               }
             ]
           },
@@ -743,7 +762,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsi"
+              "options": "wsp"
             },
             "properties": [
               {
@@ -784,6 +803,24 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -816,7 +853,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, wsi, wsi_value, country_code\nFROM systems \nWHERE upper(country_code) in ($country)\nORDER BY wsi_value DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, wsp, wsp_value, country_code\nFROM communities\nWHERE upper(country_code) in ($country)\nORDER BY wsp_value DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -849,8 +886,8 @@
       {
         "current": {
           "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "text": "PANAMA",
+          "value": "PANAMA"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
@@ -880,8 +917,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Systems",
-  "uid": "de0c2c76-364f-4326-a454-ec1af85569a2",
+  "title": "Communities",
+  "uid": "e1f8aac3-9f16-48e7-8c16-42ae182d3243",
   "version": 1,
   "weekStart": ""
 }
