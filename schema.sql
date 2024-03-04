@@ -142,6 +142,7 @@ CREATE TABLE countries (
 );
 
 CREATE INDEX countries_geom_idx ON countries USING GIST (geom);
+
 DROP TABLE IF EXISTS communities_systems_providers CASCADE;
 
 CREATE TABLE communities_systems_providers (
@@ -257,3 +258,16 @@ CREATE TABLE communities_health_centers (
   health_center_id varchar(26) REFERENCES health_centers(id) ON DELETE CASCADE,
   CONSTRAINT unique_community_health_center UNIQUE (community_id, health_center_id)
 );
+
+CREATE OR REPLACE FUNCTION color(value CHAR) 
+RETURNS TEXT AS $$
+BEGIN
+  RETURN CASE value
+    WHEN 'A' THEN '#54BA46'
+    WHEN 'B' THEN '#FFFF39'
+    WHEN 'C' THEN '#FF9326'
+    WHEN 'D' THEN '#C92429'
+    ELSE '#AAAAAA'
+  END;
+END;
+$$ LANGUAGE plpgsql;

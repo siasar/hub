@@ -48,7 +48,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n  c.id AS id,\n  c.name AS title,\n  c.wsp AS mainstat\nFROM communities_systems_providers csp\nJOIN communities c ON c.id = csp.community_id\nUNION\nSELECT \n  s.id AS id,\n  s.name AS title,\n  s.wsi AS mainstat\nFROM communities_systems_providers csp\nJOIN systems s ON s.id = csp.system_id",
+          "rawSql": "SELECT \n  c.id AS id,\n  c.name AS title,\n  c.households::text AS mainstat,\n  color(c.wsp) AS color\nFROM communities_systems_providers csp\nJOIN communities c ON c.id = csp.community_id\nUNION\nSELECT \n  s.id AS id,\n  s.name AS title,\n  (SELECT SUM(served_households)::text FROM communities_systems_providers WHERE system_id = s.id) AS mainstat,\n  color(s.wsi) AS color\nFROM communities_systems_providers csp\nJOIN systems s ON s.id = csp.system_id",
           "refId": "A",
           "sql": {
             "columns": [
@@ -98,6 +98,7 @@
           }
         }
       ],
+      "transformations": [],
       "type": "nodeGraph"
     }
   ],
@@ -117,6 +118,6 @@
   "timezone": "",
   "title": "mauri",
   "uid": "b13100b1-9c19-4fd5-8cd3-dd2dce09478a",
-  "version": 14,
+  "version": 20,
   "weekStart": ""
 }
