@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -472,6 +472,6 @@
   "timezone": "",
   "title": "Community Dashboard",
   "uid": "ce679b69-9cb2-4710-a67c-153078b071cc",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
