@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -221,6 +221,44 @@
                 "value": "Service Providers"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "D"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Schools"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#b086b8",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "E"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Health Centers"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#cc705d",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -317,6 +355,64 @@
           "rawQuery": true,
           "rawSql": "SELECT count(*) as providers\nFROM providers\nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT count(*) as schools\nFROM schools \nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "refId": "D",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT count(*) as health_centers\nFROM health_centers \nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "refId": "E",
           "sql": {
             "columns": [
               {
@@ -1357,6 +1453,6 @@
   "timezone": "",
   "title": "Main",
   "uid": "db945fe3-d580-4fd9-be35-88b12a16e99b",
-  "version": 5,
+  "version": 3,
   "weekStart": ""
 }
