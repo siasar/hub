@@ -173,8 +173,8 @@ CREATE TABLE schools (
   have_toilets boolean,
   version timestamp,
   image_url text,
-  country varchar(2),
-  adm0 text,
+  country_code varchar(2),
+  country text,
   adm1 text,
   adm2 text,
   adm3 text,
@@ -185,9 +185,9 @@ CREATE INDEX schools_shc_idx ON schools (shc);
 
 CREATE INDEX schools_shc_value_idx ON schools (shc_value);
 
-CREATE INDEX schools_country_idx ON schools (country);
+CREATE INDEX schools_country_code_idx ON schools (country_code);
 
-CREATE INDEX schools_adm0_idx ON schools (adm0);
+CREATE INDEX schools_country_idx ON schools (country);
 
 CREATE INDEX schools_adm1_idx ON schools (adm1);
 
@@ -224,8 +224,8 @@ CREATE TABLE health_centers (
   have_toilets boolean,
   version timestamp,
   image_url text,
-  country varchar(2),
-  adm0 text,
+  country_code varchar(2),
+  country text,
   adm1 text,
   adm2 text,
   adm3 text,
@@ -236,9 +236,9 @@ CREATE INDEX schools_hcc_idx ON health_centers (hcc);
 
 CREATE INDEX schools_hcc_value_idx ON health_centers (hcc_value);
 
-CREATE INDEX health_centers_country_idx ON health_centers (country);
+CREATE INDEX health_centers_country_code_idx ON health_centers (country_code);
 
-CREATE INDEX health_centers_adm0_idx ON health_centers (adm0);
+CREATE INDEX health_centers_country_idx ON health_centers (country);
 
 CREATE INDEX health_centers_adm1_idx ON health_centers (adm1);
 

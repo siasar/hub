@@ -273,7 +273,7 @@ export default class Input {
         s.field_school_code as code,
         s.field_status AS status,
         CAST(s.field_changed_value AS CHAR) AS version,
-        s.field_country_value AS country,
+        UPPER(s.field_country_value) AS country_code,
         s.field_location_lat AS latitude,
         s.field_location_lon AS longitude,
         (
@@ -314,6 +314,7 @@ export default class Input {
           (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
         ),
         have_toilets: row.toilets == 1 ? true : false,
+        country: this.countries[row.country_code].name,
       }));
     });
   }
@@ -326,7 +327,7 @@ export default class Input {
         hc.field_code as code,
         hc.field_status AS status,
         CAST(hc.field_changed_value AS CHAR) AS version,
-        hc.field_country_value AS country,
+        UPPER(hc.field_country_value) AS country_code,
         hc.field_location_lat AS latitude,
         hc.field_location_lon AS longitude,
         (
@@ -365,6 +366,7 @@ export default class Input {
           (i) => `${this.config.api.url}/files/${this.idDecode(i.toString("hex"))}/download`,
         ),
         have_toilets: row.toilets == 1 ? true : false,
+        country: this.countries[row.country_code].name,
       }));
     });
   }
