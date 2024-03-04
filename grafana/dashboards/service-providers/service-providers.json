@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
+  "id": 12,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -332,7 +332,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(sep), sep\nFROM providers \nWHERE upper(country_code) in ($country)\nGROUP BY sep\nORDER BY sep ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(sep), sep\nFROM providers \nWHERE upper(country) in ($country)\nGROUP BY sep\nORDER BY sep ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -635,7 +635,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country_code\nFROM providers \nWHERE upper(country_code) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country\nFROM providers \nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -817,7 +817,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, sep, sep_value, country_code\nFROM providers \nWHERE upper(country_code) in ($country)\nORDER BY sep_value DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, sep, sep_value, country\nFROM providers \nWHERE upper(country) in ($country)\nORDER BY sep_value DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -857,14 +857,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
+        "definition": "SELECT upper(country) from communities group by country order by country asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Country",
         "multi": false,
         "name": "country",
         "options": [],
-        "query": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
+        "query": "SELECT upper(country) from communities group by country order by country asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -883,6 +883,6 @@
   "timezone": "",
   "title": "Service Providers",
   "uid": "d470a8e2-a83d-4590-8dc0-a4a82956e551",
-  "version": 5,
+  "version": 2,
   "weekStart": ""
 }

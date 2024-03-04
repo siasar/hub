@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 12,
+  "id": 13,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -153,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, wsi\nFROM systems \nWHERE upper(country_code) in ($country);",
+          "rawSql": "SELECT latitude, longitude, wsi\nFROM systems \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -331,7 +331,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(wsi), wsi\nFROM systems \nWHERE upper(country_code) in ($country)\nGROUP BY wsi\nORDER BY wsi ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(wsi), wsi\nFROM systems \nWHERE upper(country) in ($country)\nGROUP BY wsi\nORDER BY wsi ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -526,6 +526,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
+      "description": "<a href=\"/d/f1ba09d3-fe76-47dd-abe6-718fe97074a2/systems-list?orgId=1\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -651,7 +652,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country_code\nFROM systems \nWHERE upper(country_code) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country_code\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -680,6 +681,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
+      "description": "<a href=\"/d/f1ba09d3-fe76-47dd-abe6-718fe97074a2/systems-list?orgId=1\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -851,7 +853,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, wsi, wsi_value, country_code\nFROM systems \nWHERE upper(country_code) in ($country)\nORDER BY wsi_value DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, wsi, wsi_value, country_code\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY wsi_value DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -891,14 +893,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
+        "definition": "SELECT upper(country) from communities group by country order by country asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Country",
         "multi": false,
         "name": "country",
         "options": [],
-        "query": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
+        "query": "SELECT upper(country) from communities group by country order by country asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -917,6 +919,6 @@
   "timezone": "",
   "title": "Systems",
   "uid": "de0c2c76-364f-4326-a454-ec1af85569a2",
-  "version": 5,
+  "version": 3,
   "weekStart": ""
 }
