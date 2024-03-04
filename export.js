@@ -34,20 +34,20 @@ login()
   })
   .then((data) => {
     console.info("Saving dashboards");
-    data.dashboards.forEach((dashboard) => {
-      const path = dashboard.meta.folderId !== 0 ? `${basePath}/${dashboard.meta.folderTitle}` : basePath;
-      const filename = `${path}/${dashboard.meta.slug}.json`;
+    data.dashboards.forEach(({ dashboard, meta }) => {
+      const path = meta.folderId !== 0 ? `${basePath}/${meta.folderTitle}` : basePath;
+      const filename = `${path}/${meta.slug}.json`;
       if (fs.existsSync(filename)) {
         const current = JSON.parse(fs.readFileSync(filename, "utf8"));
         const ignoreKeys = ["id", "version"];
-        const diffKeys = Object.keys(diff(current, dashboard.dashboard)).filter((key) => !ignoreKeys.includes(key));
+        const diffKeys = Object.keys(diff(current, dashboard)).filter((key) => !ignoreKeys.includes(key));
         if (diffKeys.length === 0) {
-          console.info(`\t🚫 Skipping ${dashboard.meta.slug}`);
+          console.info(`\t🚫 Skipping ${dashboard.title}`);
           return;
         }
       }
-      console.info(`\t✅ Saving ${dashboard.meta.slug}`);
-      fs.writeFileSync(`${path}/${dashboard.meta.slug}.json`, JSON.stringify(dashboard.dashboard, null, 2));
+      console.info(`\t✅ Saving ${dashboard.title}`);
+      fs.writeFileSync(`${path}/${meta.slug}.json`, JSON.stringify(dashboard, null, 2));
     });
     return data;
   })

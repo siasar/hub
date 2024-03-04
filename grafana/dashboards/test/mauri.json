@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 13,
+  "id": 12,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -116,8 +116,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "mauri",
+  "title": "Mauri",
   "uid": "b13100b1-9c19-4fd5-8cd3-dd2dce09478a",
-  "version": 20,
+  "version": 5,
   "weekStart": ""
 }
