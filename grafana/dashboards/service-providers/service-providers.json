@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 12,
+  "id": 10,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -153,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, sep\nFROM providers \nWHERE upper(country_code) in ($country);",
+          "rawSql": "SELECT latitude, longitude, sep\nFROM providers \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
