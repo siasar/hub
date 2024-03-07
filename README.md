@@ -1,4 +1,4 @@
-# SIASAR Data Hub
+# SIASAR Hub
 
 A project to collect and display data from the [SIASAR](https://globalsiasar.org) initiative.
 
