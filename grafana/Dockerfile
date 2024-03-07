@@ -5,17 +5,6 @@ USER root
 ## Install tools
 RUN apk add --no-cache mlocate
 
-## Replace Favicon and Apple Touch
-COPY img/fav32.png /usr/share/grafana/public/img
-COPY img/fav32.png /usr/share/grafana/public/img/apple-touch-icon.png
-
-## Replace Logo
-COPY img/logo.svg /usr/share/grafana/public/img/grafana_icon.svg
-
-## Update Background
-# COPY img/background.svg /usr/share/grafana/public/img/g8_login_dark.svg
-# COPY img/background.svg /usr/share/grafana/public/img/g8_login_light.svg
-
 ## Update Title
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|AppTitle="Grafana"|AppTitle="SIASAR Hub"|g' {} \;
 
@@ -36,6 +25,20 @@ RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|..createEle
 
 ## Remove Open Source icon
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|.push({target:"_blank",id:"version",text:`${..edition}${.}`,url:..licenseUrl,icon:"external-link-alt"})||g' {} \;
+
+## Replace Favicon and Apple Touch
+COPY img/fav32.png /usr/share/grafana/public/img
+COPY img/fav32.png /usr/share/grafana/public/img/apple-touch-icon.png
+
+## Replace Logo
+COPY img/logo.svg /usr/share/grafana/public/img/grafana_icon.svg
+
+## Update Background
+# COPY img/background.svg /usr/share/grafana/public/img/g8_login_dark.svg
+# COPY img/background.svg /usr/share/grafana/public/img/g8_login_light.svg
+
+## Copy Icons
+COPY icons/* /usr/share/grafana/public/icons/
 
 ## Add custom files
 COPY custom.css /usr/share/grafana/public/

@@ -45,6 +45,8 @@ login()
           console.info(`\t🚫 Skipping ${dashboard.title}`);
           return;
         }
+        dashboard.version = current.version;
+        dashboard.id = current.id;
       }
       console.info(`\t✅ Saving ${dashboard.title}`);
       fs.writeFileSync(`${path}/${meta.slug}.json`, JSON.stringify(dashboard, null, 2));
