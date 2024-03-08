@@ -34,7 +34,7 @@ export default class Output {
             '${row.code}',
             '${row.name}',
             '${row.fullname}',
-            ST_GeomFromGeoJSON('${JSON.stringify(row.geom)}')
+            ST_Multi(ST_GeomFromGeoJSON('${JSON.stringify(row.geom)}'))
           )`,
         )
         .join(",")}
