@@ -11,7 +11,7 @@ datasources:
       password: $POSTGRES_PASSWORD
     jsonData:
       database: $POSTGRES_DB
-      sslmode: 'disable'
+      sslmode: "disable"
       maxOpenConns: 100
       maxIdleConns: 100
       maxIdleConnsAuto: tru

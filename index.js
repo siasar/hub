@@ -2,7 +2,6 @@ import pino from "pino";
 import Output from "./output.js";
 import Input from "./input.js";
 import config from "./config.js";
-import fs from "fs";
 
 const logger = pino({
   transport: {
@@ -22,14 +21,7 @@ const output = new Output({
   database: process.env.POSTGRES_DB,
 });
 
-const countries = JSON.parse(fs.readFileSync("countries.json", "utf8")).features.map((feature) => ({
-  code: feature.properties.iso_a2,
-  name: feature.properties.name,
-  fullname: feature.properties.formal,
-  geom: feature.geometry,
-}));
-
-const processCountry = (country) => {
+const processCountry = (country, countries) => {
   const input = new Input({ ...country, countries });
 
   logger.info(`${country.name}: Connecting server`);
@@ -131,11 +123,24 @@ logger.info("Creating Database Schema");
 output
   .createSchema()
   .then(() => {
-    logger.info(`Importing ${countries.length} countries`);
-    return output.insertCountries(countries);
+    logger.info("Getting countries");
+    return fetch("http://data-api.globalsiasar.org/countries")
+      .then((response) => response.json())
+      .then((data) => {
+        return data.features.map((feature) => ({
+          code: feature.properties.iso_a2,
+          name: feature.properties.name,
+          fullname: feature.properties.formal,
+          geom: feature.geometry,
+        }));
+      });
   })
-  .then(() => {
-    return Promise.all(config.countries.map(processCountry));
+  .then((countries) => {
+    logger.info(`Importing ${countries.length} countries`);
+    return output.insertCountries(countries).then(() => countries);
+  })
+  .then((countries) => {
+    return Promise.all(config.countries.map((country) => processCountry(country, countries)));
   })
   .then(() => {
     logger.info("All Done! Closing output connection");
