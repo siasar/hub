@@ -1,0 +1,250 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 16,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": true,
+          "fields": "",
+          "reducer": [
+            "count"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT *\nFROM providers\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nAND adm3 in ($adm3)\nAND adm4 in ($adm4);",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+        },
+        "definition": "SELECT upper(country) from communities group by country order by country asc;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Country",
+        "multi": false,
+        "name": "country",
+        "options": [],
+        "query": "SELECT upper(country) from communities group by country order by country asc;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+        },
+        "definition": "SELECT adm1 FROM systems where upper(country) in ($country) group by adm1 order by 1 asc;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Adm 1",
+        "multi": false,
+        "name": "adm1",
+        "options": [],
+        "query": "SELECT adm1 FROM systems where upper(country) in ($country) group by adm1 order by 1 asc;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+        },
+        "definition": "SELECT adm2 FROM systems where adm1 in ($adm1) group by adm2 order by 1 asc;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Adm 2",
+        "multi": false,
+        "name": "adm2",
+        "options": [],
+        "query": "SELECT adm2 FROM systems where adm1 in ($adm1) group by adm2 order by 1 asc;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+        },
+        "definition": "SELECT adm3 FROM systems where adm2 in ($adm2) group by adm3 order by 1 asc;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Adm 3",
+        "multi": false,
+        "name": "adm3",
+        "options": [],
+        "query": "SELECT adm3 FROM systems where adm2 in ($adm2) group by adm3 order by 1 asc;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+        },
+        "definition": "SELECT adm4 FROM systems where adm3 in ($adm3) group by adm4 order by 1 asc;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Adm 4",
+        "multi": false,
+        "name": "adm4",
+        "options": [],
+        "query": "SELECT adm4 FROM systems where adm3 in ($adm3) group by adm4 order by 1 asc;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true
+  },
+  "timezone": "",
+  "title": "Service Providers List",
+  "uid": "f579d835-bfe5-4192-ae4b-7f1e2f286c94",
+  "version": 2,
+  "weekStart": ""
+}

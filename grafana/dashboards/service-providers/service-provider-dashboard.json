@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 11,
+  "id": 15,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -81,7 +81,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select \n  name,\n  id,\n  to_char(version, 'YYYY-MM-DD') as date,\n  country,\n  adm1,\n  adm2,\n  adm3,\n  adm4\nfrom systems \nWHERE id = '${id}'",
+          "rawSql": "select \n  name,\n  id,\n  to_char(version, 'YYYY-MM-DD') as date,\n  country,\n  adm1,\n  adm2,\n  adm3,\n  adm4\nfrom providers \nWHERE id = '${id}'",
           "refId": "A",
           "sql": {
             "columns": [
@@ -131,7 +131,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsi"
+              "options": "sep"
             },
             "properties": [
               {
@@ -180,7 +180,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^wsi$/",
+          "fields": "/^sep$/",
           "values": false
         },
         "showPercentChange": false,
@@ -197,7 +197,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT wsi\nfrom systems\nwhere id = '${id}'",
+          "rawSql": "SELECT sep\nfrom providers\nwhere id = '${id}'",
           "refId": "A",
           "sql": {
             "columns": [
@@ -326,7 +326,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities c\nJOIN communities_systems_providers csp ON c.id = csp.community_id\nWHERE csp.system_id = '${id}';",
+          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities c\nJOIN communities_systems_providers csp ON c.id = csp.community_id\nWHERE csp.provider_id = '${id}';",
           "refId": "A",
           "sql": {
             "columns": [
@@ -429,7 +429,7 @@
               "showLegend": false,
               "style": {
                 "color": {
-                  "field": "wsi",
+                  "field": "sep",
                   "fixed": "dark-green"
                 },
                 "opacity": 1,
@@ -445,7 +445,7 @@
                   "min": 2
                 },
                 "symbol": {
-                  "fixed": "../public/icons/system.svg",
+                  "fixed": "../public/icons/provider.svg",
                   "mode": "fixed"
                 },
                 "symbolAlign": {
@@ -470,7 +470,7 @@
               "longitude": "longitude",
               "mode": "coords"
             },
-            "name": "Systems",
+            "name": "Providers",
             "tooltip": true,
             "type": "markers"
           },
@@ -523,6 +523,56 @@
             "name": "Communities",
             "tooltip": true,
             "type": "markers"
+          },
+          {
+            "config": {
+              "showLegend": true,
+              "style": {
+                "color": {
+                  "field": "wsi",
+                  "fixed": "dark-green"
+                },
+                "opacity": 1,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 55,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "../public/icons/system.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "C"
+            },
+            "location": {
+              "latitude": "latitude",
+              "longitude": "longitude",
+              "mode": "coords"
+            },
+            "name": "Systems",
+            "tooltip": true,
+            "type": "markers"
           }
         ],
         "tooltip": {
@@ -548,7 +598,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, wsi, image_url\nFROM systems\nWHERE id = '${id}'\nORDER BY 1\n",
+          "rawSql": "SELECT latitude, longitude, sep, image_url\nFROM providers\nWHERE id = '${id}'\nORDER BY 1\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -577,8 +627,37 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, wsp, image_url\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.system_id = '${id}'\nORDER BY 1;",
+          "rawSql": "SELECT latitude, longitude, wsp, image_url\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.provider_id = '${id}'\nORDER BY 1;",
           "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT latitude, longitude, wsi, image_url\nFROM systems s\nJOIN communities_systems_providers sc ON sc.system_id = s.id\nWHERE sc.provider_id = '${id}'\nORDER BY 1;",
+          "refId": "C",
           "sql": {
             "columns": [
               {
@@ -680,7 +759,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  image_url\nFROM systems\nWHERE id = '${id}'\nORDER BY 1",
+          "rawSql": "SELECT\n  image_url\nFROM providers \nWHERE id = '${id}'\nORDER BY 1",
           "refId": "A",
           "sql": {
             "columns": [
@@ -759,7 +838,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.wsp),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.sep),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.wsi),\n    'households', csp.served_households\n  )\n)\nFROM systems s\nLEFT JOIN communities_systems_providers csp on s.id = csp.system_id\nLEFT JOIN communities c on c.id = csp.community_id\nLEFT JOIN providers p on p.id = csp.provider_id\nWHERE s.id = '${id}';",
+          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.wsp),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.sep),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.wsi),\n    'households', csp.served_households\n  )\n)\nFROM providers p\nLEFT JOIN communities_systems_providers csp on p.id = csp.provider_id\nLEFT JOIN communities c on c.id = csp.community_id\nLEFT JOIN systems s on s.id = csp.system_id\nWHERE p.id = '${id}';",
           "refId": "A",
           "sql": {
             "columns": [
@@ -807,8 +886,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "System Dashboard",
-  "uid": "aa085765-841a-4e8f-86c3-0c9d87f1e8b6",
-  "version": 5,
+  "title": "Service Provider Dashboard",
+  "uid": "ae1c1147-1c05-4e8c-9387-f86e5fcd3913",
+  "version": 1,
   "weekStart": ""
 }

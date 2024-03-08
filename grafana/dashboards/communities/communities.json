@@ -208,6 +208,135 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "shades"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "population"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Population"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "households"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Households"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "served_households"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Served households"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "households_without_water"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Households without water"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "allValues"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities\nWHERE upper(country) in ($country);",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "palette-classic"
           },
           "custom": {
@@ -296,7 +425,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 11
+        "y": 17
       },
       "id": 2,
       "options": {
@@ -444,7 +573,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 17
       },
       "id": 3,
       "options": {
@@ -628,7 +757,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 25
       },
       "id": 4,
       "options": {
@@ -830,7 +959,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 19
+        "y": 25
       },
       "id": 5,
       "options": {
@@ -888,7 +1017,7 @@
         "h": 15,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 33
       },
       "id": 6,
       "options": {
@@ -924,7 +1053,7 @@
           "series": []
         }
       },
-      "pluginVersion": "5.2.0",
+      "pluginVersion": "5.3.0",
       "targets": [
         {
           "datasource": {

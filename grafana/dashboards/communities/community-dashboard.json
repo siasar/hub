@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 10,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -35,32 +35,26 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 10,
         "x": 0,
         "y": 0
       },
-      "id": 3,
+      "id": 10,
       "options": {
         "afterRender": "",
-        "content": "<div class=\"card\">\n  <div class=\"card-content\">\n    <h2 class=\"card-title\"><b>{{name}}</b></h2>\n    <p class=\"card-text\"><b>ID #:</b> {{id}}</p>\n    <p class=\"card-text\"><b>Location:</b> {{country_code}}, {{adm1}}, {{adm2}}, {{adm3}}, {{adm4}}</p>\n  </div>\n</div>",
+        "content": "#### {{country}}\n# {{name}}\n#### {{adm1}}, {{adm2}}, {{adm3}}, {{adm4}}\n{{id}}    \n{{date}}",
         "defaultContent": "The query didn't return any results.",
         "editor": {
           "format": "auto",
-          "height": 207,
-          "language": "html"
+          "language": "markdown"
         },
         "editors": [
           "styles"
@@ -69,10 +63,10 @@
         "externalStyles": [],
         "helpers": "",
         "renderMode": "everyRow",
-        "styles": ".card {\n  border-radius: 8px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n  overflow: hidden;\n  margin: 20px;\n}\n\n.card img {\n  width: 100%;\n  height: auto;\n}\n\n.card-content {\n  padding: 20px;\n}\n\n.card-title {\n  font-size: 20px;\n  margin-bottom: 10px;\n}\n\n.card-text {\n  color: #555;\n  font-size: 16px;\n}",
+        "styles": "",
         "wrap": true
       },
-      "pluginVersion": "4.3.0",
+      "pluginVersion": "4.4.0",
       "targets": [
         {
           "datasource": {
@@ -82,7 +76,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select id, name, to_char(version, 'YYYY-MM-DD') as date, country_code, adm1, adm2, adm3, adm4\nfrom communities \nWHERE id = '${id}'",
+          "rawSql": "select \n  name,\n  id,\n  to_char(version, 'YYYY-MM-DD') as date,\n  country,\n  adm1,\n  adm2,\n  adm3,\n  adm4\nfrom communities \nWHERE id = '${id}'",
           "refId": "A",
           "sql": {
             "columns": [
@@ -166,7 +160,7 @@
         ]
       },
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 3,
         "x": 10,
         "y": 0
@@ -226,11 +220,554 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "shades"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "population"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Population"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "households"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Households"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "served_households"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Served households"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "households_without_water"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Households without water"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
-        "h": 16,
+        "h": 6,
         "w": 11,
         "x": 13,
         "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "allValues"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities c\nWHERE c.id = '${id}';",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "wsi"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "A": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "B": {
+                        "color": "super-light-yellow",
+                        "index": 1
+                      },
+                      "C": {
+                        "color": "semi-dark-orange",
+                        "index": 2
+                      },
+                      "D": {
+                        "color": "dark-red",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sep"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "A": {
+                        "color": "semi-dark-green",
+                        "index": 0
+                      },
+                      "B": {
+                        "color": "super-light-yellow",
+                        "index": 1
+                      },
+                      "C": {
+                        "color": "semi-dark-orange",
+                        "index": 2
+                      },
+                      "D": {
+                        "color": "dark-red",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "wsp"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "A": {
+                        "color": "semi-dark-green",
+                        "index": 0
+                      },
+                      "B": {
+                        "color": "super-light-yellow",
+                        "index": 1
+                      },
+                      "C": {
+                        "color": "semi-dark-orange",
+                        "index": 2
+                      },
+                      "D": {
+                        "color": "dark-red",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 5,
+      "options": {
+        "basemap": {
+          "config": {},
+          "name": "Layer 0",
+          "opacity": 1,
+          "tooltip": false,
+          "type": "osm-standard"
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": false,
+          "showMeasure": false,
+          "showScale": false,
+          "showZoom": true
+        },
+        "layers": [
+          {
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "field": "wsp",
+                  "fixed": "dark-green"
+                },
+                "opacity": 1,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 55,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "../public/icons/community.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                },
+                "text": {
+                  "fixed": "",
+                  "mode": "field"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "A"
+            },
+            "name": "Community",
+            "tooltip": true,
+            "type": "markers"
+          },
+          {
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "field": "wsi",
+                  "fixed": "dark-green"
+                },
+                "opacity": 1,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 55,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "../public/icons/system.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "B"
+            },
+            "location": {
+              "latitude": "latitude",
+              "longitude": "longitude",
+              "mode": "coords"
+            },
+            "name": "Systems",
+            "tooltip": true,
+            "type": "markers"
+          },
+          {
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "field": "sep",
+                  "fixed": "dark-green"
+                },
+                "opacity": 1,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 55,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "../public/icons/provider.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "C"
+            },
+            "location": {
+              "latitude": "latitude",
+              "longitude": "longitude",
+              "mode": "coords"
+            },
+            "name": "Providers",
+            "tooltip": true,
+            "type": "markers"
+          }
+        ],
+        "tooltip": {
+          "mode": "none"
+        },
+        "view": {
+          "allLayers": true,
+          "id": "fit",
+          "lastOnly": false,
+          "lat": 0,
+          "layer": "Community",
+          "lon": 0,
+          "padding": 5,
+          "zoom": 14
+        }
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT name, latitude, longitude, wsp, image_url\nFROM communities c\nWHERE id = '${id}'\nORDER BY 1;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT latitude, longitude, wsi, image_url\nFROM systems s\nJOIN communities_systems_providers sc ON sc.system_id = s.id\nWHERE sc.community_id = '${id}'\nORDER BY 1;",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT latitude, longitude, sep, image_url\nFROM providers p\nJOIN communities_systems_providers scp ON scp.provider_id = p.id\nWHERE scp.community_id = '${id}'\nORDER BY 1;",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "geomap"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 6
       },
       "id": 4,
       "options": {
@@ -329,92 +866,47 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unitScale": true
-        },
-        "overrides": []
-      },
       "gridPos": {
-        "h": 9,
-        "w": 13,
+        "h": 10,
+        "w": 12,
         "x": 0,
-        "y": 7
+        "y": 22
       },
-      "id": 5,
+      "id": 7,
       "options": {
-        "basemap": {
-          "config": {},
-          "name": "Layer 0",
-          "type": "osm-standard"
+        "baidu": {
+          "callback": "bmapReady",
+          "key": ""
         },
-        "controls": {
-          "mouseWheelZoom": true,
-          "showAttribution": true,
-          "showDebug": false,
-          "showMeasure": false,
-          "showScale": false,
-          "showZoom": true
+        "editor": {
+          "format": "auto",
+          "height": 600
         },
-        "layers": [
-          {
-            "config": {
-              "border": 1,
-              "color": "rgb(200, 200, 200)",
-              "crop": true,
-              "kind": "square",
-              "radius": 30,
-              "shadow": true,
-              "src": "image_url"
-            },
-            "filterData": {
-              "id": "byRefId",
-              "options": "A"
-            },
-            "location": {
-              "latitude": "latitude",
-              "longitude": "longitude",
-              "mode": "coords"
-            },
-            "name": "Community",
-            "tooltip": true,
-            "type": "photos"
-          }
-        ],
-        "tooltip": {
-          "mode": "none"
+        "editorMode": "visual",
+        "gaode": {
+          "key": "",
+          "plugin": "AMap.Scale,AMap.ToolBar"
         },
-        "view": {
-          "allLayers": true,
-          "id": "fit",
-          "lastOnly": false,
-          "lat": 0,
-          "layer": "Community",
-          "lon": 0,
-          "zoom": 10
+        "getOption": "const series = data.series.map((s) => {\n  const sData = s.fields.find((f) => f.type === 'number').values.buffer || s.fields.find((f) => f.type === 'number').values;\n  const sTime = s.fields.find((f) => f.type === 'time').values.buffer || s.fields.find((f) => f.type === 'time').values;\n  \n  return {\n    name: s.refId,\n    type: 'line',\n    showSymbol: false,\n    areaStyle: {\n      opacity: 0.1,\n    },\n    lineStyle: {\n      width: 1,\n    },\n    data: sData.map((d, i) => [sTime[i], d.toFixed(2)]),\n  };\n});\n\n/**\n * Enable Data Zoom by default\n */\nsetTimeout(() => echartsInstance.dispatchAction({\n  type: 'takeGlobalCursor',\n  key: 'dataZoomSelect',\n  dataZoomSelectActive: true,\n}), 500);\n\n/**\n * Update Time Range on Zoom\n */\nechartsInstance.on('datazoom', function (params) {\n  const startValue = params.batch[0]?.startValue;\n  const endValue = params.batch[0]?.endValue;\n  locationService.partial({ from: startValue, to: endValue });\n});\n\nreturn {\n  backgroundColor: 'transparent',\n  tooltip: {\n    trigger: 'axis',\n  },\n  legend: {\n    left: '0',\n    bottom: '0',\n    data: data.series.map((s) => s.refId),\n    textStyle: {\n      color: 'rgba(128, 128, 128, .9)',\n    },\n  },\n  toolbox: {\n    feature: {\n      dataZoom: {\n        yAxisIndex: 'none',\n        icon: {\n          zoom: 'path://',\n          back: 'path://',\n        },\n      },\n      saveAsImage: {},\n    }\n  },\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n  grid: {\n    left: '2%',\n    right: '2%',\n    top: '2%',\n    bottom: 24,\n    containLabel: true,\n  },\n  series,\n};",
+        "google": {
+          "callback": "gmapReady",
+          "key": ""
+        },
+        "map": "none",
+        "renderer": "canvas",
+        "themeEditor": {
+          "config": "{}",
+          "height": 400,
+          "name": "default"
+        },
+        "visualEditor": {
+          "code": "const data = JSON.parse(context.panel.data.series[0].fields[0].values);\n\nconst graph = data.reduce(\n  (result, item) => {\n    if (!result.nodes.some((node) => node.id === item.community_id)) {\n      result.nodes.push({\n        id: item.community_id,\n        name: item.community,\n        symbolSize: 30,\n        symbol: \"path://M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z\",\n        itemStyle: {\n          color: item.community_color,\n        },\n        emphasis: {\n          label: {\n            show: true,\n            formatter: `${item.community}\\n(${item.community_adm3})`,\n          }\n        },\n      });\n    }\n    if (item.system_id && !result.nodes.some((node) => node.id === item.system_id)) {\n      result.nodes.push({\n        id: item.system_id,\n        name: item.system,\n        symbolSize: [25, 32],\n        symbol: \"path://M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0h1.8c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z\",\n        itemStyle: {\n          color: item.system_color,\n        }\n      });\n    }\n    result.links.push(\n      {\n        source: item.community_id,\n        target: item.system_id,\n        value: item.provider,\n        label: {\n          show: true,\n          formatter: `${item.households}`\n        },\n        emphasis: {\n          label: {\n            show: true,\n            formatter: `{c}\\n${item.households} served households`,\n            rotate: 0,\n            position: \"inside\",\n            color: \"black\",\n            backgroundColor: \"white\"\n          }\n        },\n        lineStyle: {\n          color: item.provider_color,\n          width: Math.min(Math.max(item.households / 10, 1), 10)\n        }\n      },\n    );\n    return result;\n  },\n  { nodes: [], links: [] }\n);\n\nreturn {\n  series: {\n    type: \"graph\",\n    layout: \"force\",\n    data: graph.nodes,\n    links: graph.links,\n    roam: true,\n    force: {\n      repulsion: 300,\n      edgeLength: 300,\n    },\n    lineStyle: {\n      color: \"source\",\n      curveness: 0.3,\n    },\n    emphasis: {\n      focus: \"self\",\n    },\n    label: {\n      show: true,\n      position: \"bottom\",\n      formatter: \"{b}\",\n    },\n  },\n};",
+          "codeHeight": 600,
+          "dataset": [],
+          "series": []
         }
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "5.3.0",
       "targets": [
         {
           "datasource": {
@@ -424,7 +916,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, wsp, image_url\nFROM communities c\nWHERE id = '${id}'\nORDER BY 1\n",
+          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.wsp),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.sep),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.wsi),\n    'households', csp.served_households\n  )\n)\nFROM communities c\nLEFT JOIN communities_systems_providers csp on c.id = csp.community_id\nLEFT JOIN systems s on s.id = csp.system_id\nLEFT JOIN providers p on p.id = csp.provider_id\nWHERE c.id = '${id}';",
           "refId": "A",
           "sql": {
             "columns": [
@@ -445,7 +937,7 @@
           }
         }
       ],
-      "type": "geomap"
+      "type": "volkovlabs-echarts-panel"
     }
   ],
   "refresh": "",
@@ -472,6 +964,6 @@
   "timezone": "",
   "title": "Community Dashboard",
   "uid": "ce679b69-9cb2-4710-a67c-153078b071cc",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
