@@ -1,4 +1,4 @@
-name: Docker Images
+name: Docker
 
 on:
   push:
@@ -8,7 +8,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  build:
+  etl:
     runs-on: ubuntu-latest
 
     permissions:
@@ -24,11 +24,11 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for ETL
+      - name: Extract metadata (tags, labels)
         id: meta-etl
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ env.REGISTRY }}/siasar/hub-etl
+          images: ${{ env.REGISTRY }}/siasar/hub-etl:latest
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
@@ -36,11 +36,28 @@ jobs:
           push: true
           tags: ${{ steps.meta-etl.outputs.tags }}
           labels: ${{ steps.meta-etl.outputs.labels }}
-      - name: Extract metadata (tags, labels) for Grafana
+
+  grafana:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels)
         id: meta-grafana
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ env.REGISTRY }}/siasar/hub-grafana
+          images: ${{ env.REGISTRY }}/siasar/hub-grafana:latest
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
