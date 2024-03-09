@@ -16,7 +16,7 @@ export default {
         host: "colombia.api.siasar.org",
         port: process.env.COLOMBIA_SSH_PORT,
         username: process.env.COLOMBIA_SSH_USERNAME,
-        privateKey: process.env.COLOMBIA_SSH_KEY,
+        privateKey: process.env.COLOMBIA_SSH_KEY.replace(/\\n/g, "\n"),
       },
     },
     {
@@ -35,7 +35,7 @@ export default {
         host: "panama.api.siasar.org",
         port: process.env.PANAMA_SSH_PORT,
         username: process.env.PANAMA_SSH_USERNAME,
-        privateKey: process.env.PANAMA_SSH_KEY,
+        privateKey: process.env.PANAMA_SSH_KEY.replace(/\\n/g, "\n"),
       },
     },
   ],
