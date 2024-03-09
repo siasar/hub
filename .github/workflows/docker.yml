@@ -19,18 +19,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@master
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels)
         id: meta-etl
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@master
         with:
           images: ${{ env.REGISTRY }}/siasar/hub-etl
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@master
         with:
           context: .
           push: true
@@ -48,18 +48,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@master
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels)
         id: meta-grafana
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@master
         with:
           images: ${{ env.REGISTRY }}/siasar/hub-grafana
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@master
         with:
           context: ./grafana
           push: true
