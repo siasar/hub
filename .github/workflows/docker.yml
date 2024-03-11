@@ -105,3 +105,34 @@ jobs:
           push: true
           tags: ${{ steps.meta-grafana.outputs.tags }}
           labels: ${{ steps.meta-grafana.outputs.labels }}
+
+  deploy-grafana:
+    needs: grafana
+    runs-on: ubuntu-latest
+    name: Deploy and Restart Grafana
+    environment: dev
+
+    steps:
+      - name: Generate environment file
+        run: |
+          echo GF_SECURITY_ADMIN_PASSWORD=${{ secrets.GF_SECURITY_ADMIN_PASSWORD }} > .grafana
+          echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .grafana
+          echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .grafana
+          echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .grafana
+          echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .grafana
+          echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .grafana
+      - name: Install SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+      - name: Copy .env file
+        run: scp -P ${{ secrets.SSH_PORT }} .grafana ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/.grafana
+      - name: Stop Grafana
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop hub-grafana"
+      - name: Pull new image
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker pull ghcr.io/siasar/hub-grafana:main"
+      - name: Start Grafana
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker run --name hub-grafana -d --restart always --env-file .grafana -p 3080:3000 ghcr.io/siasar/hub-grafana:main"
+      - name: Cleanup
+        run: rm -rf ~/.ssh
