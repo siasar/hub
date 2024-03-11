@@ -4,9 +4,6 @@ on:
   push:
     branches: ["main"]
 
-env:
-  REGISTRY: ghcr.io
-
 jobs:
   etl:
     name: Build ETL image
@@ -22,14 +19,13 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@master
         with:
-          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels)
         id: meta-etl
         uses: docker/metadata-action@master
         with:
-          images: ${{ env.REGISTRY }}/siasar/hub-etl
+          images: ghcr.io/siasar/hub-etl
       - name: Build and push Docker image
         uses: docker/build-push-action@master
         with:
@@ -69,13 +65,13 @@ jobs:
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} > ~/.ssh/known_hosts
       - name: Copy .env file
-        run: scp .etl ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/.etl
+        run: scp -p ${{ secrets.SSH_PORT }} .etl ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/.etl
       - name: Pull new image
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker pull ghcr.io/siasar/hub-etl:main"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker pull ghcr.io/siasar/hub-etl:main"
       - name: Run ETL
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker run --env-file .etl ghcr.io/siasar/hub-etl:main"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker run --env-file .etl ghcr.io/siasar/hub-etl:main"
       - name: Cleanup
         run: rm -rf ~/.ssh
 
@@ -93,14 +89,13 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@master
         with:
-          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels)
         id: meta-grafana
         uses: docker/metadata-action@master
         with:
-          images: ${{ env.REGISTRY }}/siasar/hub-grafana
+          images: ghcr.io/siasar/hub-grafana
       - name: Build and push Docker image
         uses: docker/build-push-action@master
         with:
