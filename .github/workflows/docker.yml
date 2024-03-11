@@ -129,7 +129,7 @@ jobs:
       - name: Copy .env file
         run: scp -P ${{ secrets.SSH_PORT }} .grafana ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/.grafana
       - name: Stop Grafana
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop hub-grafana"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker rm -f hub-grafana"
       - name: Pull new image
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker pull ghcr.io/siasar/hub-grafana:main"
       - name: Start Grafana
