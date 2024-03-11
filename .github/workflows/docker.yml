@@ -9,6 +9,7 @@ env:
 
 jobs:
   etl:
+    name: Build ETL image
     runs-on: ubuntu-latest
 
     permissions:
@@ -37,8 +38,50 @@ jobs:
           tags: ${{ steps.meta-etl.outputs.tags }}
           labels: ${{ steps.meta-etl.outputs.labels }}
 
+  deploy-etl:
+    needs: etl
+    name: Deploy and Run ETL
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Generate .env file
+        run: |
+          echo "NODE_ENV=production" > .etl
+          echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .etl
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .etl
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .etl
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .etl
+          echo "POSTGRES_PORT"=${{ secrets.POSTGRES_PORT }}" >> .etl
+          echo "COLOMBIA_DB_USER"=${{ secrets.COLOMBIA_DB_USER }}" >> .etl
+          echo "COLOMBIA_DB_PASSWORD"=${{ secrets.COLOMBIA_DB_PASSWORD }}" >> .etl
+          echo "COLOMBIA_DB_NAME"=${{ secrets.COLOMBIA_DB_NAME }}" >> .etl
+          echo "COLOMBIA_SSH_PORT"=${{ secrets.DB_SSH_PORT }}" >> .etl
+          echo "COLOMBIA_SSH_USERNAME"=${{ secrets.DB_SSH_USERNAME }}" >> .etl
+          echo "COLOMBIA_SSH_KEY"=${{ secrets.DB_SSH_KEY }}" >> .etl
+          echo "PANAMA_DB_USER"=${{ secrets.PANAMA_DB_USER }}" >> .etl
+          echo "PANAMA_DB_PASSWORD"=${{ secrets.PANAMA_DB_PASSWORD }}" >> .etl
+          echo "PANAMA_DB_NAME"=${{ secrets.PANAMA_DB_NAME }}" >> .etl
+          echo "PANAMA_SSH_PORT"=${{ secrets.DB_SSH_PORT }}" >> .etl
+          echo "PANAMA_SSH_USERNAME"=${{ secrets.DB_SSH_USERNAME }}" >> .etl
+          echo "PANAMA_SSH_KEY"=${{ secrets.DB_SSH_KEY }}" >> .etl
+      - name: Install SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+      - name: Copy .env file
+        run: scp .etl ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/.etl
+      - name: Pull new image
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker pull ghcr.io/siasar/hub-etl:main"
+      - name: Run ETL
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker run --env-file .etl ghcr.io/siasar/hub-etl:main"
+      - name: Cleanup
+        run: rm -rf ~/.ssh
+
   grafana:
     runs-on: ubuntu-latest
+    name: Build Grafana image
 
     permissions:
       contents: read
