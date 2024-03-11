@@ -19,6 +19,7 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@master
         with:
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels)
@@ -89,6 +90,7 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@master
         with:
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels)
