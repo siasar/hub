@@ -2,6 +2,7 @@ import pino from "pino";
 import Output from "./output.js";
 import Input from "./input.js";
 import config from "./config.js";
+import * as fs from "node:fs";
 
 const logger = pino({
   transport: {
@@ -124,13 +125,14 @@ output
   .createSchema()
   .then(() => {
     logger.info("Getting countries");
-    return fetch("http://data-api.globalsiasar.org/countries")
-      .then((response) => response.json())
+    return fs.promises
+      .readFile("data/countries_full.json", "utf-8")
+      .then((response) => JSON.parse(response))
       .then((data) => {
         return data.features.map((feature) => ({
-          code: feature.properties.iso_a2,
-          name: feature.properties.name,
-          fullname: feature.properties.formal,
+          code: feature.properties.ISO_A2,
+          name: feature.properties.NAME,
+          fullname: feature.properties.ADMIN,
           geom: feature.geometry,
         }));
       });

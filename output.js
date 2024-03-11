@@ -39,6 +39,8 @@ export default class Output {
         )
         .join(",")}
       ON CONFLICT DO NOTHING;
+
+      UPDATE countries SET enabled = TRUE where code in ('BO', 'BR', 'CO', 'CR', 'HN', 'KG', 'MX', 'NI', 'PA', 'PY', 'PE', 'DO');
     `);
   }
 
