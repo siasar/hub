@@ -72,7 +72,7 @@ jobs:
       - name: Pull new image
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker pull ghcr.io/siasar/hub-etl:main"
       - name: Run ETL
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker run --env-file .etl ghcr.io/siasar/hub-etl:main"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker run --rm --env-file .etl ghcr.io/siasar/hub-etl:main"
       - name: Cleanup
         run: rm -rf ~/.ssh
 
