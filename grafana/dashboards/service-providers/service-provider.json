@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 15,
+  "id": 8,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -400,7 +400,56 @@
           },
           "unitScale": true
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Name"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "latitude"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Latitude"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "longitude"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Longitude"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "score"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Score"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 16,
@@ -585,7 +634,7 @@
           "lat": 0,
           "layer": "Community",
           "lon": 0,
-          "zoom": 14
+          "zoom": 17
         }
       },
       "pluginVersion": "10.3.3",
@@ -598,7 +647,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, score, image_url\nFROM providers\nWHERE id = '${id}'\nORDER BY 1\n",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM providers\nWHERE id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -627,7 +676,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, score, image_url\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.provider_id = '${id}'\nORDER BY 1;",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.provider_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -656,7 +705,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, score, image_url\nFROM systems s\nJOIN communities_systems_providers sc ON sc.system_id = s.id\nWHERE sc.provider_id = '${id}'\nORDER BY 1;",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM systems s\nJOIN communities_systems_providers sc ON sc.system_id = s.id\nWHERE sc.provider_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
           "refId": "C",
           "sql": {
             "columns": [
@@ -1216,8 +1265,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Service Provider Dashboard",
+  "title": "Service Provider",
   "uid": "ae1c1147-1c05-4e8c-9387-f86e5fcd3913",
-  "version": 1,
+  "version": 12,
   "weekStart": ""
 }

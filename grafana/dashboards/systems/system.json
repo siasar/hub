@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 11,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1265,8 +1265,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "System Dashboard",
+  "title": "System",
   "uid": "aa085765-841a-4e8f-86c3-0c9d87f1e8b6",
-  "version": 2,
+  "version": 8,
   "weekStart": ""
 }

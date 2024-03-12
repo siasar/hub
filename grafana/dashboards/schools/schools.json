@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 13,
+  "id": 18,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -76,78 +76,6 @@
                     "type": "value"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "name"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Name"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "country"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Country"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "adm"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Adm"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "latitude"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Latitude"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "longitude"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Longitude"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "score"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Score"
               }
             ]
           }
@@ -225,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT name,\n  upper(country) as country,\n  concat(adm1, ', ',adm2, ', ',adm3, ', ',adm4) as adm,\n  latitude,\n  longitude,\n  score\nFROM systems \nWHERE upper(country) in ($country);",
+          "rawSql": "SELECT name,\n  upper(country) as country,\n  concat(adm1, ', ',adm2, ', ',adm3, ', ',adm4) as adm,\n  latitude,\n  longitude,\n  score\nFROM schools \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -298,48 +226,48 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "population"
+              "options": "schools"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Population"
+                "value": "Schools"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "households"
+              "options": "students"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Households"
+                "value": "Students"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "served_households"
+              "options": "staff"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Served households"
+                "value": "Staff"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "households_without_water"
+              "options": "have_toilets"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Households without water"
+                "value": "With sanitation facilities"
               }
             ]
           }
@@ -356,7 +284,7 @@
         "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
-        "orientation": "auto",
+        "orientation": "vertical",
         "reduceOptions": {
           "calcs": [
             "allValues"
@@ -378,7 +306,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM systems s\nJOIN communities_systems_providers csp ON s.id = csp.system_id\nJOIN communities c ON c.id = csp.community_id\nWHERE upper(s.country) in ($country);",
+          "rawSql": "SELECT\n  replace(to_char(count(*), 'fm999,999,999,999'), ',','.') as schools,\n  replace(to_char(sum(students_female)+sum(students_male), 'fm999,999,999,999'), ',','.') as students,\n  replace(to_char(sum(staff_women)+sum(staff_men), 'fm999,999,999,999'), ',','.') as staff,\n  (SELECT count(*) FROM schools where have_toilets and upper(country) in ($country)) as have_toilets\nFROM schools\nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -487,7 +415,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Systems"
+                "value": "Schools"
               }
             ]
           }
@@ -532,7 +460,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(score), score\nFROM systems \nWHERE upper(country) in ($country)\nGROUP BY score\nORDER BY score ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(score), score\nFROM schools\nWHERE upper(country) in ($country)\nGROUP BY score\nORDER BY score ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -580,7 +508,7 @@
           "table": "communities"
         }
       ],
-      "title": "Systems by Score",
+      "title": "Schools by Score",
       "type": "barchart"
     },
     {
@@ -601,14 +529,15 @@
           "key": ""
         },
         "editor": {
-          "format": "auto"
+          "format": "auto",
+          "height": 851
         },
         "editorMode": "code",
         "gaode": {
           "key": "",
           "plugin": "AMap.Scale,AMap.ToolBar"
         },
-        "getOption": "const getData = () => {\n  const nameValues = data.series[0].fields[0].values;\n  const valueValues = data.series[0].fields[1].values;\n\n  const combinedData = nameValues.map((name, index) => ({\n    name,\n    value: valueValues[index]\n  }));\n\n  combinedData.sort((a, b) => a.value - b.value);\n\n  return combinedData;\n};\n\nconst getCountries = () => {\n  return JSON.parse(data.series[1].fields[0].values);\n}\n\n(async () => {\n  try {\n    const countriesJson = getCountries();\n    const gdata = await getData();\n\n    let myChart = context.panel.chart;\n    echarts.registerMap('COUNTRIES', countriesJson);\n\n    const mapOption = {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    };\n    const barOption = {\n      xAxis: {\n        type: 'value'\n      },\n      yAxis: {\n        type: 'category',\n        axisLabel: {\n          rotate: 30\n        },\n        data: gdata.map(function (item) {\n\n          return item.name;\n        })\n      },\n      animationDurationUpdate: 1000,\n      series: {\n        type: 'bar',\n        id: 'population',\n        data: gdata.map(function (item) {\n          return item.value;\n        }),\n        universalTransition: true\n      }\n    };\n\n    let currentOption = mapOption;\n    setInterval(function () {\n      currentOption = currentOption === mapOption ? barOption : mapOption;\n      myChart.setOption(currentOption, true);\n    }, 4000);\n\n    return {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    }\n\n  } catch (error) {\n    console.error('Error en la obtención de datos:', error);\n  }\n})();\n\n",
+        "getOption": "const getData = () => {\n  const nameValues = data.series[0].fields[0].values;\n  const valueValues = data.series[0].fields[1].values;\n\n  const combinedData = nameValues.map((name, index) => ({\n    name,\n    value: valueValues[index]\n  }));\n\n  combinedData.sort((a, b) => a.value - b.value);\n\n  return combinedData;\n};\n\nconst getCountries = () => {\n  return JSON.parse(data.series[1].fields[0].values);\n}\n\n(async () => {\n  try {\n    const countriesJson = await getCountries();\n    const gdata = await getData();\n\n    let myChart = context.panel.chart;\n    echarts.registerMap('COUNTRIES', countriesJson);\n\n    const mapOption = {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    };\n    const barOption = {\n      xAxis: {\n        type: 'value'\n      },\n      yAxis: {\n        type: 'category',\n        axisLabel: {\n          rotate: 30\n        },\n        data: gdata.map(function (item) {\n\n          return item.name;\n        })\n      },\n      animationDurationUpdate: 1000,\n      series: {\n        type: 'bar',\n        id: 'population',\n        data: gdata.map(function (item) {\n          return item.value;\n        }),\n        universalTransition: true\n      }\n    };\n\n    let currentOption = mapOption;\n    setInterval(function () {\n      currentOption = currentOption === mapOption ? barOption : mapOption;\n      myChart.setOption(currentOption, true);\n    }, 4000);\n\n    return {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    }\n\n  } catch (error) {\n    console.error('Error en la obtención de datos:', error);\n  }\n})();\n\n",
         "google": {
           "callback": "gmapReady",
           "key": ""
@@ -617,10 +546,12 @@
         "renderer": "canvas",
         "themeEditor": {
           "config": "{}",
+          "height": 400,
           "name": "default"
         },
         "visualEditor": {
           "code": "console.log(context);\nreturn {\n  dataset: context.editor.dataset,\n  series: context.editor.series,\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n}\n",
+          "codeHeight": 600,
           "dataset": [],
           "series": []
         }
@@ -635,7 +566,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT country as name, count(*) as value\nFROM systems\nGROUP BY country\nORDER BY 2;",
+          "rawSql": "SELECT country as name, count(*) as value\nFROM schools\nGROUP BY country\nORDER BY 2;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -685,7 +616,7 @@
           }
         }
       ],
-      "title": "Systems by Country",
+      "title": "Schools by Country",
       "type": "volkovlabs-echarts-panel"
     },
     {
@@ -693,7 +624,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "<a href=\"/d/f1ba09d3-fe76-47dd-abe6-718fe97074a2/systems-list?orgId=1\" target=\"_blank\">Show all</a>",
+      "description": "<a href=\"/d/e28fd4ec-7da0-468f-a0c6-721d1a3c8374/schools-list\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -706,6 +637,7 @@
             },
             "inspect": false
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -766,7 +698,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "country_code"
+              "options": "country"
             },
             "properties": [
               {
@@ -785,8 +717,9 @@
                 "id": "links",
                 "value": [
                   {
+                    "targetBlank": true,
                     "title": "",
-                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
+                    "url": "/d/a79a53e5-fcba-4035-a380-72a338896fa2/school?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
@@ -823,7 +756,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country_code\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country\nFROM schools\nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -852,7 +785,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "<a href=\"/d/f1ba09d3-fe76-47dd-abe6-718fe97074a2/systems-list?orgId=1\" target=\"_blank\">Show all</a>",
+      "description": "<a href=\"/d/e28fd4ec-7da0-468f-a0c6-721d1a3c8374/schools-list\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -865,6 +798,7 @@
             },
             "inspect": false
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -891,6 +825,10 @@
               {
                 "id": "displayName",
                 "value": "ID"
+              },
+              {
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
@@ -903,35 +841,25 @@
               {
                 "id": "displayName",
                 "value": "Name"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "",
-                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
-                  }
-                ]
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "wsi"
+              "options": "shc"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "WSI"
+                "value": "SHC"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "country_code"
+              "options": "country"
             },
             "properties": [
               {
@@ -988,12 +916,18 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "id"
+              "options": "name"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/d/a79a53e5-fcba-4035-a380-72a338896fa2/school?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
               }
             ]
           }
@@ -1028,7 +962,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, score, wsi, country_code\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY wsi DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, score, shc,country\nFROM schools\nWHERE upper(country) in ($country)\nORDER BY shc DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1092,8 +1026,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Systems",
-  "uid": "de0c2c76-364f-4326-a454-ec1af85569a2",
-  "version": 3,
+  "title": "Schools",
+  "uid": "f8e42864-dfc5-452c-a950-2c9caefe1cdd",
+  "version": 1,
   "weekStart": ""
 }
