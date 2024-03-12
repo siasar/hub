@@ -138,7 +138,8 @@ CREATE TABLE countries (
   code varchar(2) PRIMARY KEY,
   name text,
   fullname text,
-  geom geometry(MultiPolygon, 4326)
+  geom geometry(MultiPolygon, 4326),
+  enabled boolean
 );
 
 CREATE INDEX countries_geom_idx ON countries USING GIST (geom);
