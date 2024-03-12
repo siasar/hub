@@ -19,8 +19,8 @@ CREATE TABLE communities (
   longitude float,
   geom geometry(Point, 4326),
   status text,
-  wsp varchar(1),
-  wsp_value float,
+  score varchar(1),
+  wsp float,
   version timestamp,
   population integer,
   households integer,
@@ -34,9 +34,9 @@ CREATE TABLE communities (
   adm4 text
 );
 
-CREATE INDEX communities_wsp_idx ON communities (wsp);
+CREATE INDEX communities_score_idx ON communities (score);
 
-CREATE INDEX communities_wsp_value_idx ON communities (wsp_value);
+CREATE INDEX communities_wsp_idx ON communities (wsp);
 
 CREATE INDEX communities_country_code_idx ON communities (country_code);
 
@@ -62,8 +62,8 @@ CREATE TABLE systems (
   longitude float,
   geom geometry(Point, 4326),
   status text,
-  wsi varchar(1),
-  wsi_value float,
+  score varchar(1),
+  wsi float,
   version timestamp,
   image_url text,
   country_code varchar(2),
@@ -74,9 +74,9 @@ CREATE TABLE systems (
   adm4 text
 );
 
-CREATE INDEX systems_wsi_idx ON systems (wsi);
+CREATE INDEX systems_score_idx ON systems (score);
 
-CREATE INDEX systems_wsi_value_idx ON systems (wsi_value);
+CREATE INDEX systems_wsi_idx ON systems (wsi);
 
 CREATE INDEX systems_country_code_idx ON systems (country_code);
 
@@ -102,8 +102,8 @@ CREATE TABLE providers (
   longitude float,
   geom geometry(Point, 4326),
   status text,
-  sep varchar(1),
-  sep_value float,
+  score varchar(1),
+  sep float,
   version timestamp,
   image_url text,
   country_code varchar(2),
@@ -114,9 +114,9 @@ CREATE TABLE providers (
   adm4 text
 );
 
-CREATE INDEX providers_sep_idx ON providers (sep);
+CREATE INDEX providers_score_idx ON providers (score);
 
-CREATE INDEX providers_sep_value_idx ON providers (sep_value);
+CREATE INDEX providers_sep_idx ON providers (sep);
 
 CREATE INDEX providers_country_code_idx ON providers (country_code);
 
@@ -166,8 +166,8 @@ CREATE TABLE schools (
   longitude float,
   geom geometry(Point, 4326),
   status text,
-  shc varchar(1),
-  shc_value float,
+  score varchar(1),
+  shc float,
   staff_women integer,
   staff_men integer,
   students_female integer,
@@ -183,9 +183,9 @@ CREATE TABLE schools (
   adm4 text
 );
 
-CREATE INDEX schools_shc_idx ON schools (shc);
+CREATE INDEX schools_score_idx ON schools (score);
 
-CREATE INDEX schools_shc_value_idx ON schools (shc_value);
+CREATE INDEX schools_shc_idx ON schools (shc);
 
 CREATE INDEX schools_country_code_idx ON schools (country_code);
 
@@ -219,8 +219,8 @@ CREATE TABLE health_centers (
   longitude float,
   geom geometry(Point, 4326),
   status text,
-  hcc varchar(1),
-  hcc_value float,
+  score varchar(1),
+  hcc float,
   staff_women integer,
   staff_men integer,
   have_toilets boolean,
@@ -234,9 +234,9 @@ CREATE TABLE health_centers (
   adm4 text
 );
 
-CREATE INDEX schools_hcc_idx ON health_centers (hcc);
+CREATE INDEX health_centers_score_idx ON health_centers (score);
 
-CREATE INDEX schools_hcc_value_idx ON health_centers (hcc_value);
+CREATE INDEX health_centers_hcc_idx ON health_centers (hcc);
 
 CREATE INDEX health_centers_country_code_idx ON health_centers (country_code);
 

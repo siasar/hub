@@ -77,7 +77,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.wsp),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.sep),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.wsi),\n    'households', csp.served_households\n  )\n)\nFROM communities_systems_providers csp\nJOIN systems s on s.id = csp.system_id\nJOIN communities c on c.id = csp.community_id\nJOIN providers p on p.id = csp.provider_id",
+          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.score),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.score),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.score),\n    'households', csp.served_households\n  )\n)\nFROM communities_systems_providers csp\nJOIN systems s on s.id = csp.system_id\nJOIN communities c on c.id = csp.community_id\nJOIN providers p on p.id = csp.provider_id",
           "refId": "A",
           "sql": {
             "columns": [

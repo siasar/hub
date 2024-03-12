@@ -224,7 +224,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT wsi as label, COUNT(wsi) as value\nFROM systems\nGROUP BY wsi LIMIT 50 ",
+          "rawSql": "SELECT score as label, COUNT(score) as value\nFROM systems\nGROUP BY score LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -311,7 +311,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT wsi as label, COUNT(wsi) as value\nFROM systems\nGROUP BY wsi\nORDER BY count(*)",
+          "rawSql": "SELECT score as label, COUNT(score) as value\nFROM systems\nGROUP BY score\nORDER BY count(*)",
           "refId": "A",
           "sql": {
             "columns": [
@@ -639,7 +639,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
-        "colorByField": "wsi",
+        "colorByField": "score",
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -667,7 +667,7 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT COUNT(wsi), wsi FROM systems GROUP BY wsi LIMIT 50 ",
+          "rawSql": "SELECT COUNT(score), score FROM systems GROUP BY score LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -675,7 +675,7 @@
                 "name": "COUNT",
                 "parameters": [
                   {
-                    "name": "wsi",
+                    "name": "score",
                     "type": "functionParameter"
                   }
                 ],
@@ -684,7 +684,7 @@
               {
                 "parameters": [
                   {
-                    "name": "wsi",
+                    "name": "score",
                     "type": "functionParameter"
                   }
                 ],
@@ -694,7 +694,7 @@
             "groupBy": [
               {
                 "property": {
-                  "name": "wsi",
+                  "name": "score",
                   "type": "string"
                 },
                 "type": "groupBy"
@@ -771,7 +771,7 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT id, point_id, name, latitude, longitude, wsi, country FROM systems LIMIT 50 ",
+          "rawSql": "SELECT id, point_id, name, latitude, longitude, score, country FROM systems LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -823,7 +823,7 @@
               {
                 "parameters": [
                   {
-                    "name": "wsi",
+                    "name": "score",
                     "type": "functionParameter"
                   }
                 ],

@@ -24,8 +24,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
       "fieldConfig": {
         "defaults": {
@@ -48,7 +48,20 @@
           },
           "unitScale": true
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Country"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -115,25 +128,32 @@
       },
       "targets": [
         {
-          "cacheDurationSeconds": 300,
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "ce750c6b-2f9b-4303-ac13-c80de8eacd68"
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
           },
-          "fields": [
-            {
-              "jsonPath": "$.features[*].geometry"
-            },
-            {
-              "jsonPath": "$.features[*].properties.name",
-              "language": "jsonpath",
-              "name": ""
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT name, st_asgeojson(geom) as geometry\nFROM countries\nWHERE enabled;",
           "refId": "A",
-          "urlPath": ""
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
         }
       ],
       "type": "orchestracities-map-panel"
@@ -295,7 +315,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as communities\nFROM communities\nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "rawSql": "SELECT count(*) as communities\nFROM communities\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -324,7 +344,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as systems\nFROM systems\nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "rawSql": "SELECT count(*) as systems\nFROM systems\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "B",
           "sql": {
             "columns": [
@@ -353,7 +373,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as providers\nFROM providers\nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "rawSql": "SELECT count(*) as providers\nFROM providers\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "C",
           "sql": {
             "columns": [
@@ -382,7 +402,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as schools\nFROM schools \nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "rawSql": "SELECT count(*) as schools\nFROM schools \nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "D",
           "sql": {
             "columns": [
@@ -411,7 +431,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT count(*) as health_centers\nFROM health_centers \nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "rawSql": "SELECT count(*) as health_centers\nFROM health_centers \nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "E",
           "sql": {
             "columns": [
@@ -540,7 +560,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT sum(population) as population, sum(households) as households, sum(households) - sum(households_without_water) as served_households, sum(households_without_water) as households_without_water\nFROM communities\nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
+          "rawSql": "SELECT \n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -753,7 +773,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"A\" from systems where wsi = 'A' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"A\" from communities where wsp = 'A' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"A\" from providers where sep = 'A' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"A\" from systems where score = 'A' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"A\" from communities where score = 'A' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"A\" from providers where score = 'A' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -782,7 +802,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"B\" from systems where wsi = 'B' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"B\" from communities where wsp = 'B' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"B\" from providers where sep = 'B' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"B\" from systems where score = 'B' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"B\" from communities where score = 'B' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"B\" from providers where score = 'B' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "B",
           "sql": {
             "columns": [
@@ -811,7 +831,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"C\" from systems where wsi = 'C' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"C\" from communities where wsp = 'C' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"C\" from providers where sep = 'C' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"C\" from systems where score = 'C' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"C\" from communities where score = 'C' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"C\" from providers where score = 'C' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "C",
           "sql": {
             "columns": [
@@ -840,7 +860,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT 'SYS' as entity, count(*) as \"D\" from systems where wsi = 'D' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"D\" from communities where wsp = 'D' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"D\" from providers where sep = 'D' and upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
+          "rawSql": "SELECT 'SYS' as entity, count(*) as \"D\" from systems where score = 'D' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'COM' as entity, count(*) as \"D\" from communities where score = 'D' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) UNION\nSELECT 'SEP' as entity, count(*) as \"D\" from providers where score = 'D' and upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2);",
           "refId": "D",
           "sql": {
             "columns": [
@@ -1028,7 +1048,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as communities from communities where upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
+          "rawSql": "SELECT upper(country) as country, count(*) as communities from communities where upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1057,7 +1077,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as systems from systems where upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
+          "rawSql": "SELECT upper(country) as country, count(*) as systems from systems where upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -1086,7 +1106,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT upper(country) as country, count(*) as providers from providers where upper(country_code) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
+          "rawSql": "SELECT upper(country) as country, count(*) as providers from providers where upper(country) in ($country) AND adm1 in ($adm1) AND adm2 in ($adm2) GROUP BY country;",
           "refId": "C",
           "sql": {
             "columns": [
@@ -1274,7 +1294,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as communities\nFROM communities\nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as communities\nFROM communities\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1379,14 +1399,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
+        "definition": "SELECT upper(country) from communities group by country order by country asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Country",
         "multi": false,
         "name": "country",
         "options": [],
-        "query": "SELECT upper(country_code) from communities group by country_code order by country_code asc;",
+        "query": "SELECT upper(country) from communities group by country order by country asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1403,14 +1423,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT adm1 FROM communities where upper(country_code) in ($country) group by adm1 order by 1 asc;",
+        "definition": "SELECT adm1 FROM communities where upper(country) in ($country) group by adm1 order by 1 asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Adm 1",
         "multi": false,
         "name": "adm1",
         "options": [],
-        "query": "SELECT adm1 FROM communities where upper(country_code) in ($country) group by adm1 order by 1 asc;",
+        "query": "SELECT adm1 FROM communities where upper(country) in ($country) group by adm1 order by 1 asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

@@ -48,7 +48,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep"
+              "options": "score"
             },
             "properties": [
               {
@@ -109,7 +109,7 @@
               "clusterMinDistance": 0,
               "clusterValue": "size",
               "color": {
-                "field": "sep",
+                "field": "score",
                 "fixed": "dark-green"
               },
               "enableGradient": false,
@@ -153,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, sep\nFROM providers \nWHERE upper(country) in ($country);",
+          "rawSql": "SELECT latitude, longitude, score\nFROM providers \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -178,7 +178,7 @@
               {
                 "parameters": [
                   {
-                    "name": "wsp",
+                    "name": "score",
                     "type": "functionParameter"
                   }
                 ],
@@ -378,7 +378,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep"
+              "options": "score"
             },
             "properties": [
               {
@@ -433,7 +433,7 @@
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
-        "colorByField": "sep",
+        "colorByField": "score",
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -449,7 +449,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xField": "sep",
+        "xField": "score",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -462,7 +462,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(sep), sep\nFROM providers \nWHERE upper(country) in ($country)\nGROUP BY sep\nORDER BY sep ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(score), score\nFROM providers \nWHERE upper(country) in ($country)\nGROUP BY score\nORDER BY score ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -470,7 +470,7 @@
                 "name": "COUNT",
                 "parameters": [
                   {
-                    "name": "wsp",
+                    "name": "score",
                     "type": "functionParameter"
                   }
                 ],
@@ -479,7 +479,7 @@
               {
                 "parameters": [
                   {
-                    "name": "wsp",
+                    "name": "score",
                     "type": "functionParameter"
                   }
                 ],
@@ -489,7 +489,7 @@
             "groupBy": [
               {
                 "property": {
-                  "name": "wsp",
+                  "name": "score",
                   "type": "string"
                 },
                 "type": "groupBy"
@@ -499,7 +499,7 @@
             "orderBy": {
               "property": {
                 "name": [
-                  "wsp"
+                  "score"
                 ],
                 "type": "string"
               },
@@ -872,7 +872,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep_value"
+              "options": "sep"
             },
             "properties": [
               {
@@ -896,7 +896,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep"
+              "options": "score"
             },
             "properties": [
               {
@@ -969,7 +969,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, sep, sep_value, country\nFROM providers \nWHERE upper(country) in ($country)\nORDER BY sep_value DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, score, sep, country\nFROM providers \nWHERE upper(country) in ($country)\nORDER BY sep DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
