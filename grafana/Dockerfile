@@ -2,9 +2,6 @@ FROM grafana/grafana-oss:10.3.3
 
 USER root
 
-## Install tools
-RUN apk add --no-cache mlocate
-
 ## Update Title
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|AppTitle="Grafana"|AppTitle="SIASAR Hub"|g' {} \;
 
@@ -26,53 +23,8 @@ RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|..createEle
 ## Remove Open Source icon
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|.push({target:"_blank",id:"version",text:`${..edition}${.}`,url:..licenseUrl,icon:"external-link-alt"})||g' {} \;
 
-## Replace Favicon and Apple Touch
-COPY img/fav32.png /usr/share/grafana/public/img
-COPY img/fav32.png /usr/share/grafana/public/img/apple-touch-icon.png
-
-## Replace Logo
-COPY img/logo.svg /usr/share/grafana/public/img/grafana_icon.svg
-
-## Update Background
-# COPY img/background.svg /usr/share/grafana/public/img/g8_login_dark.svg
-# COPY img/background.svg /usr/share/grafana/public/img/g8_login_light.svg
-
-## Copy Icons
-COPY icons/* /usr/share/grafana/public/icons/
-
-## Add custom files
-COPY custom.css /usr/share/grafana/public/
-COPY custom.js /usr/share/grafana/public/
-
-## Update Title
-RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SIASAR Hub</title>|g' /usr/share/grafana/public/views/index.html
-
-## Add Google Fonts link tag
-RUN sed -i 's|</head>|<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000" rel="stylesheet"></head>|g' /usr/share/grafana/public/views/index.html
-
-# ## Add CSS link tag
-RUN sed -i 's|</head>|<link rel="stylesheet" type="text/css" href="public/custom.css" /></head>|g' /usr/share/grafana/public/views/index.html
-
-# ## Add JS Script
-RUN sed -i 's|</body>|<script src="public/custom.js" type="text/javascript"></script></body>|g' /usr/share/grafana/public/views/index.html
-
-RUN sed -i "s|\[\[.NavTree\]\],|nav,|g; \
-    s|window.grafanaBootData = {| \
-    let nav = [[.NavTree]]; \
-    const home = nav.find((element) => element.id === 'home'); \
-    if (home) { home['icon'] = 'dashboard'; } \
-    const starred = nav.findIndex((element) => element.id === 'starred'); \
-    if (starred) { nav.splice(starred, 1); } \
-    const dashboards = nav.findIndex((element) => element.id === 'dashboards/browse'); \
-    if (dashboards) { nav.splice(dashboards, 1); } \
-    const communities = { id: 'communities', icon: 'home-alt', text: 'Communities', url: '/d/e1f8aac3-9f16-48e7-8c16-42ae182d3243/communities' }; \
-    nav.push(communities); \
-    const systems = { id: 'systems', parent: 'dashboard', icon: 'drop', text: 'Systems', url: '/d/de0c2c76-364f-4326-a454-ec1af85569a2/systems' }; \
-    nav.push(systems); \
-    const providers = { id: 'providers', icon: 'wrench', text: 'Service Providers', url: '/d/d470a8e2-a83d-4590-8dc0-a4a82956e551/service-providers?orgId=1' }; \
-    nav.push(providers); \
-    window.grafanaBootData = {|g" \
-    /usr/share/grafana/public/views/index.html
+## Copy public files
+COPY public /usr/share/grafana/public
 
 ## Set Grafana options
 ENV GF_ENABLE_GZIP=true

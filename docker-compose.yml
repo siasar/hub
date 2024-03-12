@@ -45,6 +45,7 @@ services:
       - "3001:3000"
     volumes:
       - ./grafana/dashboards:/etc/grafana/dashboards
+      - ./grafana/public/custom:/usr/share/grafana/public/custom
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=siasar123
       - POSTGRES_HOST=postgres
