@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 15,
+  "id": 8,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1265,8 +1265,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Service Provider Dashboard",
+  "title": "Service Provider",
   "uid": "ae1c1147-1c05-4e8c-9387-f86e5fcd3913",
-  "version": 1,
+  "version": 12,
   "weekStart": ""
 }

@@ -400,7 +400,56 @@
           },
           "unitScale": true
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Name"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "latitude"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Latitude"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "longitude"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Longitude"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "score"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Score"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 16,
@@ -424,6 +473,56 @@
           "showZoom": true
         },
         "layers": [
+          {
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "field": "score",
+                  "fixed": "dark-green"
+                },
+                "opacity": 1,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 55,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "../public/icons/provider.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "C"
+            },
+            "location": {
+              "latitude": "latitude",
+              "longitude": "longitude",
+              "mode": "coords"
+            },
+            "name": "Providers",
+            "tooltip": true,
+            "type": "markers"
+          },
           {
             "config": {
               "showLegend": false,
@@ -535,7 +634,7 @@
           "lat": 0,
           "layer": "Community",
           "lon": 0,
-          "zoom": 14
+          "zoom": 15
         }
       },
       "pluginVersion": "10.3.3",
@@ -548,7 +647,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, score, image_url\nFROM systems\nWHERE id = '${id}'\nORDER BY 1\n",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM systems\nWHERE id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -577,8 +676,37 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, score, image_url\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.system_id = '${id}'\nORDER BY 1;",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.system_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
           "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM providers p\nJOIN communities_systems_providers scp ON scp.provider_id = p.id\nWHERE scp.system_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
+          "refId": "C",
           "sql": {
             "columns": [
               {
@@ -1041,7 +1169,7 @@
       "description": "",
       "gridPos": {
         "h": 10,
-        "w": 13,
+        "w": 12,
         "x": 0,
         "y": 28
       },

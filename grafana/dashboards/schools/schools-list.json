@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 16,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -84,7 +84,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT *\nFROM communities\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nAND adm3 in ($adm3)\nAND adm4 in ($adm4);",
+          "rawSql": "SELECT *\nFROM schools\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nAND adm3 in ($adm3)\nAND adm4 in ($adm4);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -115,7 +115,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -243,8 +243,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Communities List",
-  "uid": "de458d8c-6338-4673-bcc6-eddb161e0765",
-  "version": 5,
+  "title": "Schools List",
+  "uid": "e28fd4ec-7da0-468f-a0c6-721d1a3c8374",
+  "version": 3,
   "weekStart": ""
 }

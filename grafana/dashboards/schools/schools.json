@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 18,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -76,78 +76,6 @@
                     "type": "value"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "name"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Name"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "adm"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Adm"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "latitude"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Latitude"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "longitude"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Longitude"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "score"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Score"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "country"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Country"
               }
             ]
           }
@@ -225,7 +153,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT name,\n  upper(country) as country,\n  concat(adm1, ', ',adm2, ', ',adm3, ', ',adm4) as adm,\n  latitude,\n  longitude,\n  score\nFROM communities\nWHERE upper(country) in ($country);",
+          "rawSql": "SELECT name,\n  upper(country) as country,\n  concat(adm1, ', ',adm2, ', ',adm3, ', ',adm4) as adm,\n  latitude,\n  longitude,\n  score\nFROM schools \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -298,48 +226,48 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "population"
+              "options": "schools"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Population"
+                "value": "Schools"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "households"
+              "options": "students"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Households"
+                "value": "Students"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "served_households"
+              "options": "staff"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Served households"
+                "value": "Staff"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "households_without_water"
+              "options": "have_toilets"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Households without water"
+                "value": "With sanitation facilities"
               }
             ]
           }
@@ -378,7 +306,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities\nWHERE upper(country) in ($country);",
+          "rawSql": "SELECT\n  replace(to_char(count(*), 'fm999,999,999,999'), ',','.') as schools,\n  replace(to_char(sum(students_female)+sum(students_male), 'fm999,999,999,999'), ',','.') as students,\n  replace(to_char(sum(staff_women)+sum(staff_men), 'fm999,999,999,999'), ',','.') as staff,\n  (SELECT count(*) FROM schools where have_toilets and upper(country) in ($country)) as have_toilets\nFROM schools\nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -532,7 +460,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(score), score\nFROM communities\nWHERE upper(country) in ($country)\nGROUP BY score\nORDER BY score ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(score), score\nFROM schools\nWHERE upper(country) in ($country)\nGROUP BY score\nORDER BY score ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -580,7 +508,7 @@
           "table": "communities"
         }
       ],
-      "title": "Communities by score",
+      "title": "Schools by score",
       "type": "barchart"
     },
     {
@@ -638,7 +566,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT country as name, count(*) as value\nFROM communities\nGROUP BY country\nORDER BY 2;",
+          "rawSql": "SELECT country as name, count(*) as value\nFROM schools\nGROUP BY country\nORDER BY 2;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -688,7 +616,7 @@
           }
         }
       ],
-      "title": "Communities grouped by country",
+      "title": "Schools grouped by country",
       "type": "volkovlabs-echarts-panel"
     },
     {
@@ -696,7 +624,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "<a href=\"/d/de458d8c-6338-4673-bcc6-eddb161e0765/communities-list\" target=\"_blank\">Show all</a>",
+      "description": "<a href=\"/d/e28fd4ec-7da0-468f-a0c6-721d1a3c8374/schools-list\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -770,7 +698,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "country_code"
+              "options": "country"
             },
             "properties": [
               {
@@ -828,7 +756,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country\nFROM communities\nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country\nFROM schools\nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -857,7 +785,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "<a href=\"/d/de458d8c-6338-4673-bcc6-eddb161e0765/communities-list\" target=\"_blank\">Show all</a>",
+      "description": "<a href=\"/d/e28fd4ec-7da0-468f-a0c6-721d1a3c8374/schools-list\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -919,19 +847,19 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp"
+              "options": "shc"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "WSP"
+                "value": "SHC"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "country_code"
+              "options": "country"
             },
             "properties": [
               {
@@ -1034,7 +962,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, score, wsp, country\nFROM communities\nWHERE upper(country) in ($country)\nORDER BY wsp DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, score, shc,country\nFROM schools\nWHERE upper(country) in ($country)\nORDER BY shc DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1066,7 +994,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1098,8 +1026,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Communities",
-  "uid": "e1f8aac3-9f16-48e7-8c16-42ae182d3243",
-  "version": 2,
+  "title": "Schools",
+  "uid": "f8e42864-dfc5-452c-a950-2c9caefe1cdd",
+  "version": 1,
   "weekStart": ""
 }

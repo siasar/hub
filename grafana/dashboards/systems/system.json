@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 15,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -81,7 +81,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "select \n  name,\n  id,\n  to_char(version, 'YYYY-MM-DD') as date,\n  country,\n  adm1,\n  adm2,\n  adm3,\n  adm4\nfrom providers \nWHERE id = '${id}'",
+          "rawSql": "select \n  name,\n  id,\n  to_char(version, 'YYYY-MM-DD') as date,\n  country,\n  adm1,\n  adm2,\n  adm3,\n  adm4\nfrom systems \nWHERE id = '${id}'",
           "refId": "A",
           "sql": {
             "columns": [
@@ -197,7 +197,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT score\nfrom providers\nwhere id = '${id}'",
+          "rawSql": "SELECT score\nfrom systems\nwhere id = '${id}'",
           "refId": "A",
           "sql": {
             "columns": [
@@ -326,7 +326,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities c\nJOIN communities_systems_providers csp ON c.id = csp.community_id\nWHERE csp.provider_id = '${id}';",
+          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities c\nJOIN communities_systems_providers csp ON c.id = csp.community_id\nWHERE csp.system_id = '${id}';",
           "refId": "A",
           "sql": {
             "columns": [
@@ -512,7 +512,7 @@
             },
             "filterData": {
               "id": "byRefId",
-              "options": "A"
+              "options": "C"
             },
             "location": {
               "latitude": "latitude",
@@ -520,6 +520,56 @@
               "mode": "coords"
             },
             "name": "Providers",
+            "tooltip": true,
+            "type": "markers"
+          },
+          {
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "field": "score",
+                  "fixed": "dark-green"
+                },
+                "opacity": 1,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 55,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "../public/icons/system.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "A"
+            },
+            "location": {
+              "latitude": "latitude",
+              "longitude": "longitude",
+              "mode": "coords"
+            },
+            "name": "Systems",
             "tooltip": true,
             "type": "markers"
           },
@@ -572,56 +622,6 @@
             "name": "Communities",
             "tooltip": true,
             "type": "markers"
-          },
-          {
-            "config": {
-              "showLegend": false,
-              "style": {
-                "color": {
-                  "field": "score",
-                  "fixed": "dark-green"
-                },
-                "opacity": 1,
-                "rotation": {
-                  "fixed": 0,
-                  "max": 360,
-                  "min": -360,
-                  "mode": "mod"
-                },
-                "size": {
-                  "fixed": 55,
-                  "max": 15,
-                  "min": 2
-                },
-                "symbol": {
-                  "fixed": "../public/icons/system.svg",
-                  "mode": "fixed"
-                },
-                "symbolAlign": {
-                  "horizontal": "center",
-                  "vertical": "center"
-                },
-                "textConfig": {
-                  "fontSize": 12,
-                  "offsetX": 0,
-                  "offsetY": 0,
-                  "textAlign": "center",
-                  "textBaseline": "middle"
-                }
-              }
-            },
-            "filterData": {
-              "id": "byRefId",
-              "options": "C"
-            },
-            "location": {
-              "latitude": "latitude",
-              "longitude": "longitude",
-              "mode": "coords"
-            },
-            "name": "Systems",
-            "tooltip": true,
-            "type": "markers"
           }
         ],
         "tooltip": {
@@ -634,7 +634,7 @@
           "lat": 0,
           "layer": "Community",
           "lon": 0,
-          "zoom": 17
+          "zoom": 15
         }
       },
       "pluginVersion": "10.3.3",
@@ -647,7 +647,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT name, latitude, longitude, score\nFROM providers\nWHERE id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1\n",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM systems\nWHERE id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -676,7 +676,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT name, latitude, longitude, score\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.provider_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM communities c\nJOIN communities_systems_providers sc ON sc.community_id = c.id\nWHERE sc.system_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -705,7 +705,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT name, latitude, longitude, score\nFROM systems s\nJOIN communities_systems_providers sc ON sc.system_id = s.id\nWHERE sc.provider_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
+          "rawSql": "SELECT name, latitude, longitude, score\nFROM providers p\nJOIN communities_systems_providers scp ON scp.provider_id = p.id\nWHERE scp.system_id = '${id}'\nGROUP BY name, latitude, longitude, score\nORDER BY 1;",
           "refId": "C",
           "sql": {
             "columns": [
@@ -808,7 +808,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  image_url\nFROM providers \nWHERE id = '${id}'\nORDER BY 1",
+          "rawSql": "SELECT\n  image_url\nFROM systems\nWHERE id = '${id}'\nORDER BY 1",
           "refId": "A",
           "sql": {
             "columns": [
@@ -972,7 +972,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, score\nFROM communities_systems_providers csp\nJOIN communities c on csp.community_id = c.id\nWHERE csp.provider_id = '${id}'\nGROUP BY id, name, score",
+          "rawSql": "SELECT id, name, score\nFROM communities_systems_providers csp\nJOIN communities c on csp.community_id = c.id\nWHERE csp.system_id = '${id}'\nGROUP BY id, name, score",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1055,7 +1055,7 @@
                   {
                     "targetBlank": true,
                     "title": "",
-                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
+                    "url": "/d/ae1c1147-1c05-4e8c-9387-f86e5fcd3913/service-provider-dashboard?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
@@ -1137,7 +1137,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, score\nFROM communities_systems_providers csp\nJOIN systems s on csp.system_id = s.id\nWHERE csp.provider_id = '${id}'\nGROUP BY id, name, score",
+          "rawSql": "SELECT id, name, score\nFROM communities_systems_providers csp\nJOIN providers p on csp.provider_id = p.id\nWHERE csp.system_id = '${id}'\nGROUP BY id, name, score",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1158,7 +1158,7 @@
           }
         }
       ],
-      "title": "Systems",
+      "title": "Service Providers",
       "type": "table"
     },
     {
@@ -1168,7 +1168,7 @@
       },
       "description": "",
       "gridPos": {
-        "h": 13,
+        "h": 10,
         "w": 12,
         "x": 0,
         "y": 28
@@ -1217,7 +1217,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.score),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.score),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.score),\n    'households', csp.served_households\n  )\n)\nFROM providers p\nLEFT JOIN communities_systems_providers csp on p.id = csp.provider_id\nLEFT JOIN communities c on c.id = csp.community_id\nLEFT JOIN systems s on s.id = csp.system_id\nWHERE p.id = '${id}';",
+          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.score),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.score),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.score),\n    'households', csp.served_households\n  )\n)\nFROM systems s\nLEFT JOIN communities_systems_providers csp on s.id = csp.system_id\nLEFT JOIN communities c on c.id = csp.community_id\nLEFT JOIN providers p on p.id = csp.provider_id\nWHERE s.id = '${id}';",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1265,8 +1265,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Service Provider Dashboard",
-  "uid": "ae1c1147-1c05-4e8c-9387-f86e5fcd3913",
-  "version": 1,
+  "title": "System",
+  "uid": "aa085765-841a-4e8f-86c3-0c9d87f1e8b6",
+  "version": 8,
   "weekStart": ""
 }

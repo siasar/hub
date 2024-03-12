@@ -78,6 +78,78 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Name"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "country"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Country"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "adm"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Adm"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "latitude"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Latitude"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "longitude"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Longitude"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "score"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Score"
+              }
+            ]
           }
         ]
       },
@@ -153,7 +225,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, score\nFROM systems \nWHERE upper(country) in ($country);",
+          "rawSql": "SELECT name,\n  upper(country) as country,\n  concat(adm1, ', ',adm2, ', ',adm3, ', ',adm4) as adm,\n  latitude,\n  longitude,\n  score\nFROM systems \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -516,90 +588,44 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unitScale": true
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "count"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Systems"
-              }
-            ]
-          }
-        ]
-      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
         "y": 17
       },
-      "id": 3,
+      "id": 6,
       "options": {
-        "barRadius": 0,
-        "barWidth": 0.97,
-        "colorByField": "country_code",
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
+        "baidu": {
+          "callback": "bmapReady",
+          "key": ""
         },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
+        "editor": {
+          "format": "auto"
         },
-        "xField": "country_code",
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
+        "editorMode": "code",
+        "gaode": {
+          "key": "",
+          "plugin": "AMap.Scale,AMap.ToolBar"
+        },
+        "getOption": "const getData = () => {\n  const nameValues = data.series[0].fields[0].values;\n  const valueValues = data.series[0].fields[1].values;\n\n  const combinedData = nameValues.map((name, index) => ({\n    name,\n    value: valueValues[index]\n  }));\n\n  combinedData.sort((a, b) => a.value - b.value);\n\n  return combinedData;\n};\n\nconst getCountries = () => {\n  return JSON.parse(data.series[1].fields[0].values);\n}\n\n(async () => {\n  try {\n    const countriesJson = getCountries();\n    const gdata = await getData();\n\n    let myChart = context.panel.chart;\n    echarts.registerMap('COUNTRIES', countriesJson);\n\n    const mapOption = {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    };\n    const barOption = {\n      xAxis: {\n        type: 'value'\n      },\n      yAxis: {\n        type: 'category',\n        axisLabel: {\n          rotate: 30\n        },\n        data: gdata.map(function (item) {\n\n          return item.name;\n        })\n      },\n      animationDurationUpdate: 1000,\n      series: {\n        type: 'bar',\n        id: 'population',\n        data: gdata.map(function (item) {\n          return item.value;\n        }),\n        universalTransition: true\n      }\n    };\n\n    let currentOption = mapOption;\n    setInterval(function () {\n      currentOption = currentOption === mapOption ? barOption : mapOption;\n      myChart.setOption(currentOption, true);\n    }, 4000);\n\n    return {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    }\n\n  } catch (error) {\n    console.error('Error en la obtención de datos:', error);\n  }\n})();\n\n",
+        "google": {
+          "callback": "gmapReady",
+          "key": ""
+        },
+        "map": "none",
+        "renderer": "canvas",
+        "themeEditor": {
+          "config": "{}",
+          "name": "default"
+        },
+        "visualEditor": {
+          "code": "console.log(context);\nreturn {\n  dataset: context.editor.dataset,\n  series: context.editor.series,\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n}\n",
+          "dataset": [],
+          "series": []
+        }
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "5.3.0",
       "targets": [
         {
           "datasource": {
@@ -609,46 +635,58 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(country_code), country_code FROM systems group by country_code LIMIT 50 ",
+          "rawSql": "SELECT country as name, count(*) as value\nFROM systems\nGROUP BY country\nORDER BY 2;",
           "refId": "A",
           "sql": {
             "columns": [
               {
-                "name": "COUNT",
-                "parameters": [
-                  {
-                    "name": "country_code",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "country_code",
-                    "type": "functionParameter"
-                  }
-                ],
+                "parameters": [],
                 "type": "function"
               }
             ],
             "groupBy": [
               {
                 "property": {
-                  "name": "country_code",
                   "type": "string"
                 },
                 "type": "groupBy"
               }
             ],
             "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
           },
-          "table": "communities"
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT json_build_object(\n    'type', 'FeatureCollection',\n    'features', json_agg(ST_AsGeoJSON(t.*)::json)\n    ) as geojson\nFROM (SELECT code, name, geom FROM countries\n     ) as t(id, name, geom);",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
         }
       ],
-      "title": "Systems by country",
-      "type": "barchart"
+      "title": "Systems grouped by country",
+      "type": "volkovlabs-echarts-panel"
     },
     {
       "datasource": {
@@ -694,6 +732,10 @@
               {
                 "id": "displayName",
                 "value": "ID"
+              },
+              {
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
@@ -736,7 +778,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "id"
+              "options": "name"
             },
             "properties": [
               {
@@ -861,6 +903,16 @@
               {
                 "id": "displayName",
                 "value": "Name"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
               }
             ]
           },
@@ -940,14 +992,8 @@
             },
             "properties": [
               {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "",
-                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
-                  }
-                ]
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           }
@@ -1005,111 +1051,6 @@
       ],
       "title": "Top records",
       "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 33
-      },
-      "id": 6,
-      "options": {
-        "baidu": {
-          "callback": "bmapReady",
-          "key": ""
-        },
-        "editor": {
-          "format": "auto"
-        },
-        "editorMode": "code",
-        "gaode": {
-          "key": "",
-          "plugin": "AMap.Scale,AMap.ToolBar"
-        },
-        "getOption": "const getData = () => {\n  const nameValues = data.series[0].fields[0].values;\n  const valueValues = data.series[0].fields[1].values;\n\n  const combinedData = nameValues.map((name, index) => ({\n    name,\n    value: valueValues[index]\n  }));\n\n  combinedData.sort((a, b) => a.value - b.value);\n\n  return combinedData;\n};\n\nconst getCountries = () => {\n  return JSON.parse(data.series[1].fields[0].values);\n}\n\n(async () => {\n  try {\n    const countriesJson = getCountries();\n    const gdata = await getData();\n\n    let myChart = context.panel.chart;\n    echarts.registerMap('COUNTRIES', countriesJson);\n\n    const mapOption = {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    };\n    const barOption = {\n      xAxis: {\n        type: 'value'\n      },\n      yAxis: {\n        type: 'category',\n        axisLabel: {\n          rotate: 30\n        },\n        data: gdata.map(function (item) {\n\n          return item.name;\n        })\n      },\n      animationDurationUpdate: 1000,\n      series: {\n        type: 'bar',\n        id: 'population',\n        data: gdata.map(function (item) {\n          return item.value;\n        }),\n        universalTransition: true\n      }\n    };\n\n    let currentOption = mapOption;\n    setInterval(function () {\n      currentOption = currentOption === mapOption ? barOption : mapOption;\n      myChart.setOption(currentOption, true);\n    }, 4000);\n\n    return {\n      visualMap: {\n        left: 'right',\n        min: 500000,\n        max: 38000000,\n        inRange: {\n          // prettier-ignore\n          color: ['#313695']\n        },\n        calculable: false\n      },\n      series: [\n        {\n          id: 'population',\n          type: 'map',\n          roam: true,\n          map: 'COUNTRIES',\n          animationDurationUpdate: 1000,\n          universalTransition: true,\n          data: gdata\n        }\n      ]\n    }\n\n  } catch (error) {\n    console.error('Error en la obtención de datos:', error);\n  }\n})();\n\n",
-        "google": {
-          "callback": "gmapReady",
-          "key": ""
-        },
-        "map": "none",
-        "renderer": "canvas",
-        "themeEditor": {
-          "config": "{}",
-          "name": "default"
-        },
-        "visualEditor": {
-          "code": "console.log(context);\nreturn {\n  dataset: context.editor.dataset,\n  series: context.editor.series,\n  xAxis: {\n    type: 'time',\n  },\n  yAxis: {\n    type: 'value',\n    min: 'dataMin',\n  },\n}\n",
-          "dataset": [],
-          "series": []
-        }
-      },
-      "pluginVersion": "5.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT country as name, count(*) as value\nFROM systems\nGROUP BY country\nORDER BY 2;",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": false,
-          "rawQuery": true,
-          "rawSql": "SELECT json_build_object(\n    'type', 'FeatureCollection',\n    'features', json_agg(ST_AsGeoJSON(t.*)::json)\n    ) as geojson\nFROM (SELECT code, name, geom FROM countries\n     ) as t(id, name, geom);",
-          "refId": "B",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "Systems grouped by country",
-      "type": "volkovlabs-echarts-panel"
     }
   ],
   "refresh": "",
