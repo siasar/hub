@@ -766,7 +766,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "country_code"
+              "options": "country"
             },
             "properties": [
               {
@@ -823,7 +823,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country_code\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -931,7 +931,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "country_code"
+              "options": "country"
             },
             "properties": [
               {
@@ -1028,7 +1028,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, score, wsi, country_code\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY wsi DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, score, wsi, country\nFROM systems \nWHERE upper(country) in ($country)\nORDER BY wsi DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
