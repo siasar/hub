@@ -719,7 +719,7 @@
                   {
                     "targetBlank": true,
                     "title": "",
-                    "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+                    "url": "/d/a79a53e5-fcba-4035-a380-72a338896fa2/school?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
@@ -925,7 +925,7 @@
                   {
                     "targetBlank": true,
                     "title": "",
-                    "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+                    "url": "/d/a79a53e5-fcba-4035-a380-72a338896fa2/school?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
