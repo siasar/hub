@@ -242,7 +242,10 @@
     <div id="reactRoot"></div>
 
     <script nonce="[[.Nonce]]">
-      const navTree = [ {
+      const originalNav = [[.NavTree]];
+      const filteredNav = originalNav.filter((item) => !["home", "starred", "dashboards/browse"].includes(item.id));
+
+      const navTree = [{
           "id": "home",
           "text": "Home",
           "icon": "apps",
@@ -268,7 +271,8 @@
           "text": "Dashboards",
           "icon": "book-open",
           "url": "/dashboards",
-          }
+        },
+        ...filteredNav
       ];
 
       window.grafanaBootData = {
