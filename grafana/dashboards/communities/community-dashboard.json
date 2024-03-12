@@ -126,7 +126,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp"
+              "options": "score"
             },
             "properties": [
               {
@@ -175,7 +175,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^wsp$/",
+          "fields": "/^score$/",
           "values": false
         },
         "showPercentChange": false,
@@ -192,7 +192,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT wsp\nfrom communities\nwhere id = '${id}'",
+          "rawSql": "SELECT score\nfrom communities\nwhere id = '${id}'",
           "refId": "A",
           "sql": {
             "columns": [
@@ -378,7 +378,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsi"
+              "options": "score"
             },
             "properties": [
               {
@@ -412,7 +412,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "sep"
+              "options": "score"
             },
             "properties": [
               {
@@ -446,7 +446,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp"
+              "options": "score"
             },
             "properties": [
               {
@@ -508,7 +508,7 @@
               "showLegend": false,
               "style": {
                 "color": {
-                  "field": "wsp",
+                  "field": "score",
                   "fixed": "dark-green"
                 },
                 "opacity": 1,
@@ -557,7 +557,7 @@
               "showLegend": false,
               "style": {
                 "color": {
-                  "field": "wsi",
+                  "field": "score",
                   "fixed": "dark-green"
                 },
                 "opacity": 1,
@@ -607,7 +607,7 @@
               "showLegend": false,
               "style": {
                 "color": {
-                  "field": "sep",
+                  "field": "score",
                   "fixed": "dark-green"
                 },
                 "opacity": 1,
@@ -677,7 +677,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT name, latitude, longitude, wsp, image_url\nFROM communities c\nWHERE id = '${id}'\nORDER BY 1;",
+          "rawSql": "SELECT name, latitude, longitude, score, image_url\nFROM communities c\nWHERE id = '${id}'\nORDER BY 1;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -706,7 +706,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, wsi, image_url\nFROM systems s\nJOIN communities_systems_providers sc ON sc.system_id = s.id\nWHERE sc.community_id = '${id}'\nORDER BY 1;",
+          "rawSql": "SELECT latitude, longitude, score, image_url\nFROM systems s\nJOIN communities_systems_providers sc ON sc.system_id = s.id\nWHERE sc.community_id = '${id}'\nORDER BY 1;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -735,7 +735,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT latitude, longitude, sep, image_url\nFROM providers p\nJOIN communities_systems_providers scp ON scp.provider_id = p.id\nWHERE scp.community_id = '${id}'\nORDER BY 1;",
+          "rawSql": "SELECT latitude, longitude, score, image_url\nFROM providers p\nJOIN communities_systems_providers scp ON scp.provider_id = p.id\nWHERE scp.community_id = '${id}'\nORDER BY 1;",
           "refId": "C",
           "sql": {
             "columns": [
@@ -866,11 +866,341 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Name"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "score"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Score"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "A": {
+                        "color": "semi-dark-green",
+                        "index": 0
+                      },
+                      "B": {
+                        "color": "super-light-yellow",
+                        "index": 1
+                      },
+                      "C": {
+                        "color": "semi-dark-orange",
+                        "index": 2
+                      },
+                      "D": {
+                        "color": "dark-red",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 22
+      },
+      "id": 12,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT id, name, score\nFROM communities_systems_providers csp\nJOIN systems s on csp.system_id = s.id\nWHERE csp.community_id = '${id}'\nGROUP BY id, name, score",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Systems",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Name"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/d/ae1c1147-1c05-4e8c-9387-f86e5fcd3913/service-provider-dashboard?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "score"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Score"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "A": {
+                        "color": "semi-dark-green",
+                        "index": 0
+                      },
+                      "B": {
+                        "color": "super-light-yellow",
+                        "index": 1
+                      },
+                      "C": {
+                        "color": "semi-dark-orange",
+                        "index": 2
+                      },
+                      "D": {
+                        "color": "dark-red",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 22
+      },
+      "id": 13,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT id, name, score\nFROM communities_systems_providers csp\nJOIN providers p on csp.provider_id = p.id\nWHERE csp.community_id = '${id}'\nGROUP BY id, name, score",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Service Providers",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
+      },
       "gridPos": {
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 22
+        "y": 27
       },
       "id": 7,
       "options": {
@@ -916,7 +1246,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.wsp),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.sep),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.wsi),\n    'households', csp.served_households\n  )\n)\nFROM communities c\nLEFT JOIN communities_systems_providers csp on c.id = csp.community_id\nLEFT JOIN systems s on s.id = csp.system_id\nLEFT JOIN providers p on p.id = csp.provider_id\nWHERE c.id = '${id}';",
+          "rawSql": "SELECT json_agg(\n  json_build_object(\n    'community_id', c.id,\n    'community', c.name,\n    'community_color', color(c.score),\n    'community_adm3', c.adm3,\n    'provider_id', p.id,\n    'provider', p.name,\n    'provider_color', color(p.score),\n    'system_id', s.id,\n    'system', s.name,\n    'system_color', color(s.score),\n    'households', csp.served_households\n  )\n)\nFROM communities c\nLEFT JOIN communities_systems_providers csp on c.id = csp.community_id\nLEFT JOIN systems s on s.id = csp.system_id\nLEFT JOIN providers p on p.id = csp.provider_id\nWHERE c.id = '${id}';",
           "refId": "A",
           "sql": {
             "columns": [
