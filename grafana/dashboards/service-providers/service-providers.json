@@ -582,7 +582,7 @@
           "table": "communities"
         }
       ],
-      "title": "Service Providers by score",
+      "title": "Service Providers by Score",
       "type": "barchart"
     },
     {
@@ -687,7 +687,7 @@
           }
         }
       ],
-      "title": "Service Providers grouped by country",
+      "title": "Service Providers by Country",
       "type": "volkovlabs-echarts-panel"
     },
     {
@@ -839,7 +839,7 @@
           }
         }
       ],
-      "title": "Last Records",
+      "title": "Last records",
       "type": "table"
     },
     {

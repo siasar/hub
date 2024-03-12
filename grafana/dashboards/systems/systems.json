@@ -580,7 +580,7 @@
           "table": "communities"
         }
       ],
-      "title": "Systems by score",
+      "title": "Systems by Score",
       "type": "barchart"
     },
     {
@@ -685,7 +685,7 @@
           }
         }
       ],
-      "title": "Systems grouped by country",
+      "title": "Systems by Country",
       "type": "volkovlabs-echarts-panel"
     },
     {
@@ -844,7 +844,7 @@
           }
         }
       ],
-      "title": "Last Records",
+      "title": "Last records",
       "type": "table"
     },
     {

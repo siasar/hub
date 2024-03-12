@@ -580,7 +580,7 @@
           "table": "communities"
         }
       ],
-      "title": "Communities by score",
+      "title": "Communities by Score",
       "type": "barchart"
     },
     {
@@ -688,7 +688,7 @@
           }
         }
       ],
-      "title": "Communities grouped by country",
+      "title": "Communities by Country",
       "type": "volkovlabs-echarts-panel"
     },
     {
@@ -849,7 +849,7 @@
           }
         }
       ],
-      "title": "Last Records",
+      "title": "Last records",
       "type": "table"
     },
     {

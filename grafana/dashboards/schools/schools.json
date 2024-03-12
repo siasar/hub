@@ -415,7 +415,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Communities"
+                "value": "Schools"
               }
             ]
           }
@@ -508,7 +508,7 @@
           "table": "communities"
         }
       ],
-      "title": "Schools by score",
+      "title": "Schools by Score",
       "type": "barchart"
     },
     {
@@ -616,7 +616,7 @@
           }
         }
       ],
-      "title": "Schools grouped by country",
+      "title": "Schools by Country",
       "type": "volkovlabs-echarts-panel"
     },
     {
@@ -777,7 +777,7 @@
           }
         }
       ],
-      "title": "Last Records",
+      "title": "Last records",
       "type": "table"
     },
     {
