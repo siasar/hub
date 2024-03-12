@@ -2,9 +2,6 @@ FROM grafana/grafana-oss:10.3.3
 
 USER root
 
-## Install tools
-RUN apk add --no-cache mlocate
-
 ## Update Title
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|AppTitle="Grafana"|AppTitle="SIASAR Hub"|g' {} \;
 
@@ -26,35 +23,8 @@ RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|..createEle
 ## Remove Open Source icon
 RUN find /usr/share/grafana/public/build/ -name *.js -exec sed -i 's|.push({target:"_blank",id:"version",text:`${..edition}${.}`,url:..licenseUrl,icon:"external-link-alt"})||g' {} \;
 
-## Replace Favicon and Apple Touch
-COPY img/fav32.png /usr/share/grafana/public/img
-COPY img/fav32.png /usr/share/grafana/public/img/apple-touch-icon.png
-
-## Replace Logo
-COPY img/logo.svg /usr/share/grafana/public/img/grafana_icon.svg
-
-## Update Background
-# COPY img/background.svg /usr/share/grafana/public/img/g8_login_dark.svg
-# COPY img/background.svg /usr/share/grafana/public/img/g8_login_light.svg
-
-## Copy Icons
-COPY icons/* /usr/share/grafana/public/icons/
-
-## Add custom files
-COPY custom.css /usr/share/grafana/public/
-COPY custom.js /usr/share/grafana/public/
-
-## Update Title
-RUN sed -i 's|<title>\[\[.AppTitle\]\]</title>|<title>SIASAR Hub</title>|g' /usr/share/grafana/public/views/index.html
-
-## Add Google Fonts link tag
-RUN sed -i 's|</head>|<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000" rel="stylesheet"></head>|g' /usr/share/grafana/public/views/index.html
-
-# ## Add CSS link tag
-RUN sed -i 's|</head>|<link rel="stylesheet" type="text/css" href="public/custom.css" /></head>|g' /usr/share/grafana/public/views/index.html
-
-# ## Add JS Script
-RUN sed -i 's|</body>|<script src="public/custom.js" type="text/javascript"></script></body>|g' /usr/share/grafana/public/views/index.html
+## Copy public files
+COPY public /usr/share/grafana/public
 
 ## Set Grafana options
 ENV GF_ENABLE_GZIP=true
