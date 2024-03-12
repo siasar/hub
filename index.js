@@ -2,7 +2,7 @@ import pino from "pino";
 import Output from "./output.js";
 import Input from "./input.js";
 import config from "./config.js";
-import * as fs from "node:fs";
+import countries from "./data/countries_full.json" assert { type: "json" };
 
 const logger = pino({
   transport: {
@@ -125,17 +125,12 @@ output
   .createSchema()
   .then(() => {
     logger.info("Getting countries");
-    return fs.promises
-      .readFile("data/countries_full.json", "utf-8")
-      .then((response) => JSON.parse(response))
-      .then((data) => {
-        return data.features.map((feature) => ({
-          code: feature.properties.ISO_A2,
-          name: feature.properties.NAME,
-          fullname: feature.properties.ADMIN,
-          geom: feature.geometry,
-        }));
-      });
+    return Object.values(countries.features).map((feature) => ({
+      code: feature.properties.ISO_A2,
+      name: feature.properties.NAME,
+      fullname: feature.properties.ADMIN,
+      geom: feature.geometry,
+    }));
   })
   .then((countries) => {
     logger.info(`Importing ${countries.length} countries`);
