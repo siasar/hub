@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 7,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -65,7 +65,7 @@
                   {
                     "targetBlank": true,
                     "title": "",
-                    "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+                    "url": "/d/a6cf4e85-96ae-472e-b256-bdd77810f435/health-center?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
@@ -104,7 +104,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT *\nFROM communities\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nAND adm3 in ($adm3)\nAND adm4 in ($adm4);",
+          "rawSql": "SELECT *\nFROM health_centers \nWHERE upper(country) in ($country)\nAND adm1 in ($adm1)\nAND adm2 in ($adm2)\nAND adm3 in ($adm3)\nAND adm4 in ($adm4);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -135,7 +135,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -143,14 +143,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT upper(country) from communities group by country order by country asc;",
+        "definition": "SELECT upper(country) from health_centers group by country order by country asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Country",
         "multi": false,
         "name": "country",
         "options": [],
-        "query": "SELECT upper(country) from communities group by country order by country asc;",
+        "query": "SELECT upper(country) from health_centers group by country order by country asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -167,14 +167,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT adm1 FROM communities where upper(country) in ($country) group by adm1 order by 1 asc;",
+        "definition": "SELECT adm1 FROM health_centers where upper(country) in ($country) group by adm1 order by 1 asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Adm 1",
         "multi": false,
         "name": "adm1",
         "options": [],
-        "query": "SELECT adm1 FROM communities where upper(country) in ($country) group by adm1 order by 1 asc;",
+        "query": "SELECT adm1 FROM health_centers where upper(country) in ($country) group by adm1 order by 1 asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -191,14 +191,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT adm2 FROM communities where adm1 in ($adm1) group by adm2 order by 1 asc;",
+        "definition": "SELECT adm2 FROM health_centers where adm1 in ($adm1) group by adm2 order by 1 asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Adm 2",
         "multi": false,
         "name": "adm2",
         "options": [],
-        "query": "SELECT adm2 FROM communities where adm1 in ($adm1) group by adm2 order by 1 asc;",
+        "query": "SELECT adm2 FROM health_centers where adm1 in ($adm1) group by adm2 order by 1 asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -215,14 +215,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT adm3 FROM communities where adm2 in ($adm2) group by adm3 order by 1 asc;",
+        "definition": "SELECT adm3 FROM health_centers where adm2 in ($adm2) group by adm3 order by 1 asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Adm 3",
         "multi": false,
         "name": "adm3",
         "options": [],
-        "query": "SELECT adm3 FROM communities where adm2 in ($adm2) group by adm3 order by 1 asc;",
+        "query": "SELECT adm3 FROM health_centers where adm2 in ($adm2) group by adm3 order by 1 asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -239,14 +239,14 @@
           "type": "grafana-postgresql-datasource",
           "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
         },
-        "definition": "SELECT adm4 FROM communities where adm3 in ($adm3) group by adm4 order by 1 asc;",
+        "definition": "SELECT adm4 FROM health_centers where adm3 in ($adm3) group by adm4 order by 1 asc;",
         "hide": 0,
         "includeAll": true,
         "label": "Adm 4",
         "multi": false,
         "name": "adm4",
         "options": [],
-        "query": "SELECT adm4 FROM communities where adm3 in ($adm3) group by adm4 order by 1 asc;",
+        "query": "SELECT adm4 FROM health_centers where adm3 in ($adm3) group by adm4 order by 1 asc;",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -263,8 +263,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Communities List",
-  "uid": "de458d8c-6338-4673-bcc6-eddb161e0765",
-  "version": 5,
+  "title": "Health Centers List",
+  "uid": "a53bc2b8-bc8e-49d4-9801-2ef01cab2800",
+  "version": 2,
   "weekStart": ""
 }

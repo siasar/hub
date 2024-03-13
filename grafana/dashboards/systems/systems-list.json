@@ -52,10 +52,28 @@
           },
           "unitScale": true
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "",
+                    "url": "/d/aa085765-841a-4e8f-86c3-0c9d87f1e8b6/system-dashboard?orgId=1&var-id=${__data.fields.id}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 20,
+        "h": 24,
         "w": 24,
         "x": 0,
         "y": 0
@@ -65,11 +83,12 @@
         "cellHeight": "sm",
         "footer": {
           "countRows": true,
+          "enablePagination": true,
           "fields": "",
           "reducer": [
             "count"
           ],
-          "show": true
+          "show": false
         },
         "showHeader": true,
         "sortBy": []

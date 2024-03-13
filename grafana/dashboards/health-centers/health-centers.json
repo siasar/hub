@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -94,6 +94,18 @@
           {
             "matcher": {
               "id": "byName",
+              "options": "country"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Country"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
               "options": "adm"
             },
             "properties": [
@@ -136,18 +148,6 @@
               {
                 "id": "displayName",
                 "value": "Score"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "country"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Country"
               }
             ]
           }
@@ -225,7 +225,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT name,\n  upper(country) as country,\n  concat(adm1, ', ',adm2, ', ',adm3, ', ',adm4) as adm,\n  latitude,\n  longitude,\n  score\nFROM communities\nWHERE upper(country) in ($country);",
+          "rawSql": "SELECT name,\n  upper(country) as country,\n  concat(adm1, ', ',adm2, ', ',adm3, ', ',adm4) as adm,\n  latitude,\n  longitude,\n  score\nFROM health_centers \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -298,48 +298,48 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "population"
+              "options": "health_centers"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Population"
+                "value": "Health Centers"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "households"
+              "options": "staff_women"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Households"
+                "value": "Women staff"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "served_households"
+              "options": "staff_men"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Served households"
+                "value": "Men staff"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "households_without_water"
+              "options": "have_toilets"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Households without water"
+                "value": "With sanitation facilities"
               }
             ]
           }
@@ -378,7 +378,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  replace(to_char(sum(population), 'fm999,999,999,999'), ',','.') as population,\n  replace(to_char(sum(households), 'fm999,999,999,999'), ',','.') as households,\n  replace(to_char(sum(households) - sum(households_without_water), 'fm999,999,999,999'), ',','.') as served_households,\n  replace(to_char(sum(households_without_water), 'fm999,999,999,999'), ',','.') as households_without_water\nFROM communities\nWHERE upper(country) in ($country);",
+          "rawSql": "SELECT\n  replace(to_char(count(*), 'fm999,999,999,999'), ',','.') as health_centers,\n  replace(to_char(sum(staff_women), 'fm999,999,999,999'), ',','.') as staff_women,\n  replace(to_char(sum(staff_men), 'fm999,999,999,999'), ',','.') as staff_men,\n  (SELECT count(*) FROM health_centers where have_toilets and upper(country) in ($country)) as have_toilets\nFROM health_centers \nWHERE upper(country) in ($country);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -487,7 +487,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Communities"
+                "value": "Schools"
               }
             ]
           }
@@ -532,7 +532,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(score), score\nFROM communities\nWHERE upper(country) in ($country)\nGROUP BY score\nORDER BY score ASC LIMIT 50 ",
+          "rawSql": "SELECT COUNT(score), score\nFROM health_centers \nWHERE upper(country) in ($country)\nGROUP BY score\nORDER BY score ASC LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -580,7 +580,7 @@
           "table": "communities"
         }
       ],
-      "title": "Communities by Score",
+      "title": "Health Centers by Score",
       "type": "barchart"
     },
     {
@@ -638,7 +638,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT country as name, count(*) as value\nFROM communities\nGROUP BY country\nORDER BY 2;",
+          "rawSql": "SELECT country as name, count(*) as value\nFROM health_centers \nGROUP BY country\nORDER BY 2;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -688,7 +688,7 @@
           }
         }
       ],
-      "title": "Communities by Country",
+      "title": "Health Centers by Country",
       "type": "volkovlabs-echarts-panel"
     },
     {
@@ -696,7 +696,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "<a href=\"/d/de458d8c-6338-4673-bcc6-eddb161e0765/communities-list\" target=\"_blank\">Show all</a>",
+      "description": "<a href=\"/d/a53bc2b8-bc8e-49d4-9801-2ef01cab2800/health-centers-list\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -791,7 +791,7 @@
                   {
                     "targetBlank": true,
                     "title": "",
-                    "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+                    "url": "/d/a6cf4e85-96ae-472e-b256-bdd77810f435/health-center?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
@@ -828,7 +828,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, version, country\nFROM communities\nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, version, country\nFROM health_centers \nWHERE upper(country) in ($country)\nORDER BY version DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -857,7 +857,7 @@
         "type": "grafana-postgresql-datasource",
         "uid": "0fdb8ba7-3686-48b7-8a92-373004563730"
       },
-      "description": "<a href=\"/d/de458d8c-6338-4673-bcc6-eddb161e0765/communities-list\" target=\"_blank\">Show all</a>",
+      "description": "<a href=\"/d/a53bc2b8-bc8e-49d4-9801-2ef01cab2800/health-centers-listt\" target=\"_blank\">Show all</a>",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -919,12 +919,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "wsp"
+              "options": "hcc"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "WSP"
+                "value": "HCC"
               }
             ]
           },
@@ -997,7 +997,7 @@
                   {
                     "targetBlank": true,
                     "title": "",
-                    "url": "/d/ce679b69-9cb2-4710-a67c-153078b071cc/community-dashboard?orgId=1&var-id=${__data.fields.id}"
+                    "url": "/d/a6cf4e85-96ae-472e-b256-bdd77810f435/health-center?orgId=1&var-id=${__data.fields.id}"
                   }
                 ]
               }
@@ -1034,7 +1034,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT id, name, score, wsp, country\nFROM communities\nWHERE upper(country) in ($country)\nORDER BY wsp DESC\nLIMIT 10",
+          "rawSql": "SELECT id, name, score, hcc, country\nFROM health_centers \nWHERE upper(country) in ($country)\nORDER BY hcc DESC\nLIMIT 10",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1066,7 +1066,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1098,8 +1098,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Communities",
-  "uid": "e1f8aac3-9f16-48e7-8c16-42ae182d3243",
-  "version": 2,
+  "title": "Health Centers",
+  "uid": "ecd6bae1-ac27-4858-a24a-9a0641fa7a7f",
+  "version": 1,
   "weekStart": ""
 }
