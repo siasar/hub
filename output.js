@@ -437,12 +437,4 @@ export default class Output {
       );
     `);
   }
-
-  dropTmpTables() {
-    return this.query(`
-      DROP TABLE IF EXISTS communities_systems_providers_tmp CASCADE;
-      DROP TABLE IF EXISTS communities_schools_tmp CASCADE;
-      DROP TABLE IF EXISTS communities_health_centers_tmp CASCADE;
-    `);
-  }
 }

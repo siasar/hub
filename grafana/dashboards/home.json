@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 104,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -881,7 +881,7 @@
           }
         }
       ],
-      "title": "SIASAR entities clasified by score",
+      "title": "SIASAR entities by Score",
       "transformations": [
         {
           "id": "merge",
@@ -1127,7 +1127,7 @@
           }
         }
       ],
-      "title": "SIASAR entities grouped by country",
+      "title": "SIASAR entities by Country",
       "transformations": [
         {
           "id": "merge",
@@ -1173,8 +1173,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -1471,8 +1470,8 @@
     "hidden": true
   },
   "timezone": "",
-  "title": "Main",
-  "uid": "db945fe3-d580-4fd9-be35-88b12a16e99b",
+  "title": "Home",
+  "uid": "db945fe3-d580-4fd9-be35-98b12a16e99b",
   "version": 3,
   "weekStart": ""
 }
