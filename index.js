@@ -22,6 +22,8 @@ const output = new Output({
   database: process.env.POSTGRES_DB,
 });
 
+const siasarCountries = ["BO", "BR", "CO", "CR", "HN", "KG", "MX", "NI", "PA", "PY", "PE", "DO"];
+
 const processCountry = (country, countries) => {
   const input = new Input({ ...country, countries });
 
@@ -130,6 +132,7 @@ output
       name: feature.properties.NAME,
       fullname: feature.properties.ADMIN,
       geom: feature.geometry,
+      enabled: siasarCountries.includes(feature.properties.ISO_A2),
     }));
   })
   .then((countries) => {

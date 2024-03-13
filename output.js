@@ -26,7 +26,8 @@ export default class Output {
         code,
         name,
         fullname,
-        geom
+        geom,
+        enabled
       )
       VALUES ${rows
         .map(
@@ -34,13 +35,12 @@ export default class Output {
             '${row.code}',
             '${row.name}',
             '${row.fullname}',
-            ST_Multi(ST_GeomFromGeoJSON('${JSON.stringify(row.geom)}'))
+            ST_Multi(ST_GeomFromGeoJSON('${JSON.stringify(row.geom)}')),
+            ${row.enabled}
           )`,
         )
         .join(",")}
       ON CONFLICT DO NOTHING;
-
-      UPDATE countries SET enabled = TRUE where code in ('BO', 'BR', 'CO', 'CR', 'HN', 'KG', 'MX', 'NI', 'PA', 'PY', 'PE', 'DO');
     `);
   }
 
