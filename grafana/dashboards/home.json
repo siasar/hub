@@ -1173,7 +1173,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1322,7 +1323,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as systems\nFROM systems\nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as systems\nFROM systems\nWHERE upper(country) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
           "refId": "B",
           "sql": {
             "columns": [
@@ -1351,7 +1352,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as providers\nFROM providers \nWHERE upper(country_code) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
+          "rawSql": "SELECT concat(extract(year from version), '-',extract(month from version)) as label, COUNT(*) as providers\nFROM providers \nWHERE upper(country) in ($country)\nAND adm1 in ($adm1) AND adm2 in ($adm2)\nAND version >= CURRENT_DATE - interval '6 months'\ngroup by extract(year from version), extract(month from version)\nORDER by 1, 2;",
           "refId": "C",
           "sql": {
             "columns": [
